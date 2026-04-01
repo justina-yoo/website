@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, TrendingUp, Users, MousePointerClick, Clock, MessageSquare, Newspaper, Target, Lightbulb, BarChart3, ChevronRight, Globe, Zap } from 'lucide-react';
+import { Mail, TrendingUp, Users, MousePointerClick, Clock, MessageSquare, Newspaper, Target, Lightbulb, BarChart3, ChevronRight, Globe, Zap, FileText } from 'lucide-react';
 
 const locations = [
   { city: "Shanghai", country: "China", flag: "🇨🇳", pct: 10 },
@@ -75,41 +75,6 @@ function HorizonTracker() {
   );
 }
 
-// ─── Floating Sparkle shape ────────────────────────────────────────────────
-function Sparkle({ style, color1, color2 }: { style?: React.CSSProperties; color1: string; color2: string }) {
-  return (
-    <svg viewBox="0 0 80 80" style={style} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id={`sg-${color1.replace('#','')}`} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor={color1} />
-          <stop offset="100%" stopColor={color2} />
-        </linearGradient>
-      </defs>
-      <path
-        d="M40 4 C40 4 44 28 58 34 C72 40 76 40 76 40 C76 40 52 44 46 58 C40 72 40 76 40 76 C40 76 36 52 22 46 C8 40 4 40 4 40 C4 40 28 36 34 22 C40 8 40 4 40 4Z"
-        fill={`url(#sg-${color1.replace('#','')})`}
-        opacity="0.92"
-      />
-    </svg>
-  );
-}
-
-// ─── Glass Orb ─────────────────────────────────────────────────────────────
-function GlassOrb({ size, gradient, style }: { size: number; gradient: string; style?: React.CSSProperties }) {
-  return (
-    <div
-      style={{
-        width: size,
-        height: size,
-        borderRadius: '50%',
-        background: gradient,
-        boxShadow: `0 20px 60px rgba(99,102,241,0.25), inset 0 -8px 20px rgba(255,255,255,0.3), inset 0 8px 20px rgba(255,255,255,0.5)`,
-        filter: 'blur(0.4px)',
-        ...style,
-      }}
-    />
-  );
-}
 
 // ─── Featured Project Page — NewsChat ────────────────────────────────────────────
 
@@ -139,18 +104,11 @@ function NewsChatCaseStudy({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="animated-gradient min-h-screen text-slate-900 font-sans relative">
-      {/* Background blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full bg-indigo-300/30 blur-[120px]" />
-        <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] rounded-full bg-violet-300/25 blur-[100px]" />
-        <div className="absolute -bottom-40 right-1/4 w-[600px] h-[600px] rounded-full bg-blue-300/20 blur-[120px]" />
-        <div className="absolute bottom-1/4 -left-20 w-[400px] h-[400px] rounded-full bg-pink-300/20 blur-[100px]" />
-      </div>
 
       <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-          <button onClick={onBack} className="text-xl font-bold tracking-tighter text-slate-800">
-            JUSTINA<span className="text-indigo-500">.</span>YOO
+          <button onClick={onBack} style={{ fontFamily: 'Montserrat, sans-serif' }} className="text-base font-bold tracking-tight text-slate-800 hover:text-indigo-600 transition-colors">
+            justina yoo. 
           </button>
           <div className="flex items-center gap-3">
             <a
@@ -162,6 +120,10 @@ function NewsChatCaseStudy({ onBack }: { onBack: () => void }) {
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
               </svg>
+            </a>
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
+              <FileText className="w-4 h-4" />
             </a>
             <a href="mailto:justina.yoo@gmail.com"
               className="px-4 py-2 md:px-6 md:py-2.5 bg-white/50 backdrop-blur-sm text-slate-800 text-sm font-semibold rounded-full border border-white/70 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all flex items-center gap-2 shadow-sm">
@@ -185,8 +147,6 @@ function NewsChatCaseStudy({ onBack }: { onBack: () => void }) {
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-6">NewsChat<span className="text-indigo-500">.</span></h1>
               <p className="text-base md:text-xl lg:text-2xl text-slate-500 font-light max-w-2xl leading-relaxed mb-10">Turning passive news consumption into interactive conversation — and monetizing the engagement gap.</p>
               <div className="flex flex-wrap gap-3 md:gap-6 text-sm text-slate-500">
-                <div><span className="font-semibold text-slate-800">Role</span> · Lead PM, 0→1</div>
-                <div><span className="font-semibold text-slate-800">Team</span> · ML, Infra, Design, Partnerships</div>
                 <div><span className="font-semibold text-slate-800">Market</span> · Digital News Publishers</div>
               </div>
             </motion.div>
@@ -350,18 +310,11 @@ function AekoCaseStudy({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="animated-gradient min-h-screen text-slate-900 font-sans relative">
-      {/* Background blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full bg-violet-300/30 blur-[120px]" />
-        <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] rounded-full bg-indigo-300/25 blur-[100px]" />
-        <div className="absolute -bottom-40 right-1/4 w-[600px] h-[600px] rounded-full bg-pink-300/20 blur-[120px]" />
-        <div className="absolute bottom-1/4 -left-20 w-[400px] h-[400px] rounded-full bg-blue-300/20 blur-[100px]" />
-      </div>
 
       <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-          <button onClick={onBack} className="text-xl font-bold tracking-tighter text-slate-800">
-            JUSTINA<span className="text-indigo-500">.</span>YOO
+          <button onClick={onBack} style={{ fontFamily: 'Montserrat, sans-serif' }} className="text-base font-bold tracking-tight text-slate-800 hover:text-indigo-600 transition-colors">
+            justina yoo
           </button>
           <div className="flex items-center gap-3">
             <a
@@ -373,6 +326,10 @@ function AekoCaseStudy({ onBack }: { onBack: () => void }) {
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
               </svg>
+            </a>
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
+              <FileText className="w-4 h-4" />
             </a>
             <a href="mailto:justina.yoo@gmail.com"
               className="px-4 py-2 md:px-6 md:py-2.5 bg-white/50 backdrop-blur-sm text-slate-800 text-sm font-semibold rounded-full border border-white/70 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all flex items-center gap-2 shadow-sm">
@@ -395,7 +352,6 @@ function AekoCaseStudy({ onBack }: { onBack: () => void }) {
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-6">AEKO<span className="text-violet-500">.</span></h1>
               <p className="text-base md:text-xl lg:text-2xl text-slate-500 font-light max-w-2xl leading-relaxed mb-10">Building the analytics layer for the AI search era — so brands stop flying blind when AI engines recommend their competitors.</p>
               <div className="flex flex-wrap gap-3 md:gap-6 text-sm text-slate-500">
-                <div><span className="font-semibold text-slate-800">Role</span> · Product Strategy & 0→1 Build</div>
                 <div><span className="font-semibold text-slate-800">Stage</span> · Closed MVP Testing</div>
                 <div><span className="font-semibold text-slate-800">Market</span> · Cross-Border E-commerce</div>
               </div>
@@ -500,56 +456,6 @@ function AekoCaseStudy({ onBack }: { onBack: () => void }) {
 
 // ─── Cursor Trail ─────────────────────────────────────────────────────────────
 
-const TRAIL_COLORS = [
-  'rgba(165,180,252,0.7)',  // indigo-300
-  'rgba(196,181,253,0.7)',  // violet-300
-  'rgba(249,168,212,0.65)', // pink-300
-  'rgba(147,197,253,0.65)', // blue-300
-  'rgba(233,213,255,0.7)',  // purple-200
-];
-
-function CursorTrail() {
-  const [dots, setDots] = useState<{ id: number; x: number; y: number; color: string; size: number }[]>([]);
-  const counter = useRef(0);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const id = counter.current++;
-      const color = TRAIL_COLORS[id % TRAIL_COLORS.length];
-      const size = Math.random() * 10 + 6;
-      setDots(prev => [...prev.slice(-18), { id, x: e.clientX, y: e.clientY, color, size }]);
-    };
-    window.addEventListener('mousemove', onMove);
-    return () => window.removeEventListener('mousemove', onMove);
-  }, []);
-
-  return (
-    <div className="fixed inset-0 pointer-events-none z-[9999]">
-      <AnimatePresence>
-        {dots.map(dot => (
-          <motion.div
-            key={dot.id}
-            initial={{ opacity: 0.8, scale: 1 }}
-            animate={{ opacity: 0, scale: 0.2 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            style={{
-              position: 'fixed',
-              left: dot.x - dot.size / 2,
-              top: dot.y - dot.size / 2,
-              width: dot.size,
-              height: dot.size,
-              borderRadius: '50%',
-              background: dot.color,
-              filter: 'blur(2px)',
-              pointerEvents: 'none',
-            }}
-          />
-        ))}
-      </AnimatePresence>
-    </div>
-  );
-}
 
 // ─── ATTN Case Study ──────────────────────────────────────────────────────────
 
@@ -578,17 +484,11 @@ function AttnCaseStudy({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="animated-gradient min-h-screen text-slate-900 font-sans relative">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full bg-sky-300/30 blur-[120px]" />
-        <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] rounded-full bg-indigo-300/25 blur-[100px]" />
-        <div className="absolute -bottom-40 right-1/4 w-[600px] h-[600px] rounded-full bg-blue-300/20 blur-[120px]" />
-        <div className="absolute bottom-1/4 -left-20 w-[400px] h-[400px] rounded-full bg-violet-300/20 blur-[100px]" />
-      </div>
 
       <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-          <button onClick={onBack} className="text-xl font-bold tracking-tighter text-slate-800">
-            JUSTINA<span className="text-indigo-500">.</span>YOO
+          <button onClick={onBack} style={{ fontFamily: 'Montserrat, sans-serif' }} className="text-base font-bold tracking-tight text-slate-800 hover:text-indigo-600 transition-colors">
+            justina yoo
           </button>
           <div className="flex items-center gap-3">
             <a href="https://www.linkedin.com/in/justina-ji-yeon-yoo/" target="_blank" rel="noopener noreferrer"
@@ -596,6 +496,10 @@ function AttnCaseStudy({ onBack }: { onBack: () => void }) {
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
               </svg>
+            </a>
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
+              <FileText className="w-4 h-4" />
             </a>
             <a href="mailto:justina.yoo@gmail.com"
               className="px-4 py-2 md:px-6 md:py-2.5 bg-white/50 backdrop-blur-sm text-slate-800 text-sm font-semibold rounded-full border border-white/70 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all flex items-center gap-2 shadow-sm">
@@ -617,7 +521,6 @@ function AttnCaseStudy({ onBack }: { onBack: () => void }) {
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-6">Korea's <span className="text-sky-500">#1 US Market</span> Intelligence Platform</h1>
               <p className="text-base md:text-xl lg:text-2xl text-slate-500 font-light max-w-2xl leading-relaxed mb-10">Closing the information gap between Korean investors and US markets — real-time SEC filings, government signals, and market news, translated and delivered at the speed of trading.</p>
               <div className="flex flex-wrap gap-3 md:gap-6 text-sm text-slate-500">
-                <div><span className="font-semibold text-slate-800">Role</span> · Lead PM, 0→1 Build</div>
                 <div><span className="font-semibold text-slate-800">Stack</span> · Multi-Model AI, MCP Server, AI Orchestration</div>
                 <div><span className="font-semibold text-slate-800">Market</span> · Korean Retail Investors</div>
               </div>
@@ -749,17 +652,6 @@ export default function App() {
   const [careerExpanded, setCareerExpanded] = useState(false);
   const [sitePassword, setSitePassword] = useState('');
   const [sitePasswordError, setSitePasswordError] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({
-        x: (e.clientX / window.innerWidth - 0.5) * 2,
-        y: (e.clientY / window.innerHeight - 0.5) * 2,
-      });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   function submitSitePassword(e: React.FormEvent) {
     e.preventDefault();
@@ -773,28 +665,26 @@ export default function App() {
 
   if (!unlocked) {
     return (
-      <div
+      <motion.div
         className="min-h-screen flex items-center justify-center px-6"
-        style={{ background: 'linear-gradient(135deg, #c7d2fe 0%, #a5f3fc 45%, #d8b4fe 100%)' }}
+        animate={{ background: [
+          'radial-gradient(circle at 20% 50%, #c7d2fe 0%, #a5f3fc 40%, #d8b4fe 100%)',
+          'radial-gradient(circle at 80% 30%, #a5f3fc 0%, #d8b4fe 40%, #c7d2fe 100%)',
+          'radial-gradient(circle at 50% 80%, #d8b4fe 0%, #c7d2fe 40%, #a5f3fc 100%)',
+          'radial-gradient(circle at 20% 50%, #c7d2fe 0%, #a5f3fc 40%, #d8b4fe 100%)',
+        ]}}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       >
-        {/* Decorative floating elements on lock screen */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div animate={{ y: [0, -16, 0], rotate: [0, 5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }} className="absolute top-[15%] left-[10%]">
-            <Sparkle style={{ width: 48, height: 48, opacity: 0.7 }} color1="#a78bfa" color2="#818cf8" />
-          </motion.div>
-          <motion.div animate={{ y: [0, 14, 0], rotate: [0, -8, 0] }} transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }} className="absolute top-[20%] right-[12%]">
-            <Sparkle style={{ width: 36, height: 36, opacity: 0.65 }} color1="#67e8f9" color2="#38bdf8" />
-          </motion.div>
-          <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }} className="absolute bottom-[20%] left-[15%]">
-            <GlassOrb size={120} gradient="radial-gradient(circle at 35% 30%, #e0e7ff, #a5b4fc, #6366f1)" />
-          </motion.div>
-          <motion.div animate={{ y: [0, 12, 0] }} transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 2 }} className="absolute bottom-[15%] right-[10%]">
-            <GlassOrb size={180} gradient="radial-gradient(circle at 35% 30%, #ede9fe, #a5b4fc, #6366f1)" />
-          </motion.div>
-        </div>
-
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="w-full max-w-sm text-center relative z-10">
-          <div className="text-2xl font-bold tracking-tighter mb-1 text-slate-800">JUSTINA<span className="text-indigo-500">.</span>YOO</div>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            style={{ fontFamily: 'Montserrat, sans-serif' }}
+            className="text-4xl md:text-5xl font-bold tracking-tight leading-[0.9] text-slate-800 mb-8"
+          >
+            justina yoo
+          </motion.p>
           <p className="text-sm text-slate-600 mb-10">This portfolio is password protected.</p>
           <form onSubmit={submitSitePassword} className="space-y-3">
             <input
@@ -811,13 +701,12 @@ export default function App() {
             </button>
           </form>
         </motion.div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <>
-      <CursorTrail />
       <AnimatePresence mode="wait">
       {page === 'newschat' ? (
         <motion.div key="newschat" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
@@ -834,19 +723,12 @@ export default function App() {
       ) : (
         <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
           className="animated-gradient text-slate-900 font-sans selection:bg-indigo-500/30 relative">
-          {/* Fixed full-page gradient blobs so colour persists while scrolling */}
-          <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-            <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-indigo-300/40 blur-[120px]" />
-            <div className="absolute top-1/3 -right-40 w-[600px] h-[600px] rounded-full bg-blue-300/35 blur-[120px]" />
-            <div className="absolute top-2/3 left-1/4 w-[500px] h-[500px] rounded-full bg-violet-300/35 blur-[120px]" />
-            <div className="absolute bottom-0 right-1/3 w-[600px] h-[600px] rounded-full bg-pink-200/30 blur-[120px]" />
-          </div>
 
           {/* ── Navigation ────────────────────────────────────── */}
           <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
             <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-              <motion.button initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-xl font-bold tracking-tighter text-slate-800 hover:text-indigo-500 transition-colors">
-                JUSTINA<span className="text-indigo-500">.</span>YOO
+              <motion.button initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ fontFamily: 'Montserrat, sans-serif' }} className="text-base font-bold tracking-tight text-slate-800 hover:text-indigo-600 transition-colors">
+                justina yoo
               </motion.button>
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1 md:gap-3">
                 <div className="hidden sm:flex items-center gap-1">
@@ -873,6 +755,10 @@ export default function App() {
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                   </svg>
                 </a>
+                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
+                  className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
+                  <FileText className="w-4 h-4" />
+                </a>
                 <a href="mailto:justina.yoo@gmail.com"
                   className="px-4 py-2 md:px-6 md:py-2.5 bg-white/50 backdrop-blur-sm text-slate-800 text-sm font-semibold rounded-full border border-white/70 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all flex items-center gap-2 shadow-sm">
                   Contact <Mail className="w-4 h-4" />
@@ -898,71 +784,6 @@ export default function App() {
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
             />
 
-            {/* Floating orbs — mouse parallax */}
-            <motion.div
-              className="absolute bottom-[8%] left-[4%] z-0 pointer-events-none"
-              style={{ x: mousePos.x * -18, y: mousePos.y * -12 }}
-              animate={{ y: [0, -18, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <GlassOrb size={220} gradient="radial-gradient(circle at 35% 28%, #f5f3ff, #c4b5fd, #7c3aed)" />
-            </motion.div>
-
-            <motion.div
-              className="absolute bottom-[12%] right-[5%] z-0 pointer-events-none"
-              style={{ x: mousePos.x * 22, y: mousePos.y * 14 }}
-              animate={{ y: [0, 20, 0] }}
-              transition={{ duration: 8.5, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-            >
-              <GlassOrb size={260} gradient="radial-gradient(circle at 35% 28%, #ede9fe, #c4b5fd, #7c3aed)" />
-            </motion.div>
-
-            <motion.div
-              className="absolute top-[15%] right-[8%] z-0 pointer-events-none"
-              style={{ x: mousePos.x * 15, y: mousePos.y * -10 }}
-              animate={{ y: [0, -14, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-            >
-              <GlassOrb size={100} gradient="radial-gradient(circle at 35% 28%, #fdf4ff, #e879f9, #9333ea)" />
-            </motion.div>
-
-            {/* Sparkle shapes */}
-            <motion.div
-              className="absolute top-[22%] left-[8%] z-0 pointer-events-none"
-              style={{ x: mousePos.x * -10, y: mousePos.y * -8 }}
-              animate={{ rotate: [0, 15, 0], y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <Sparkle style={{ width: 64, height: 64 }} color1="#a78bfa" color2="#6366f1" />
-            </motion.div>
-
-            <motion.div
-              className="absolute top-[30%] right-[14%] z-0 pointer-events-none"
-              style={{ x: mousePos.x * 12, y: mousePos.y * 10 }}
-              animate={{ rotate: [0, -20, 0], y: [0, 12, 0] }}
-              transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-            >
-              <Sparkle style={{ width: 48, height: 48 }} color1="#67e8f9" color2="#0ea5e9" />
-            </motion.div>
-
-            <motion.div
-              className="absolute bottom-[32%] left-[16%] z-0 pointer-events-none"
-              style={{ x: mousePos.x * -8, y: mousePos.y * 12 }}
-              animate={{ rotate: [0, 25, 0], scale: [1, 1.1, 1] }}
-              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            >
-              <Sparkle style={{ width: 32, height: 32, opacity: 0.7 }} color1="#f0abfc" color2="#c026d3" />
-            </motion.div>
-
-            <motion.div
-              className="absolute top-[55%] right-[20%] z-0 pointer-events-none"
-              style={{ x: mousePos.x * 16, y: mousePos.y * -14 }}
-              animate={{ rotate: [0, -12, 0], y: [0, -8, 0] }}
-              transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-            >
-              <Sparkle style={{ width: 40, height: 40, opacity: 0.75 }} color1="#bfdbfe" color2="#6366f1" />
-            </motion.div>
-
             {/* Hero content */}
             <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
               <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
@@ -979,29 +800,20 @@ export default function App() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.28, duration: 0.7 }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-[0.9] text-slate-800 mb-4"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
+                  className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-snug text-slate-800 mb-4"
                 >
-                  JUSTINA YOO
+                  I'm Justina, an AI Product Manager bridging<br />complex problems to human-centered solutions.
                 </motion.p>
 
                 <motion.h1
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-lg md:text-xl lg:text-2xl font-semibold tracking-tight leading-snug mb-8 text-indigo-500"
+                  className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-snug mb-8 text-indigo-500"
                 >
                   Architecting the 0→1 AI Journey.
                 </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.55, duration: 0.7 }}
-                  className="max-w-xl mx-auto text-base md:text-lg text-slate-600 mb-8 leading-relaxed"
-                >
-                  Bridging complex AI capabilities and human-centered design.
-                  Currently building 0→1 GenAI products at Panomix.
-                </motion.p>
 
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -1137,7 +949,7 @@ export default function App() {
                         <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${jobs[0].tagColor}`}>{jobs[0].tag}</span>
                       </div>
                       <p className="text-xs text-slate-400 mb-2 pl-[18px]">{jobs[0].period}</p>
-                      <p className="text-sm text-slate-500 leading-relaxed pl-[18px]">{jobs[0].summary}</p>
+                      <p className="text-sm text-slate-500 leading-relaxed pl-[18px]">Led end-to-end product lifecycle for AI products (NewsChat, AEKO): scaled to 1M+ MAU, drove +10% ad CTR and +250% session time, spearheaded AEKO MVP, and pioneered contextual ads generating 3.5x ARPU.</p>
                     </div>
 
                     {/* Collapsed: peek + expand trigger as one unit */}
@@ -1231,7 +1043,7 @@ export default function App() {
                     ))}
                   </div>
                   <div className="flex items-center gap-1.5 text-sm font-semibold text-indigo-500 group-hover:gap-3 transition-all">
-                    Read case study <ChevronRight className="w-4 h-4" />
+                    Read more <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.div>
                 <motion.div
@@ -1257,7 +1069,7 @@ export default function App() {
                     ))}
                   </div>
                   <div className="flex items-center gap-1.5 text-sm font-semibold text-violet-500 group-hover:gap-3 transition-all">
-                    Read case study <ChevronRight className="w-4 h-4" />
+                    Read more <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.div>
                 <motion.div
@@ -1283,7 +1095,7 @@ export default function App() {
                     ))}
                   </div>
                   <div className="flex items-center gap-1.5 text-sm font-semibold text-sky-500 group-hover:gap-3 transition-all">
-                    Read case study <ChevronRight className="w-4 h-4" />
+                    Read more <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.div>
               </div>
