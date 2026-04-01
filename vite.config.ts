@@ -6,7 +6,7 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: process.env.GITHUB_ACTIONS ? '/justina-yoo-portfolio/' : '/',
+    base: process.env.GITHUB_ACTIONS ? '/' : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
