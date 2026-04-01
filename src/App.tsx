@@ -652,6 +652,7 @@ export default function App() {
   const [careerExpanded, setCareerExpanded] = useState(false);
   const [sitePassword, setSitePassword] = useState('');
   const [sitePasswordError, setSitePasswordError] = useState(false);
+  const [lang, setLang] = useState<'en' | 'kr'>('en');
 
   function submitSitePassword(e: React.FormEvent) {
     e.preventDefault();
@@ -724,6 +725,11 @@ export default function App() {
         <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
           className="animated-gradient text-slate-900 font-sans selection:bg-indigo-500/30 relative">
 
+          {(() => {
+            const t = (en: string, kr: string) => lang === 'kr' ? kr : en;
+            return (
+              <>
+
           {/* ── Navigation ────────────────────────────────────── */}
           <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
             <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
@@ -745,6 +751,14 @@ export default function App() {
                     Side Projects
                   </button>
                 </div>
+                <button
+                  onClick={() => setLang(lang === 'en' ? 'kr' : 'en')}
+                  className="flex items-center gap-0.5 px-2.5 py-1.5 rounded-full bg-white/50 backdrop-blur-sm border border-white/70 shadow-sm text-xs font-bold hover:bg-indigo-500 hover:border-indigo-500 transition-all"
+                >
+                  <span className={lang === 'en' ? 'text-indigo-600' : 'text-slate-400 hover:text-white'}>EN</span>
+                  <span className="text-slate-300 mx-0.5">·</span>
+                  <span className={lang === 'kr' ? 'text-indigo-600' : 'text-slate-400 hover:text-white'}>KR</span>
+                </button>
                 <a
                   href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
                   target="_blank"
@@ -793,7 +807,7 @@ export default function App() {
                   transition={{ delay: 0.2, duration: 0.6 }}
                   className="inline-block px-4 py-1.5 rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-indigo-600 text-xs font-bold tracking-[0.2em] uppercase mb-8 shadow-sm"
                 >
-                  AI Product Manager
+                  {t('AI Product Manager', 'AI 프로덕트 매니저')}
                 </motion.span>
 
                 <motion.p
@@ -803,7 +817,7 @@ export default function App() {
                   style={{ fontFamily: 'Montserrat, sans-serif' }}
                   className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-snug text-slate-800 mb-4"
                 >
-                  I'm Justina, an AI Product Manager bridging<br />complex problems to human-centered solutions.
+                  {t('I\'m Justina, an AI Product Manager bridging\ncomplex problems to human-centered solutions.', '저는 저스티나입니다. 복잡한 문제를 사람 중심의 솔루션으로 연결하는\nAI 프로덕트 매니저입니다.')}
                 </motion.p>
 
                 <motion.h1
@@ -812,7 +826,7 @@ export default function App() {
                   transition={{ delay: 0.35, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                   className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-snug mb-8 text-indigo-500"
                 >
-                  Architecting the 0→1 AI Journey.
+                  {t('Architecting the 0→1 AI Journey.', '0→1 AI 여정을 설계합니다.')}
                 </motion.h1>
 
                 <motion.div
@@ -822,10 +836,10 @@ export default function App() {
                   className="flex flex-wrap justify-center gap-2 mb-10"
                 >
                   {[
-                    { value: "1M+", label: "MAU in 5 months", color: "text-indigo-500" },
-                    { value: "+250%", label: "Session time", color: "text-violet-500" },
-                    { value: "+10%", label: "Ad CTR", color: "text-pink-500" },
-                    { value: "0→1", label: "builder", color: "text-sky-500" },
+                    { value: "1M+", label: t("MAU in 5 months", "5개월 MAU"), color: "text-indigo-500" },
+                    { value: "+250%", label: t("Session time", "세션 시간"), color: "text-violet-500" },
+                    { value: "+10%", label: t("Ad CTR", "광고 CTR"), color: "text-pink-500" },
+                    { value: "0→1", label: t("builder", "빌더"), color: "text-sky-500" },
                   ].map((stat, i) => (
                     <span key={i} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-white/70 shadow-sm text-sm text-slate-700">
                       <span className={`font-bold ${stat.color}`}>{stat.value}</span>
@@ -844,8 +858,8 @@ export default function App() {
             <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
             <div className="max-w-4xl mx-auto px-6 relative z-10">
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-10">
-                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">Background</p>
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">Education & Background</h2>
+                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">{t('Background', '배경')}</p>
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">{t('Education & Background', '학력 및 배경')}</h2>
               </motion.div>
 
               <div className="grid md:grid-cols-2 gap-6 md:gap-8">
@@ -855,8 +869,8 @@ export default function App() {
                     {
                       school: "Carnegie Mellon University",
                       period: "2019 – 2024",
-                      degree: "B.S. Decision Science",
-                      sub: "Minors in HCI & Architecture",
+                      degree: t("B.S. Decision Science", "의사결정과학 학사"),
+                      sub: t("Minors in HCI & Architecture", "HCI 및 건축학 부전공"),
                       accent: "border-indigo-300",
                       tag: "Pittsburgh, PA",
                       tagColor: "bg-indigo-100 text-indigo-600",
@@ -864,8 +878,8 @@ export default function App() {
                     {
                       school: "Shanghai American School",
                       period: "2007 – 2019",
-                      degree: "IB & AP Diploma",
-                      sub: "International Baccalaureate + Advanced Placement",
+                      degree: t("IB & AP Diploma", "IB & AP 디플로마"),
+                      sub: t("International Baccalaureate + Advanced Placement", "국제 바칼로레아 및 AP"),
                       accent: "border-violet-300",
                       tag: "Shanghai, China",
                       tagColor: "bg-violet-100 text-violet-600",
@@ -895,12 +909,12 @@ export default function App() {
 
                 {/* What I bring */}
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.6 }}>
-                  <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-4">What I bring</p>
+                  <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-4">{t('What I bring', '저의 강점')}</p>
                   <div className="space-y-3">
                     {[
-                      { flag: "🇰🇷 🇨🇳 🇺🇸", label: "Global Experience", desc: "Raised across Korea, China, and the US — fluent in all three languages and comfortable navigating cross-cultural teams and markets.", color: "bg-indigo-50 border-indigo-100" },
-                      { flag: "🎓", label: "Decision Science + HCI", desc: "Analytical problem-framing meets user-centered design.", color: "bg-violet-50 border-violet-100" },
-                      { flag: "⚡", label: "0→1 builder", desc: "Two GenAI products from concept to production launch.", color: "bg-cyan-50 border-cyan-100" },
+                      { flag: "🇰🇷 🇨🇳 🇺🇸", label: "Global Experience", desc: t("Raised across Korea, China, and the US — fluent in all three languages and comfortable navigating cross-cultural teams and markets.", "한국, 중국, 미국에서 성장하며 세 언어에 유창하고, 다문화 팀과 시장에서 자연스럽게 소통합니다."), color: "bg-indigo-50 border-indigo-100" },
+                      { flag: "🎓", label: "Decision Science + HCI", desc: t("Analytical problem-framing meets user-centered design.", "분석적 문제 정의와 사용자 중심 디자인의 결합."), color: "bg-violet-50 border-violet-100" },
+                      { flag: "⚡", label: "0→1 builder", desc: t("Two GenAI products from concept to production launch.", "개념에서 프로덕션 출시까지 두 개의 GenAI 제품 빌드."), color: "bg-cyan-50 border-cyan-100" },
                     ].map((item, i) => (
                       <motion.div
                         key={i}
@@ -927,15 +941,15 @@ export default function App() {
           <section className="py-16">
             <div className="max-w-4xl mx-auto px-4 md:px-6">
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-10">
-                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">Career</p>
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">The journey so far</h2>
+                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">{t('Career', '경력')}</p>
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">{t('The journey so far', '지금까지의 여정')}</h2>
               </motion.div>
               {(() => {
                 const jobs = [
-                  { role: "AI Product Manager", company: "Panomix", period: "2024 – Present", tag: "Current", tagColor: "bg-indigo-100 text-indigo-600", summary: "Leading 0→1 GenAI product builds — from news-chat to AI-SDK. Own the full lifecycle: roadmap, specs, launch, and iteration with Engineering & Design.", accent: "bg-indigo-400" },
-                  { role: "Branding & Marketing Intern", company: "Edelman", period: "2023", tag: "Comms & Strategy", tagColor: "bg-cyan-100 text-cyan-600", summary: "Learned how global brands tell stories. Executed campaigns, wrote performance reports, and contributed to new business strategy through deep competitor research.", accent: "bg-cyan-300" },
-                  { role: "Council Development Intern", company: "Gerson Lehrman Group", period: "2022", tag: "Research", tagColor: "bg-violet-100 text-violet-600", summary: "Interviewed 20+ industry experts daily to surface insights for consulting clients. Built a muscle for rapid synthesis across wildly different domains.", accent: "bg-violet-300" },
-                  { role: "Product Growth Intern", company: "Tridge", period: "2021", tag: "First product role", tagColor: "bg-sky-100 text-sky-600", summary: "First taste of product work — user interviews, data organization, and localizing content across Chinese and English markets.", accent: "bg-sky-300" },
+                  { role: "AI Product Manager", company: "Panomix", period: "2024 – Present", tag: t("Current", "현재"), tagColor: "bg-indigo-100 text-indigo-600", summary: t("Leading 0→1 GenAI product builds — from news-chat to AI-SDK. Own the full lifecycle: roadmap, specs, launch, and iteration with Engineering & Design.", "AI 프로덕트(NewsChat, AEKO) 전체 수명 주기 주도: 1M+ MAU 달성, 광고 CTR +10%·세션 시간 +250% 향상, AEKO MVP 론칭, 3.5x ARPU 맥락 광고 도입."), accent: "bg-indigo-400" },
+                  { role: "Branding & Marketing Intern", company: "Edelman", period: "2023", tag: t("Comms & Strategy", "커뮤니케이션 & 전략"), tagColor: "bg-cyan-100 text-cyan-600", summary: t("Learned how global brands tell stories. Executed campaigns, wrote performance reports, and contributed to new business strategy through deep competitor research.", "글로벌 브랜드의 스토리텔링 방식을 배웠습니다. 캠페인 집행, 성과 보고서 작성, 경쟁사 분석을 통한 신사업 전략 기여."), accent: "bg-cyan-300" },
+                  { role: "Council Development Intern", company: "Gerson Lehrman Group", period: "2022", tag: t("Research", "리서치"), tagColor: "bg-violet-100 text-violet-600", summary: t("Interviewed 20+ industry experts daily to surface insights for consulting clients. Built a muscle for rapid synthesis across wildly different domains.", "매일 20명 이상의 산업 전문가 인터뷰를 통해 컨설팅 인사이트 발굴. 다양한 도메인에 걸친 빠른 종합 역량 구축."), accent: "bg-violet-300" },
+                  { role: "Product Growth Intern", company: "Tridge", period: "2021", tag: t("First product role", "첫 프로덕트 역할"), tagColor: "bg-sky-100 text-sky-600", summary: t("First taste of product work — user interviews, data organization, and localizing content across Chinese and English markets.", "첫 프로덕트 경험 — 사용자 인터뷰, 데이터 정리, 중국어·영어 시장 콘텐츠 현지화."), accent: "bg-sky-300" },
                 ];
                 return (
                   <motion.div initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
@@ -971,7 +985,7 @@ export default function App() {
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/70 pointer-events-none" />
                         {/* Always-visible label */}
                         <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-2 py-3 border-t border-white/50">
-                          <span className="text-xs font-semibold text-indigo-500 group-hover:text-indigo-600 transition-colors">See previous roles</span>
+                          <span className="text-xs font-semibold text-indigo-500 group-hover:text-indigo-600 transition-colors">{t('See previous roles', '이전 경력 보기')}</span>
                           <motion.span animate={{ y: [0, 2, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}>
                             <ChevronRight className="w-3.5 h-3.5 text-indigo-500 rotate-90" />
                           </motion.span>
@@ -1003,7 +1017,7 @@ export default function App() {
                           onClick={() => setCareerExpanded(false)}
                           className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-semibold text-slate-400 hover:text-indigo-500 transition-colors"
                         >
-                          Show less <ChevronRight className="w-3.5 h-3.5 rotate-[270deg]" />
+                          {t('Show less', '접기')} <ChevronRight className="w-3.5 h-3.5 rotate-[270deg]" />
                         </button>
                       </div>
                     )}
@@ -1017,7 +1031,7 @@ export default function App() {
           <section id="featured-work" className="py-20">
             <div className="max-w-4xl mx-auto px-4 md:px-6">
               <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-6">Featured Projects</p>
+                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-6">{t('Featured Projects', '주요 프로젝트')}</p>
               </motion.div>
               <div className="space-y-4">
                 <motion.div
@@ -1033,17 +1047,17 @@ export default function App() {
                     <div className="inline-flex items-center bg-slate-800 rounded-lg px-3 py-1.5">
                       <img src="https://panomix.io/images/products/Newschat%20logo.svg" alt="NewsChat" className="h-5 object-contain" />
                     </div>
-                    <span className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-600">Featured Project</span>
+                    <span className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-600">{t('Featured Project', '주요 프로젝트')}</span>
                   </div>
-                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">Scaling & Monetizing Generative AI</h2>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-3">Built the product architecture for a GenAI-powered news chat experience — from 0 to 1M MAU. Designed a contextual ad strategy that layered monetization without degrading the AI conversation, driving a +10% CTR lift and +250% session depth increase.</p>
+                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">{t('Scaling & Monetizing Generative AI', '생성형 AI 스케일링 및 수익화')}</h2>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-3">{t('Built the product architecture for a GenAI-powered news chat experience — from 0 to 1M MAU. Designed a contextual ad strategy that layered monetization without degrading the AI conversation, driving a +10% CTR lift and +250% session depth increase.', 'GenAI 기반 뉴스 채팅 경험의 프로덕트 아키텍처 설계 — 0에서 1M MAU까지. AI 대화를 해치지 않으면서 수익화를 더한 맥락 광고 전략 설계로 CTR +10%, 세션 깊이 +250% 달성.')}</p>
                   <div className="flex flex-wrap gap-2 mb-5">
                     {["0→1 Product", "1M MAU", "Contextual Ads", "GenAI", "Monetization"].map(t => (
                       <span key={t} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500 border border-indigo-100">{t}</span>
                     ))}
                   </div>
                   <div className="flex items-center gap-1.5 text-sm font-semibold text-indigo-500 group-hover:gap-3 transition-all">
-                    Read more <ChevronRight className="w-4 h-4" />
+                    {t('Read more', '자세히 보기')} <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.div>
                 <motion.div
@@ -1059,17 +1073,17 @@ export default function App() {
                     <div className="inline-flex items-center bg-white rounded-lg px-3 py-1.5 border border-slate-100">
                       <img src="https://aeko-intelligence.com/logo.svg" alt="AEKO" className="h-8 object-contain" />
                     </div>
-                    <span className="inline-flex items-center rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-600">Featured Project</span>
+                    <span className="inline-flex items-center rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-600">{t('Featured Project', '주요 프로젝트')}</span>
                   </div>
-                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">AI Visibility for Cross-Border E-commerce</h2>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-3">Defining the product strategy for an Answer Engine Optimization SaaS targeting cross-border e-commerce brands. Translating AI search behavior into actionable visibility tools — currently in MVP testing with MCP integration underway.</p>
+                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">{t('AI Visibility for Cross-Border E-commerce', '크로스보더 이커머스를 위한 AI 가시성 분석')}</h2>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-3">{t('Defining the product strategy for an Answer Engine Optimization SaaS targeting cross-border e-commerce brands. Translating AI search behavior into actionable visibility tools — currently in MVP testing with MCP integration underway.', '크로스보더 이커머스 브랜드를 위한 AEO(답변 엔진 최적화) SaaS 프로덕트 전략 정의. AI 검색 행동을 실행 가능한 가시성 도구로 전환 — 현재 MVP 테스트 중이며 MCP 통합 진행 중.')}</p>
                   <div className="flex flex-wrap gap-2 mb-5">
                     {["AEO SaaS", "MVP", "MCP Integration", "E-commerce", "Pre-launch"].map(t => (
                       <span key={t} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-500 border border-violet-100">{t}</span>
                     ))}
                   </div>
                   <div className="flex items-center gap-1.5 text-sm font-semibold text-violet-500 group-hover:gap-3 transition-all">
-                    Read more <ChevronRight className="w-4 h-4" />
+                    {t('Read more', '자세히 보기')} <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.div>
                 <motion.div
@@ -1085,17 +1099,17 @@ export default function App() {
                     <div className="inline-flex items-center bg-white rounded-lg px-3 py-1.5 border border-slate-100">
                       <img src="https://attn.today/icons/attn_logo.svg" alt="ATTN" className="h-4 object-contain" />
                     </div>
-                    <span className="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-600">Featured Project</span>
+                    <span className="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-600">{t('Featured Project', '주요 프로젝트')}</span>
                   </div>
-                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">Korea's #1 US Market Intelligence Platform</h2>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-3">Built an AI-native pipeline that aggregates SEC filings, US government signals, and breaking market news — translated into Korean at trading speed. Closing the information gap that had left Korean retail investors structurally behind in US equities.</p>
+                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">{t('Korea\'s #1 US Market Intelligence Platform', '한국 1위 미국 주식 시장 정보 플랫폼')}</h2>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-3">{t('Built an AI-native pipeline that aggregates SEC filings, US government signals, and breaking market news — translated into Korean at trading speed. Closing the information gap that had left Korean retail investors structurally behind in US equities.', 'SEC 공시, 미국 정부 신호, 실시간 시장 뉴스를 트레이딩 속도에 맞춰 한국어로 번역 제공하는 AI 네이티브 파이프라인 구축. 한국 개인 투자자들의 미국 주식 정보 격차를 해소.')}</p>
                   <div className="flex flex-wrap gap-2 mb-5">
                     {["Multi-Model AI", "Financial Media", "MCP Server", "Korea", "Launched"].map(t => (
                       <span key={t} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-500 border border-sky-100">{t}</span>
                     ))}
                   </div>
                   <div className="flex items-center gap-1.5 text-sm font-semibold text-sky-500 group-hover:gap-3 transition-all">
-                    Read more <ChevronRight className="w-4 h-4" />
+                    {t('Read more', '자세히 보기')} <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.div>
               </div>
@@ -1107,8 +1121,8 @@ export default function App() {
             <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
             <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-10">
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-10">
-                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">Side Projects</p>
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">Building on the side</h2>
+                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">{t('Side Projects', '사이드 프로젝트')}</p>
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">{t('Building on the side', '사이드에서 빌드 중')}</h2>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
@@ -1120,7 +1134,7 @@ export default function App() {
                 <div className="w-8 h-8 rounded-full bg-indigo-100/60 flex items-center justify-center">
                   <span className="text-indigo-400 text-sm">✦</span>
                 </div>
-                <p className="text-xs font-semibold tracking-widest uppercase text-slate-400">Coming Soon</p>
+                <p className="text-xs font-semibold tracking-widest uppercase text-slate-400">{t('Coming Soon', '출시 예정')}</p>
               </motion.div>
             </div>
           </section>
@@ -1130,7 +1144,9 @@ export default function App() {
               <div className="text-xs text-slate-400 tracking-widest uppercase">© 2026 Justina Yoo</div>
             </div>
           </footer>
-
+              </>
+            );
+          })()}
         </motion.div>
       )}
     </AnimatePresence>
