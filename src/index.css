@@ -1,19 +1,249 @@
 @import "tailwindcss";
 
+:root {
+  --paper: #faf8f4;
+  --paper-2: #f3f0ea;
+  --paper-3: #ebe7df;
+  --ink: #1a1a1a;
+  --ink-2: #2e2e2e;
+  --ink-3: #6b6b6b;
+  --muted: #9a9a9a;
+  --rule: #ddd9d2;
+  --accent: #2e4bff;
+  --accent-2: #1e3ae0;
+  --indigo: #4338ca;
+  --violet: #6d28d9;
+  --sky: #0369a1;
+}
+
 @layer base {
-  html {
-    font-family: "Avenir Next Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  html,
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-feature-settings: "ss01", "cv11";
   }
 }
 
-@keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.font-serif-display {
+  font-family: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.font-mono-tech {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+.eyebrow {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.hairline {
+  border-color: var(--rule);
 }
 
+/* animated multi-stop blue/lavender gradient */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 .animated-gradient {
-  background: linear-gradient(130deg, #c7d2fe, #ddd6fe, #bfdbfe, #f5d0fe, #fbcfe8, #e0e7ff);
+  background: linear-gradient(130deg, #c7d2fe, #bfdbfe, #a5b4fc, #ddd6fe, #bae6fd, #e0e7ff);
   background-size: 400% 400%;
-  animation: gradientShift 5s ease infinite;
+  animation: gradientShift 18s ease-in-out infinite;
+}
+
+/* grain */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.03;
+  mix-blend-mode: multiply;
+}
+
+/* page canvas: animated gradient base + soft radial highlights */
+.canvas-tint {
+  position: relative;
+  background: var(--paper);
+}
+
+/* oversized display numeral */
+.display-num {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+}
+
+/* ticker marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+/* reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.nav-link {
+  position: relative;
+}
+.nav-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.nav-link:hover::before {
+  transform: scaleX(1);
+}
+
+/* dotted grid for decorative area */
+.dot-grid {
+  background-image: radial-gradient(var(--rule) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+/* case study accents */
+.acc-indigo {
+  --acc: #2e4bff;
+  --acc-2: #1e3ae0;
+  --acc-tint: #dbe4ff;
+}
+.acc-violet {
+  --acc: #5b5bf5;
+  --acc-2: #4040d6;
+  --acc-tint: #e0e0ff;
+}
+.acc-sky {
+  --acc: #0ea5e9;
+  --acc-2: #0284c7;
+  --acc-tint: #e0f2fe;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 2px;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+}
+.chip-filled {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.chip-acc {
+  background: var(--acc);
+  color: #fff;
+  border-color: var(--acc);
+}
+
+/* glass panel on top of gradient */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+.glass-strong {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* case study hero metric */
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 28px 22px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+}
+.metric .n {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-size: 48px;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--acc, var(--ink));
+}
+
+/* button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition:
+    background 0.25s ease,
+    transform 0.3s ease;
+}
+.btn-primary:hover {
+  background: var(--accent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
 }

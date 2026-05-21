@@ -1,1155 +1,598 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
+ *
+ * Editorial blue-paper portfolio — home + password gate + EN/KR toggle.
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Mail, TrendingUp, Users, MousePointerClick, Clock, MessageSquare, Newspaper, Target, Lightbulb, BarChart3, ChevronRight, Globe, Zap, FileText } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  Reveal,
+  Icon,
+  TopNav,
+  Footer,
+} from './ui';
+import { NewsChatCaseStudy, AekoCaseStudy, AttnCaseStudy, WorkflowCaseStudy } from './CaseStudies';
 
-const locations = [
-  { city: "Shanghai", country: "China", flag: "🇨🇳", pct: 10 },
-  { city: "Pennsylvania", country: "United States", flag: "🇺🇸", pct: 50 },
-  { city: "Seoul", country: "South Korea", flag: "🇰🇷", pct: 90 },
-];
+type Lang = 'en' | 'kr';
+type Page = 'home' | 'newschat' | 'aeko' | 'attn' | 'workflow';
 
-function HorizonTracker() {
-  const [active, setActive] = useState(0);
+const PASSWORD = 'justina2026';
+const AUTH_KEY = 'justina_portfolio_auth_v2';
 
-  useEffect(() => {
-    const id = setInterval(() => setActive(p => (p + 1) % locations.length), 2400);
-    return () => clearInterval(id);
-  }, []);
+/* ─── Password Gate ─────────────────────────────── */
+function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
+  const [value, setValue] = useState('');
+  const [error, setError] = useState(false);
 
-  const dotPct = locations[active].pct;
-
-  return (
-    <div className="flex flex-col items-center gap-1 select-none w-full max-w-[340px]">
-      <span className="text-[10px] font-semibold tracking-widest uppercase text-slate-400 mb-3">Lived in</span>
-      {/* horizon container */}
-      <div className="relative w-full" style={{ height: 56 }}>
-        {/* line */}
-        <div className="absolute top-[18px] left-0 right-0 h-px bg-slate-200" />
-        {/* travelled fill */}
-        <motion.div
-          className="absolute top-[18px] left-0 h-px bg-gradient-to-r from-indigo-400 via-cyan-400 to-violet-400"
-          animate={{ width: `${dotPct}%` }}
-          transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
-        />
-        {/* city points */}
-        {locations.map((loc, i) => (
-          <div
-            key={loc.city}
-            className="absolute flex flex-col items-center"
-            style={{ left: `${loc.pct}%`, transform: 'translateX(-50%)', top: 0 }}
-          >
-            {/* dot */}
-            <motion.div
-              animate={{
-                scale: active === i ? 1.4 : 1,
-                backgroundColor: active === i ? '#6366f1' : '#cbd5e1',
-                boxShadow: active === i ? '0 0 0 4px rgba(99,102,241,0.2)' : '0 0 0 0px transparent',
-              }}
-              transition={{ duration: 0.4 }}
-              className="w-2.5 h-2.5 rounded-full mt-[13px]"
-            />
-            {/* label */}
-            <motion.div
-              animate={{ opacity: active === i ? 1 : 0.35 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col items-center mt-2"
-            >
-              <span className="text-base leading-none">{loc.flag}</span>
-              <span className="text-[10px] font-semibold text-slate-700 mt-0.5 whitespace-nowrap">{loc.city}</span>
-            </motion.div>
-          </div>
-        ))}
-        {/* traveling glow dot */}
-        <motion.div
-          animate={{ left: `${dotPct}%` }}
-          transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
-          className="absolute top-[12px] -translate-x-1/2 w-4 h-4 rounded-full bg-indigo-500/30 blur-[3px] pointer-events-none"
-        />
-      </div>
-    </div>
-  );
-}
-
-
-// ─── Featured Project Page — NewsChat ────────────────────────────────────────────
-
-function NewsChatCaseStudy({ onBack }: { onBack: () => void }) {
-  useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
-
-  const metrics = [
-    { icon: Users, value: "1M", label: "MAU in 5 months", color: "text-indigo-500" },
-    { icon: Clock, value: "250%", label: "Increase in dwell time", color: "text-cyan-500" },
-    { icon: MousePointerClick, value: "10%", label: "Contextual ad CTR", color: "text-violet-500" },
-    { icon: Newspaper, value: "100M+", label: "Article views accumulated", color: "text-sky-500" },
-  ];
-
-  const timeline = [
-    { phase: "01 — Discovery", title: "Why are readers bouncing?", content: "Partnered with a South Korean digital news publisher facing a 40% YoY drop in session duration. Ran user interviews, session replay analysis, and heatmapping across 3M monthly sessions. The core insight: readers wanted to go deeper on a topic but had no path forward — they'd read the headline, skim the article, and leave.", tags: ["User Interviews", "Session Analytics", "Heatmapping", "Stakeholder Alignment"] },
-    { phase: "02 — Problem Framing", title: "Passive consumption is a dead end", content: "Defined the core problem: news content was broadcast-only. Readers had questions the article didn't answer, but no way to ask them. This created a gap between reader intent and publisher experience — and left monetization value on the table. Framed the opportunity as: can we make news a conversation?", tags: ["Jobs-to-be-Done", "Opportunity Sizing", "Problem Statement"] },
-    { phase: "03 — Solution Design", title: "NewsChat: Ask anything about the story", content: "Designed a contextual conversational layer embedded directly in news articles. Readers can ask follow-up questions, get source summaries, explore related topics, and request simplified explanations — all grounded in the article and vetted source material via RAG pipelines. Worked closely with ML and infra teams to define retrieval quality, latency budgets (<800ms), and hallucination guardrails.", tags: ["GenAI / LLM", "RAG Architecture", "UX Design", "Latency Optimization"] },
-    { phase: "04 — Monetization Strategy", title: "Contextual ads that feel native", content: "Designed a contextual ad injection system that reads the semantic thread of each conversation turn and surfaces relevant sponsored content at natural breakpoints — never mid-sentence, never intrusive. Ads are tagged to conversation intent, not page keywords, achieving 10x industry-average CTR. Modeled a CPM uplift of 3.2x over standard display inventory.", tags: ["Ad Strategy", "Intent Targeting", "Revenue Modeling", "A/B Testing"] },
-    { phase: "05 — Launch & Scale", title: "0 → 1M MAU in 5 months", content: "Ran a soft launch with 3 publisher partners, iterating on response quality, UI placement, and chat trigger UX based on real engagement data. After hitting PMF signals (>30% of readers who saw the chat prompt engaged with it), scaled to additional publishers. Hit 1M MAU 5 months post-launch with zero paid acquisition — entirely through publisher distribution.", tags: ["Go-to-Market", "PMF Signals", "Publisher Partnerships", "Growth"] },
-  ];
-
-  const learnings = [
-    { icon: Lightbulb, title: "Trust is the foundation of AI products", body: "Hallucination wasn't just a technical problem — it was a product trust problem. We invested heavily in source attribution UI and escalation flows (\"I'm not sure — read the original article\") before we got engagement to lift. Users forgave slow answers; they didn't forgive wrong ones." },
-    { icon: Target, title: "Monetization must be designed in, not bolted on", body: "Starting with a clear monetization hypothesis from day one shaped every product decision — from data schemas to conversation UX. Teams that treat ads as a later problem ship products that are fundamentally incompatible with their business model." },
-    { icon: BarChart3, title: "Dwell time is a vanity metric without attribution", body: "Dwell time went up 250% — but the real win was that pages-per-session and return visit rate moved too. We learned to look for correlated behavior clusters, not single metrics, as signals of genuine engagement improvement." },
-  ];
-
-  return (
-    <div className="animated-gradient min-h-screen text-slate-900 font-sans relative">
-
-      <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-          <button onClick={onBack} style={{ fontFamily: 'Montserrat, sans-serif' }} className="text-base font-bold tracking-tight text-slate-800 hover:text-indigo-600 transition-colors">
-            justina yoo. 
-          </button>
-          <div className="flex items-center gap-3">
-            <a
-              href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-            </a>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
-              <FileText className="w-4 h-4" />
-            </a>
-            <a href="mailto:justina.yoo@gmail.com"
-              className="px-4 py-2 md:px-6 md:py-2.5 bg-white/50 backdrop-blur-sm text-slate-800 text-sm font-semibold rounded-full border border-white/70 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all flex items-center gap-2 shadow-sm">
-              Contact <Mail className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      <main className="pt-20 relative z-10">
-        <section className="relative py-16 md:py-28 overflow-hidden border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                <span className="px-3 py-1 rounded-full border border-indigo-300/40 bg-indigo-100/60 backdrop-blur text-indigo-600 text-xs font-semibold tracking-widest uppercase">Featured Project</span>
-                <span className="px-3 py-1 rounded-full border border-white/60 bg-white/40 backdrop-blur text-slate-500 text-xs font-semibold tracking-widest uppercase">GenAI · Media · Monetization</span>
-              </div>
-              <div className="inline-flex items-center bg-slate-800 rounded-xl px-4 py-2 mb-6">
-                <img src="https://panomix.io/images/products/Newschat%20logo.svg" alt="NewsChat" className="h-7 object-contain" />
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-6">NewsChat<span className="text-indigo-500">.</span></h1>
-              <p className="text-base md:text-xl lg:text-2xl text-slate-500 font-light max-w-2xl leading-relaxed mb-10">Turning passive news consumption into interactive conversation — and monetizing the engagement gap.</p>
-              <div className="flex flex-wrap gap-3 md:gap-6 text-sm text-slate-500">
-                <div><span className="font-semibold text-slate-800">Market</span> · Digital News Publishers</div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="py-12 md:py-20 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-10">Impact at a glance</p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-                {metrics.map((m, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
-                    className="rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-4 md:p-6 hover:bg-white/60 hover:shadow-lg hover:shadow-indigo-100/30 transition-all">
-                    <m.icon className={`w-5 h-5 mb-4 ${m.color}`} />
-                    <div className={`text-4xl font-bold tracking-tight mb-1 ${m.color}`}>{m.value}</div>
-                    <div className="text-sm text-slate-500 leading-snug">{m.label}</div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="py-12 md:py-20 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-4">The Context</p>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">News media is an engagement crisis dressed as a content problem.</h2>
-                <p className="text-slate-600 leading-relaxed">Publishers invested in AI-powered content generation — and saw article output double. But session duration kept falling. More content didn't mean more engagement. The real problem was structural: readers had no reason to stay.</p>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="space-y-4">
-                {[
-                  { label: "Average article read time", before: "48 sec" },
-                  { label: "Reader return rate (7-day)", before: "12%" },
-                  { label: "Ad CPM (display)", before: "$1.20" },
-                  { label: "AI content investment ROI", before: "Unmeasured" },
-                ].map((row, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/40 backdrop-blur border border-white/60">
-                    <span className="text-sm text-slate-600">{row.label}</span>
-                    <span className="text-sm font-semibold text-red-400">{row.before}</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-14">
-              <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-4">Process</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">How we built it</h2>
-            </motion.div>
-            <div className="space-y-6">
-              {timeline.map((step, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}
-                  className="group rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-8 hover:bg-white/60 hover:shadow-md hover:shadow-indigo-100/30 transition-all">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div>
-                      <p className="text-xs font-semibold tracking-widest uppercase text-indigo-500 mb-1">{step.phase}</p>
-                      <h3 className="text-xl font-bold text-slate-900">{step.title}</h3>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-indigo-500 transition-colors mt-1 shrink-0" />
-                  </div>
-                  <p className="text-slate-600 leading-relaxed mb-5">{step.content}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {step.tags.map((tag, j) => (
-                      <span key={j} className="px-2.5 py-1 rounded-full bg-indigo-100/60 text-indigo-600 text-xs font-medium border border-indigo-200/40">{tag}</span>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-14">
-              <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-4">Product</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">NewsChat in action</h2>
-            </motion.div>
-            <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-              {[
-                { icon: MessageSquare, title: "Ask anything", body: "Readers ask follow-up questions mid-article. NewsChat responds with context drawn from the story, related reporting, and verified source material — grounded via RAG." },
-                { icon: Newspaper, title: "Deeper context, instantly", body: "\"Who is this person?\" \"What happened last week?\" — background questions are answered in-line without leaving the page. Session depth increases, bounce rate drops." },
-                { icon: TrendingUp, title: "Monetize the conversation", body: "Sponsored content surfaces contextually at natural breakpoints in the conversation thread — matched to semantic intent, not page keywords. 10% CTR vs. 0.1% industry average." },
-              ].map((card, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-7 hover:bg-white/60 transition-all">
-                  <card.icon className="w-6 h-6 text-indigo-500 mb-5" />
-                  <h3 className="text-lg font-semibold mb-3 text-slate-800">{card.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{card.body}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-14">
-              <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-4">Reflections</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">What I learned</h2>
-            </motion.div>
-            <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-              {learnings.map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-7 hover:bg-white/60 transition-all">
-                  <item.icon className="w-5 h-5 text-indigo-500 mb-5" />
-                  <h3 className="text-base font-bold mb-3 leading-snug text-slate-800">{item.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{item.body}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24">
-          <div className="max-w-5xl mx-auto px-6 text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Want to talk through this?</h2>
-              <p className="text-slate-500 mb-8 max-w-md mx-auto">I'm always happy to go deeper on product strategy, AI monetization, or 0→1 builds.</p>
-              <a href="mailto:justina.yoo@gmail.com" className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-3.5 bg-indigo-500 text-white text-sm font-semibold rounded-full hover:bg-indigo-600 transition-colors">
-                Get in touch <Mail className="w-4 h-4" />
-              </a>
-            </motion.div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="py-12 border-t border-white/40 bg-white/20 backdrop-blur-md relative z-10">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <div className="text-xs text-slate-400 tracking-widest uppercase">© 2026 Justina Yoo</div>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-// ─── AEKO Featured Project ─────────────────────────────────────────────────────────
-
-function AekoCaseStudy({ onBack }: { onBack: () => void }) {
-  useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
-
-  const timeline = [
-    { phase: "01 — Discovery", title: "The SEO playbook doesn't work for AI search", content: "Interviewed cross-border e-commerce sellers who noticed their AI-era traffic was unpredictable and unattributable. The core finding: sellers had zero visibility into how ChatGPT, Claude, and Perplexity were recommending (or not recommending) their products. The same brand got completely different AI treatment depending on the market and language — and nobody knew why.", tags: ["User Interviews", "Market Research", "Competitive Analysis", "Opportunity Sizing"] },
-    { phase: "02 — Problem Framing", title: "Brands are flying blind in AI-driven search", content: "Defined the core problem: AI engines have taken over top-of-funnel discovery for millions of shoppers, but there are no analytics tools built for it. Search Console exists for traditional SEO. There is no equivalent for AEO — Answer Engine Optimization. This gap is sharpest for cross-border sellers, where language and market context dramatically change AI outputs.", tags: ["Jobs-to-be-Done", "Problem Statement", "TAM Sizing", "AEO Category Definition"] },
-    { phase: "03 — Product Strategy", title: "Monitor first, optimize second", content: "Made the key strategic call to lead with monitoring — not optimization recommendations. Sellers need to see the problem before they'll invest in fixing it. Designed AEKO's core activation loop: connect domain → define tracked prompts → see your AI Visibility Score → receive optimization guidance. This sequencing is our hypothesis for driving both activation and paid conversion.", tags: ["Product Strategy", "Activation Design", "Pricing Architecture", "Freemium Model"] },
-    { phase: "04 — MVP Build", title: "Real-time AI visibility across multiple engines and markets", content: "Built an MVP that polls ChatGPT, Claude, and Perplexity with real buyer prompts, segmented by market and language (US, UK, JP, KR). Introduced the AI Visibility Score — a composite of mentions, citations, and share of voice — as the north star metric. Also scoped AEKO Agents (MCP integration) to let power users run optimization tools directly in Claude Desktop and Cursor without leaving their workflow.", tags: ["GenAI", "MCP Integration", "Multi-Region Data", "Visibility Score Metric"] },
-    { phase: "05 — What's Next", title: "Testing the MVP with early users", content: "Currently running closed MVP testing with a small cohort of cross-border sellers. Focused on validating three things: do sellers understand their score, does seeing the score motivate action, and does the optimization guidance produce measurable AI visibility changes. Results pending — watching closely.", tags: ["MVP Testing", "User Validation", "Activation Metrics", "Iteration"] },
-  ];
-
-  const bets = [
-    { icon: Lightbulb, title: "The aha moment has to be immediate", body: "Our hypothesis: sellers need to see their AI Visibility Score within minutes of signing up — before we ask for any commitment. Showing a brand they have zero mentions while a competitor ranks in every query should be the conversion event. We're testing whether the score alone creates urgency." },
-    { icon: Zap, title: "MCP will be the highest-retention surface", body: "We're betting that the AEKO Agents integration — running optimization in Claude Desktop and Cursor — will anchor power users more than the dashboard alone. When the tool lives inside an existing workflow, churn friction drops. This is our top hypothesis to validate post-MVP." },
-    { icon: Globe, title: "Cross-market parity is the real differentiator", body: "Every comparable tool tracks one market. Our bet is that showing a Korean brand how they appear in US ChatGPT versus Japanese Perplexity in the same view is the feature that justifies premium pricing and enterprise conversations. Multi-region is the moat we're building toward." },
-  ];
-
-  return (
-    <div className="animated-gradient min-h-screen text-slate-900 font-sans relative">
-
-      <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-          <button onClick={onBack} style={{ fontFamily: 'Montserrat, sans-serif' }} className="text-base font-bold tracking-tight text-slate-800 hover:text-indigo-600 transition-colors">
-            justina yoo
-          </button>
-          <div className="flex items-center gap-3">
-            <a
-              href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-            </a>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
-              <FileText className="w-4 h-4" />
-            </a>
-            <a href="mailto:justina.yoo@gmail.com"
-              className="px-4 py-2 md:px-6 md:py-2.5 bg-white/50 backdrop-blur-sm text-slate-800 text-sm font-semibold rounded-full border border-white/70 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all flex items-center gap-2 shadow-sm">
-              Contact <Mail className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      <main className="pt-20 relative z-10">
-        <section className="relative py-16 md:py-28 overflow-hidden border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                <span className="px-3 py-1 rounded-full border border-violet-300/40 bg-violet-100/60 backdrop-blur text-violet-600 text-xs font-semibold tracking-widest uppercase">Featured Project</span>
-                <span className="px-3 py-1 rounded-full border border-amber-300/40 bg-amber-50/60 backdrop-blur text-amber-600 text-xs font-semibold tracking-widest uppercase">MVP in Testing</span>
-                <span className="px-3 py-1 rounded-full border border-white/60 bg-white/40 backdrop-blur text-slate-500 text-xs font-semibold tracking-widest uppercase">AEO · SaaS · Cross-Border E-commerce</span>
-              </div>
-              <img src="https://aeko-intelligence.com/logo.svg" alt="AEKO" className="h-7 object-contain mb-6" />
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-6">AEKO<span className="text-violet-500">.</span></h1>
-              <p className="text-base md:text-xl lg:text-2xl text-slate-500 font-light max-w-2xl leading-relaxed mb-10">Building the analytics layer for the AI search era — so brands stop flying blind when AI engines recommend their competitors.</p>
-              <div className="flex flex-wrap gap-3 md:gap-6 text-sm text-slate-500">
-                <div><span className="font-semibold text-slate-800">Stage</span> · Closed MVP Testing</div>
-                <div><span className="font-semibold text-slate-800">Market</span> · Cross-Border E-commerce</div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="py-12 md:py-20 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-4">The Shift</p>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">AI engines are the new search bar. Nobody built analytics for them.</h2>
-                <p className="text-slate-600 leading-relaxed">A growing share of product discovery now happens through conversational AI — not traditional search. Brands spent years optimizing for keywords, backlinks, and page speed. None of that moves the needle when a shopper asks ChatGPT "best Korean skincare for dry skin." AEKO was built to close that data gap.</p>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="space-y-4">
-                {[
-                  { label: "ChatGPT monthly active users", value: "400M+" },
-                  { label: "Product queries via AI search", value: "Rising fast" },
-                  { label: "Brands with AI visibility data", value: "Near zero" },
-                  { label: "Cross-border sellers at risk", value: "Millions" },
-                ].map((row, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/40 backdrop-blur border border-white/60">
-                    <span className="text-sm text-slate-600">{row.label}</span>
-                    <span className="text-sm font-semibold text-violet-600">{row.value}</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-14">
-              <p className="text-xs font-semibold tracking-widest uppercase text-violet-400 mb-4">Process</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">How we built it</h2>
-            </motion.div>
-            <div className="space-y-6">
-              {timeline.map((step, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}
-                  className="group rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-8 hover:bg-white/60 hover:shadow-md hover:shadow-violet-100/30 transition-all">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div>
-                      <p className="text-xs font-semibold tracking-widest uppercase text-violet-500 mb-1">{step.phase}</p>
-                      <h3 className="text-xl font-bold text-slate-900">{step.title}</h3>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-violet-500 transition-colors mt-1 shrink-0" />
-                  </div>
-                  <p className="text-slate-600 leading-relaxed mb-5">{step.content}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {step.tags.map((tag, j) => (
-                      <span key={j} className="px-2.5 py-1 rounded-full bg-violet-100/60 text-violet-600 text-xs font-medium border border-violet-200/40">{tag}</span>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-14">
-              <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-4">Hypotheses</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">Key product bets</h2>
-            </motion.div>
-            <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-              {bets.map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-7 hover:bg-white/60 transition-all">
-                  <item.icon className="w-5 h-5 text-violet-500 mb-5" />
-                  <h3 className="text-base font-bold mb-3 leading-snug text-slate-800">{item.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{item.body}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24">
-          <div className="max-w-5xl mx-auto px-6 text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Curious about AEKO?</h2>
-              <p className="text-slate-500 mb-8 max-w-md mx-auto">Happy to go deeper on the strategy, the AEO category, or what we're learning from early users.</p>
-              <a href="mailto:justina.yoo@gmail.com" className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-3.5 bg-violet-500 text-white text-sm font-semibold rounded-full hover:bg-violet-600 transition-colors">
-                Get in touch <Mail className="w-4 h-4" />
-              </a>
-            </motion.div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="py-12 border-t border-white/40 bg-white/20 backdrop-blur-md relative z-10">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <div className="text-xs text-slate-400 tracking-widest uppercase">© 2026 Justina Yoo</div>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-// ─── Cursor Trail ─────────────────────────────────────────────────────────────
-
-
-// ─── ATTN Case Study ──────────────────────────────────────────────────────────
-
-function AttnCaseStudy({ onBack }: { onBack: () => void }) {
-  useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
-
-  const timeline = [
-    { phase: "01 — Discovery", title: "Korean investors are flying blind on US markets", content: "Korean retail investors were increasingly active in US equities, but the information gap was severe. Earnings releases, SEC filings, and government policy signals move US small-cap stocks within minutes — yet Korean investors had no reliable, translated source to act on them in time. By the time news filtered through, the trade was gone.", tags: ["User Research", "Market Analysis", "Opportunity Sizing", "Competitive Landscape"] },
-    { phase: "02 — Problem Framing", title: "The bottleneck isn't information — it's speed and language", content: "The problem wasn't that US market data didn't exist. It was that nothing aggregated SEC filings, government signals, and breaking market news in one place and made them accessible in Korean, fast enough to act on. We framed the product opportunity as: build the intelligence layer Korean investors need to move at the speed of US markets.", tags: ["Problem Statement", "Jobs-to-be-Done", "TAM Sizing"] },
-    { phase: "03 — Product Strategy", title: "Three-pillar intelligence platform", content: "Designed ATTN around three core content pillars: real-time market news, SEC filing analysis, and US government policy signals. Each pillar feeds a distinct investor need — from intraday traders reacting to earnings to longer-horizon investors tracking regulatory shifts. Multi-model AI handles translation, summarization, and signal extraction at scale.", tags: ["Product Strategy", "Content Architecture", "Multi-Model AI", "AI Orchestration"] },
-    { phase: "04 — Build", title: "AI-native pipeline from source to reader", content: "Built an AI-native data pipeline using multi-model orchestration and MCP servers to continuously ingest English-language financial sources, extract market-moving signals, translate and structure content for Korean readers, and surface it within minutes of publication. Docker-based infrastructure enables reliable scaling around US market open/close windows.", tags: ["Multi-Model AI", "MCP Server", "Docker", "3rd Party APIs", "AI Orchestration"] },
-    { phase: "05 — Outcome", title: "South Korea's #1 US stock market information media", content: "ATTN established itself as the leading Korean-language platform for US market intelligence. The platform delivers real-time coverage of SEC filings, government signals, and market news — closing the information gap that had left Korean investors at a structural disadvantage in US markets.", tags: ["Product Launch", "Market Leadership", "SEO", "Growth"] },
-  ];
-
-  const pillars = [
-    { icon: TrendingUp, title: "Real-time market news", body: "Breaking US market coverage translated and delivered to Korean investors within minutes — fast enough to inform intraday decisions on small-cap stocks and earnings plays." },
-    { icon: Newspaper, title: "SEC filing analysis", body: "SEC disclosures are dense and in English. ATTN extracts the signal — material changes, insider moves, risk flags — and surfaces them in structured Korean-language summaries." },
-    { icon: Globe, title: "US government signals", body: "Policy shifts, Fed communications, and regulatory moves that affect US markets. ATTN tracks and translates these signals so Korean investors aren't the last to know." },
-  ];
-
-  const learnings = [
-    { icon: Lightbulb, title: "Speed is the product", body: "In financial information, a 10-minute lag is the same as no information. Every infrastructure decision — from MCP server design to deployment architecture — was made to minimize time from source to reader." },
-    { icon: Target, title: "Translation is more than language", body: "Accurate Korean translation wasn't enough. We had to localize financial terminology, contextualize US market conventions, and adapt formatting for how Korean investors read and act on information." },
-    { icon: Zap, title: "Multi-model orchestration earns its complexity", body: "No single model handles real-time ingestion, translation, summarization, and signal extraction equally well. Orchestrating specialized models per task gave us both better output quality and cost efficiency at scale." },
-  ];
-
-  return (
-    <div className="animated-gradient min-h-screen text-slate-900 font-sans relative">
-
-      <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-          <button onClick={onBack} style={{ fontFamily: 'Montserrat, sans-serif' }} className="text-base font-bold tracking-tight text-slate-800 hover:text-indigo-600 transition-colors">
-            justina yoo
-          </button>
-          <div className="flex items-center gap-3">
-            <a href="https://www.linkedin.com/in/justina-ji-yeon-yoo/" target="_blank" rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-            </a>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
-              <FileText className="w-4 h-4" />
-            </a>
-            <a href="mailto:justina.yoo@gmail.com"
-              className="px-4 py-2 md:px-6 md:py-2.5 bg-white/50 backdrop-blur-sm text-slate-800 text-sm font-semibold rounded-full border border-white/70 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all flex items-center gap-2 shadow-sm">
-              Contact <Mail className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      <main className="pt-20 relative z-10">
-        <section className="relative py-16 md:py-28 overflow-hidden border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                <span className="px-3 py-1 rounded-full border border-sky-300/40 bg-sky-100/60 backdrop-blur text-sky-600 text-xs font-semibold tracking-widest uppercase">Featured Project</span>
-                <span className="px-3 py-1 rounded-full border border-white/60 bg-white/40 backdrop-blur text-slate-500 text-xs font-semibold tracking-widest uppercase">Financial Media · AI · Korea</span>
-              </div>
-              <img src="https://attn.today/icons/attn_logo.svg" alt="ATTN" className="h-8 object-contain mb-6" />
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-6">Korea's <span className="text-sky-500">#1 US Market</span> Intelligence Platform</h1>
-              <p className="text-base md:text-xl lg:text-2xl text-slate-500 font-light max-w-2xl leading-relaxed mb-10">Closing the information gap between Korean investors and US markets — real-time SEC filings, government signals, and market news, translated and delivered at the speed of trading.</p>
-              <div className="flex flex-wrap gap-3 md:gap-6 text-sm text-slate-500">
-                <div><span className="font-semibold text-slate-800">Stack</span> · Multi-Model AI, MCP Server, AI Orchestration</div>
-                <div><span className="font-semibold text-slate-800">Market</span> · Korean Retail Investors</div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="py-12 md:py-20 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-4">The Problem</p>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">Korean investors are the last to know about US market moves.</h2>
-                <p className="text-slate-600 leading-relaxed">SEC filings, earnings calls, and government policy signals move small-cap stocks within minutes of publication. All of it is in English, scattered across dozens of sources. By the time Korean investors found and parsed the information, the trade window had already closed.</p>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="space-y-4">
-                {[
-                  { label: "Language barrier to US financial sources", value: "Severe" },
-                  { label: "SEC filings available in Korean", value: "Zero" },
-                  { label: "Time to act on US small-cap news", value: "Minutes" },
-                  { label: "Korean retail investors in US equities", value: "Growing fast" },
-                ].map((row, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/40 backdrop-blur border border-white/60">
-                    <span className="text-sm text-slate-600">{row.label}</span>
-                    <span className="text-sm font-semibold text-sky-600">{row.value}</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-12 md:py-20 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-14">
-              <p className="text-xs font-semibold tracking-widest uppercase text-sky-400 mb-4">Product</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">Three pillars of US market intelligence</h2>
-            </motion.div>
-            <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-              {pillars.map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-7 hover:bg-white/60 transition-all">
-                  <item.icon className="w-6 h-6 text-sky-500 mb-5" />
-                  <h3 className="text-lg font-semibold mb-3 text-slate-800">{item.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{item.body}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-14">
-              <p className="text-xs font-semibold tracking-widest uppercase text-sky-400 mb-4">Process</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">How we built it</h2>
-            </motion.div>
-            <div className="space-y-6">
-              {timeline.map((step, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}
-                  className="group rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-8 hover:bg-white/60 hover:shadow-md hover:shadow-sky-100/30 transition-all">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div>
-                      <p className="text-xs font-semibold tracking-widest uppercase text-sky-500 mb-1">{step.phase}</p>
-                      <h3 className="text-xl font-bold text-slate-900">{step.title}</h3>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-sky-500 transition-colors mt-1 shrink-0" />
-                  </div>
-                  <p className="text-slate-600 leading-relaxed mb-5">{step.content}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {step.tags.map((tag, j) => (
-                      <span key={j} className="px-2.5 py-1 rounded-full bg-sky-100/60 text-sky-600 text-xs font-medium border border-sky-200/40">{tag}</span>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24 border-b border-white/30">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-14">
-              <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-4">Reflections</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">What I learned</h2>
-            </motion.div>
-            <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-              {learnings.map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-7 hover:bg-white/60 transition-all">
-                  <item.icon className="w-5 h-5 text-sky-500 mb-5" />
-                  <h3 className="text-base font-bold mb-3 leading-snug text-slate-800">{item.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{item.body}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-14 md:py-24">
-          <div className="max-w-5xl mx-auto px-6 text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Want to talk through this?</h2>
-              <p className="text-slate-500 mb-8 max-w-md mx-auto">Happy to go deeper on the AI pipeline, financial media strategy, or what it takes to build for speed-sensitive markets.</p>
-              <a href="mailto:justina.yoo@gmail.com" className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-3.5 bg-sky-500 text-white text-sm font-semibold rounded-full hover:bg-sky-600 transition-colors">
-                Get in touch <Mail className="w-4 h-4" />
-              </a>
-            </motion.div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="py-12 border-t border-white/40 bg-white/20 backdrop-blur-md relative z-10">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <div className="text-xs text-slate-400 tracking-widest uppercase">© 2026 Justina Yoo</div>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-// ─── Main App ─────────────────────────────────────────────────────────────────
-
-const SITE_PASSWORD = 'justina';
-
-export default function App() {
-  const [page, setPage] = useState<'home' | 'newschat' | 'aeko' | 'attn'>('home');
-  const [unlocked, setUnlocked] = useState(false);
-  const [careerExpanded, setCareerExpanded] = useState(false);
-  const [sitePassword, setSitePassword] = useState('');
-  const [sitePasswordError, setSitePasswordError] = useState(false);
-  const [lang, setLang] = useState<'en' | 'kr'>('en');
-
-  function submitSitePassword(e: React.FormEvent) {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (sitePassword === SITE_PASSWORD) {
-      setUnlocked(true);
+    if (value === PASSWORD) {
+      sessionStorage.setItem(AUTH_KEY, '1');
+      onUnlock();
     } else {
-      setSitePasswordError(true);
-      setSitePassword('');
+      setError(true);
+      setTimeout(() => setError(false), 1600);
     }
-  }
+  };
 
-  if (!unlocked) {
-    return (
-      <motion.div
-        className="min-h-screen flex items-center justify-center px-6"
-        animate={{ background: [
-          'radial-gradient(circle at 20% 50%, #c7d2fe 0%, #a5f3fc 40%, #d8b4fe 100%)',
-          'radial-gradient(circle at 80% 30%, #a5f3fc 0%, #d8b4fe 40%, #c7d2fe 100%)',
-          'radial-gradient(circle at 50% 80%, #d8b4fe 0%, #c7d2fe 40%, #a5f3fc 100%)',
-          'radial-gradient(circle at 20% 50%, #c7d2fe 0%, #a5f3fc 40%, #d8b4fe 100%)',
-        ]}}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="w-full max-w-sm text-center relative z-10">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            style={{ fontFamily: 'Montserrat, sans-serif' }}
-            className="text-4xl md:text-5xl font-bold tracking-tight leading-[0.9] text-slate-800 mb-8"
-          >
-            justina yoo
-          </motion.p>
-          <p className="text-sm text-slate-600 mb-10">This portfolio is password protected.</p>
-          <form onSubmit={submitSitePassword} className="space-y-3">
+  return (
+    <div
+      className="canvas-tint grain min-h-screen flex items-center justify-center px-6"
+      style={{ position: 'relative' }}
+    >
+      <div className="relative z-10 w-full max-w-md">
+        <div className="glass-strong rounded-sm p-10 md:p-12 border hairline">
+          <div className="eyebrow mb-3">Access required</div>
+          <h1 className="font-serif-display text-[36px] leading-[1.05] tracking-tight mb-3">
+            Justina Yoo
+          </h1>
+          <p className="text-[14px] mb-8" style={{ color: 'var(--ink-3)' }}>
+            This portfolio is private. Enter the password to continue.
+          </p>
+          <form onSubmit={submit} className="flex flex-col gap-3">
             <input
               type="password"
-              value={sitePassword}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setSitePassword(e.target.value); setSitePasswordError(false); }}
-              placeholder="Enter password"
               autoFocus
-              className={`w-full px-4 py-3 rounded-xl border text-sm outline-none transition-colors text-center tracking-widest bg-white/70 backdrop-blur-sm ${sitePasswordError ? 'border-red-300 bg-red-50/70 placeholder-red-300 focus:border-red-400' : 'border-white/80 focus:border-indigo-400'}`}
+              value={value}
+              onChange={e => setValue(e.target.value)}
+              placeholder="Password"
+              className="px-4 py-3 border hairline rounded-sm bg-white/70 text-[14px] outline-none focus:border-[var(--ink)]"
+              style={{
+                animation: error ? 'shake 0.4s' : 'none',
+                borderColor: error ? '#b91c1c' : undefined,
+              }}
             />
-            {sitePasswordError && <p className="text-xs text-red-500">Incorrect password. Try again.</p>}
-            <button type="submit" className="w-full py-3 bg-slate-900/90 text-white text-sm font-semibold rounded-xl hover:bg-indigo-600 transition-colors backdrop-blur-sm">
-              Enter
+            <button type="submit" className="btn-primary justify-center">
+              Enter <Icon.Arrow />
             </button>
+            {error && (
+              <p
+                className="text-[12px] font-mono-tech tracking-widest uppercase"
+                style={{ color: '#b91c1c' }}
+              >
+                Incorrect password
+              </p>
+            )}
           </form>
-        </motion.div>
-      </motion.div>
-    );
-  }
+        </div>
+        <p
+          className="mt-6 text-center font-mono-tech text-[10px] tracking-widest uppercase"
+          style={{ color: 'var(--ink-3)' }}
+        >
+          If you need access, email justina.yoo@gmail.com
+        </p>
+      </div>
+      <style>{`@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }`}</style>
+    </div>
+  );
+}
+
+/* ─── Home sections ─────────────────────────────── */
+function Hero({ t }: { t: (en: string, kr: string) => string }) {
+  return (
+    <section className="relative border-b hairline">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-20 pb-24 md:pt-32 md:pb-36">
+        <div className="grid grid-cols-12 gap-6 md:gap-10 items-end">
+          <div className="col-span-12 md:col-span-8">
+            <Reveal>
+              <div className="flex items-center gap-3 mb-8">
+                <span className="chip chip-filled">
+                  <span
+                    className="inline-block w-1.5 h-1.5 rounded-full"
+                    style={{ background: '#4ade80' }}
+                  />
+                  {t('Open to opportunities', '기회 탐색 중')}
+                </span>
+                <span className="chip">{t('AI Product Consulting', 'AI 프로덕트 컨설팅')}</span>
+              </div>
+            </Reveal>
+            <Reveal delay={120}>
+              <h1 className="font-serif-display text-[48px] md:text-[80px] lg:text-[96px] leading-[0.92] tracking-tight">
+                {t('Strategy to', '전략에서')}
+                <br />
+                <span style={{ color: 'var(--accent)' }}>
+                  {t('shipped product', '출시까지')}
+                </span>
+                <span style={{ color: 'var(--accent)' }}>.</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={260}>
+              <p
+                className="mt-10 font-serif-display text-[18px] md:text-[22px] leading-snug max-w-[50ch]"
+                style={{ color: 'var(--ink-3)' }}
+              >
+                {t(
+                  'AI product consulting, end to end — research, design, build, and launch. Embedded with the team, not outside it.',
+                  'AI 프로덕트 컨설팅, 엔드투엔드 — 리서치, 설계, 빌드, 론칭. 외부가 아닌 팀 안에서.',
+                )}
+              </p>
+            </Reveal>
+          </div>
+          <div className="col-span-12 md:col-span-4">
+            <Reveal delay={360}>
+              <div className="border-l hairline pl-6 flex flex-col gap-6">
+                <div>
+                  <div className="eyebrow mb-2">{t('Currently', '현재')}</div>
+                  <div className="text-[14px]" style={{ color: 'var(--ink-2)' }}>
+                    {t('Building ', '')}
+                    <span className="font-serif-display italic">AEKO</span>
+                    {t(' — AEO for cross-border brands', ' — 크로스보더 브랜드를 위한 AEO 빌드 중')}
+                  </div>
+                </div>
+                <div>
+                  <div className="eyebrow mb-2">{t('Based across', '거점')}</div>
+                  <div className="flex flex-col gap-1.5 text-[14px]" style={{ color: 'var(--ink-2)' }}>
+                    <span>🇨🇳 {t('Shanghai — 12 years', '상하이 — 12년')}</span>
+                    <span>🇺🇸 {t('Pittsburgh — 5 years', '피츠버그 — 5년')}</span>
+                    <span>🇰🇷 {t('Seoul — Now', '서울 — 현재')}</span>
+                  </div>
+                </div>
+                <div>
+                  <div className="eyebrow mb-2">{t('Focus', '관심 분야')}</div>
+                  <div className="text-[14px]" style={{ color: 'var(--ink-2)' }}>
+                    {t('AX Consulting · GenAI · 0→1 · End-to-End Build', 'AX 컨설팅 · GenAI · 0→1 · 엔드투엔드 빌드')}
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeaturedWork({
+  t,
+  onOpen,
+}: {
+  t: (en: string, kr: string) => string;
+  onOpen: (p: Page) => void;
+}) {
+  const [filter, setFilter] = useState<string | null>(null);
+
+  const projects: {
+    id: Page;
+    name: string;
+    logo?: string;
+    tag: string;
+    kicker: string;
+    headline: string;
+    body: string;
+    accent: string;
+    categories: string[];
+    metrics: { v: string; l: string }[];
+  }[] = [
+    {
+      id: 'aeko',
+      name: 'AEKO',
+      logo: '/aeko-logo.svg',
+      tag: t('AEO · SaaS', 'AEO · SaaS'),
+      kicker: '01',
+      categories: ['B2B', 'AEO', 'SaaS', '0→1'],
+      headline: t(
+        'Analytics for the AI search era.',
+        'AI 검색 시대의 분석 도구.',
+      ),
+      body: t(
+        'The AEO platform for cross-border e-commerce. Tracks brand visibility across ChatGPT, Claude, and Perplexity — multi-region, multi-language — with MCP agents that run optimization inside Claude Desktop and Cursor.',
+        '크로스보더 이커머스를 위한 AEO 플랫폼. ChatGPT·Claude·Perplexity 전반의 브랜드 가시성을 멀티 리전·멀티 언어로 추적. Claude Desktop과 Cursor 내에서 최적화를 실행하는 MCP Agents 지원.',
+      ),
+      accent: '#5B5BF5',
+      metrics: [
+        { v: 'MVP', l: t('In testing', '테스트 중') },
+        { v: '3+', l: t('AI engines', 'AI 엔진') },
+        { v: '4', l: t('Markets tracked', '추적 시장') },
+      ],
+    },
+    {
+      id: 'newschat',
+      name: 'NewsChat',
+      logo: '/newschat-logo.svg',
+      tag: t('GenAI · Media', 'GenAI · 미디어'),
+      kicker: '02',
+      categories: ['B2C', 'GenAI', '0→1'],
+      headline: t(
+        'Turning passive news into conversation.',
+        '수동적 뉴스를 대화로.',
+      ),
+      body: t(
+        'Contextual AI chat layer embedded in news articles. Grew to 1M MAU in 5 months, lifted dwell time 250%, and introduced a contextual ad product delivering 10% CTR.',
+        '뉴스 기사에 내장된 맥락형 AI 채팅 레이어. 5개월 만에 MAU 100만 돌파, 체류 시간 250% 상승, 10% CTR의 맥락 광고 프로덕트 론칭.',
+      ),
+      accent: '#2E4BFF',
+      metrics: [
+        { v: '1M', l: t('MAU in 5mo', '5개월 MAU') },
+        { v: '250%', l: t('Dwell time', '체류 시간') },
+        { v: '10%', l: 'Ad CTR' },
+      ],
+    },
+    {
+      id: 'attn',
+      name: 'ATTN',
+      logo: '/attn-logo.svg',
+      tag: t('Financial Media', '금융 미디어'),
+      kicker: '03',
+      categories: ['B2B', 'B2C', 'GenAI', 'Financial Media'],
+      headline: t(
+        "Korea's #1 US market intelligence.",
+        '한국 1위 미국 시장 인텔리전스.',
+      ),
+      body: t(
+        'Real-time SEC filings, government signals, and market news translated and delivered at trading speed. Built on multi-model AI orchestration and MCP infrastructure.',
+        '실시간 SEC 공시, 정부 시그널, 시장 뉴스를 번역해 트레이딩 속도로 전달. 멀티 모델 AI 오케스트레이션과 MCP 인프라로 구축.',
+      ),
+      accent: '#0EA5E9',
+      metrics: [
+        { v: '#1', l: t('In category', '카테고리 1위') },
+        { v: '3', l: t('Data pillars', '데이터 축') },
+        { v: 'RT', l: t('Latency', '레이턴시') },
+      ],
+    },
+    {
+      id: 'workflow',
+      name: t('AI Workflow Stack', 'AI 워크플로우 스택'),
+      tag: t('Agentic · Internal Tools', '에이전틱 · 내부 도구'),
+      kicker: '04',
+      categories: ['GenAI', '0→1'],
+      headline: t(
+        'Agents that do the work with me.',
+        '함께 일하는 에이전트.',
+      ),
+      body: t(
+        'Custom AI agents and MCP integrations built on Claude at Panomix / AEKO Intelligence — a sales & marketing plugin, a junior PM agent, and end-to-end content automation.',
+        'Panomix / AEKO Intelligence에서 Claude 기반으로 구축한 커스텀 AI 에이전트와 MCP 통합 — 세일즈·마케팅 플러그인, 주니어 PM 에이전트, 엔드투엔드 콘텐츠 자동화.',
+      ),
+      accent: '#8B5CF6',
+      metrics: [
+        { v: '3+', l: t('Agents built', '구축 에이전트') },
+        { v: 'MCP', l: t('Infrastructure', '인프라') },
+        { v: 'Claude', l: t('Platform', '플랫폼') },
+      ],
+    },
+  ];
 
   return (
-    <>
-      <AnimatePresence mode="wait">
-      {page === 'newschat' ? (
-        <motion.div key="newschat" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-          <NewsChatCaseStudy onBack={() => setPage('home')} />
-        </motion.div>
-      ) : page === 'aeko' ? (
-        <motion.div key="aeko" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-          <AekoCaseStudy onBack={() => setPage('home')} />
-        </motion.div>
-      ) : page === 'attn' ? (
-        <motion.div key="attn" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-          <AttnCaseStudy onBack={() => setPage('home')} />
-        </motion.div>
-      ) : (
-        <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
-          className="animated-gradient text-slate-900 font-sans selection:bg-indigo-500/30 relative">
-
-          {(() => {
-            const t = (en: string, kr: string) => lang === 'kr' ? kr : en;
-            return (
-              <>
-
-          {/* ── Navigation ────────────────────────────────────── */}
-          <nav className="fixed top-0 w-full z-50 bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-sm shadow-indigo-100/20">
-            <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-              <motion.button initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ fontFamily: 'Montserrat, sans-serif' }} className="text-base font-bold tracking-tight text-slate-800 hover:text-indigo-600 transition-colors">
-                justina yoo
-              </motion.button>
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1 md:gap-3">
-                <div className="hidden sm:flex items-center gap-1">
-                  <button
-                    onClick={() => document.getElementById('featured-work')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-indigo-500 hover:bg-white/40 rounded-full transition-all"
-                  >
-                    Featured Work
-                  </button>
-                  <button
-                    onClick={() => document.getElementById('side-projects')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-indigo-500 hover:bg-white/40 rounded-full transition-all"
-                  >
-                    Side Projects
-                  </button>
-                </div>
-                <button
-                  onClick={() => setLang(lang === 'en' ? 'kr' : 'en')}
-                  className="flex items-center gap-0.5 px-2.5 py-1.5 rounded-full bg-white/50 backdrop-blur-sm border border-white/70 shadow-sm text-xs font-bold hover:bg-indigo-500 hover:border-indigo-500 transition-all"
-                >
-                  <span className={lang === 'en' ? 'text-indigo-600' : 'text-slate-400 hover:text-white'}>EN</span>
-                  <span className="text-slate-300 mx-0.5">·</span>
-                  <span className={lang === 'kr' ? 'text-indigo-600' : 'text-slate-400 hover:text-white'}>KR</span>
-                </button>
-                <a
-                  href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </a>
-                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
-                  className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-slate-700 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all shadow-sm">
-                  <FileText className="w-4 h-4" />
-                </a>
-                <a href="mailto:justina.yoo@gmail.com"
-                  className="px-4 py-2 md:px-6 md:py-2.5 bg-white/50 backdrop-blur-sm text-slate-800 text-sm font-semibold rounded-full border border-white/70 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 transition-all flex items-center gap-2 shadow-sm">
-                  Contact <Mail className="w-4 h-4" />
-                </a>
-              </motion.div>
+    <section id="featured-work" className="border-b hairline">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+        <Reveal>
+          <div className="flex items-end justify-between mb-8">
+            <h2 className="font-serif-display text-[36px] md:text-[56px] leading-[1] tracking-tight">
+              {t('Featured Work', '주요 프로젝트')}
+            </h2>
+            <div
+              className="hidden md:block font-mono-tech text-[10px] tracking-widest uppercase"
+              style={{ color: 'var(--ink-3)' }}
+            >
+              2023 — 2026
             </div>
-          </nav>
-
-          {/* ── Hero ──────────────────────────────────────────── */}
-          <section
-            className="relative flex items-center justify-center pt-20 overflow-hidden"
-            style={{ minHeight: 'min(90vh, 100dvh)', background: 'transparent' }}
-          >
-            {/* Animated gradient overlay that shifts */}
-            <motion.div
-              className="absolute inset-0 z-0 pointer-events-none"
-              animate={{ background: [
-                'radial-gradient(ellipse at 20% 50%, rgba(196,181,253,0.5) 0%, transparent 60%)',
-                'radial-gradient(ellipse at 80% 50%, rgba(186,230,253,0.5) 0%, transparent 60%)',
-                'radial-gradient(ellipse at 50% 20%, rgba(221,214,254,0.5) 0%, transparent 60%)',
-                'radial-gradient(ellipse at 20% 50%, rgba(196,181,253,0.5) 0%, transparent 60%)',
-              ]}}
-              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            />
-
-            {/* Hero content */}
-            <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-              <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
-                <motion.span
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  className="inline-block px-4 py-1.5 rounded-full bg-white/50 backdrop-blur-sm border border-white/70 text-indigo-600 text-xs font-bold tracking-[0.2em] uppercase mb-8 shadow-sm"
-                >
-                  {t('AI Product Manager', 'AI 프로덕트 매니저')}
-                </motion.span>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.28, duration: 0.7 }}
-                  style={{ fontFamily: 'Montserrat, sans-serif' }}
-                  className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-snug text-slate-800 mb-4"
-                >
-                  {t('I\'m Justina, an AI Product Manager bridging\ncomplex problems to human-centered solutions.', '저는 저스티나입니다. 복잡한 문제를 사람 중심의 솔루션으로 연결하는\nAI 프로덕트 매니저입니다.')}
-                </motion.p>
-
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.35, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-snug mb-8 text-indigo-500"
-                >
-                  {t('Architecting the 0→1 AI Journey.', '0→1 AI 여정을 설계합니다.')}
-                </motion.h1>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7, duration: 0.6 }}
-                  className="flex flex-wrap justify-center gap-2 mb-10"
-                >
-                  {[
-                    { value: "1M+", label: t("MAU in 5 months", "5개월 MAU"), color: "text-indigo-500" },
-                    { value: "+250%", label: t("Session time", "세션 시간"), color: "text-violet-500" },
-                    { value: "+10%", label: t("Ad CTR", "광고 CTR"), color: "text-pink-500" },
-                    { value: "0→1", label: t("builder", "빌더"), color: "text-sky-500" },
-                  ].map((stat, i) => (
-                    <span key={i} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-white/70 shadow-sm text-sm text-slate-700">
-                      <span className={`font-bold ${stat.color}`}>{stat.value}</span>
-                      <span className="text-slate-500">{stat.label}</span>
-                    </span>
-                  ))}
-                </motion.div>
-
-              </motion.div>
-            </div>
-
-          </section>
-
-          {/* ── Education ─────────────────────────────────────── */}
-          <section className="py-16 relative">
-            <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
-            <div className="max-w-4xl mx-auto px-6 relative z-10">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-10">
-                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">{t('Background', '배경')}</p>
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">{t('Education & Background', '학력 및 배경')}</h2>
-              </motion.div>
-
-              <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-                {/* School cards */}
-                <div className="space-y-3">
-                  {[
-                    {
-                      school: "Carnegie Mellon University",
-                      period: "2019 – 2024",
-                      degree: t("B.S. Decision Science", "의사결정과학 학사"),
-                      sub: t("Minors in HCI & Architecture", "HCI 및 건축학 부전공"),
-                      accent: "border-indigo-300",
-                      tag: "Pittsburgh, PA",
-                      tagColor: "bg-indigo-100 text-indigo-600",
-                    },
-                    {
-                      school: "Shanghai American School",
-                      period: "2007 – 2019",
-                      degree: t("IB & AP Diploma", "IB & AP 디플로마"),
-                      sub: t("International Baccalaureate + Advanced Placement", "국제 바칼로레아 및 AP"),
-                      accent: "border-violet-300",
-                      tag: "Shanghai, China",
-                      tagColor: "bg-violet-100 text-violet-600",
-                    },
-                  ].map((edu, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 16 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1, duration: 0.5 }}
-                      className={`rounded-2xl bg-white/40 backdrop-blur-lg border-l-4 ${edu.accent} border border-white/60 p-4 shadow-sm shadow-indigo-100/20 hover:bg-white/60 transition-all`}
+          </div>
+          <div className="flex flex-wrap gap-2 mb-16">
+            {['B2B', 'B2C', 'AEO', 'GenAI', 'SaaS', 'Financial Media', '0→1'].map(cat => (
+              <button
+                key={cat}
+                onClick={() => setFilter(f => f === cat ? null : cat)}
+                className={`chip cursor-pointer transition-colors ${filter === cat ? 'chip-filled' : ''}`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+        <div className="flex flex-col">
+          {projects.filter(p => !filter || p.categories.includes(filter)).map((p, i) => (
+            <Reveal key={p.id} delay={i * 80}>
+              <button
+                onClick={() => onOpen(p.id)}
+                className="group relative w-full text-left border-t hairline last:border-b py-10 md:py-14 transition-colors"
+              >
+                <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
+                  <div className="col-span-12 md:col-span-1">
+                    <div
+                      className="font-mono-tech text-[11px] tracking-widest"
+                      style={{ color: 'var(--ink-3)' }}
                     >
-                      <div className="flex items-start justify-between gap-3 mb-1.5">
-                        <p className="font-bold text-slate-800 text-sm leading-snug">{edu.school}</p>
-                        <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full ${edu.tagColor}`}>{edu.tag}</span>
-                      </div>
-                      <p className="text-xs font-semibold text-slate-500 mb-0.5">{edu.degree} · {edu.period}</p>
-                      <p className="text-xs text-slate-400">{edu.sub}</p>
-                    </motion.div>
-                  ))}
-
-                  <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.25, duration: 0.6 }} className="pt-2">
-                    <HorizonTracker />
-                  </motion.div>
-                </div>
-
-                {/* What I bring */}
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.6 }}>
-                  <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-4">{t('What I bring', '저의 강점')}</p>
-                  <div className="space-y-3">
-                    {[
-                      { flag: "🇰🇷 🇨🇳 🇺🇸", label: "Global Experience", desc: t("Raised across Korea, China, and the US — fluent in all three languages and comfortable navigating cross-cultural teams and markets.", "한국, 중국, 미국에서 성장하며 세 언어에 유창하고, 다문화 팀과 시장에서 자연스럽게 소통합니다."), color: "bg-indigo-50 border-indigo-100" },
-                      { flag: "🎓", label: "Decision Science + HCI", desc: t("Analytical problem-framing meets user-centered design.", "분석적 문제 정의와 사용자 중심 디자인의 결합."), color: "bg-violet-50 border-violet-100" },
-                      { flag: "⚡", label: "0→1 builder", desc: t("Two GenAI products from concept to production launch.", "개념에서 프로덕션 출시까지 두 개의 GenAI 제품 빌드."), color: "bg-cyan-50 border-cyan-100" },
-                    ].map((item, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: 16 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
-                        className={`rounded-xl border p-4 backdrop-blur-md bg-white/40 border-white/60 shadow-sm hover:bg-white/60 transition-all`}
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-base">{item.flag}</span>
-                          <p className="text-sm font-bold text-slate-800">{item.label}</p>
-                        </div>
-                        <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </section>
-
-          {/* ── Career ────────────────────────────────────────── */}
-          <section className="py-16">
-            <div className="max-w-4xl mx-auto px-4 md:px-6">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-10">
-                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">{t('Career', '경력')}</p>
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">{t('The journey so far', '지금까지의 여정')}</h2>
-              </motion.div>
-              {(() => {
-                const jobs = [
-                  { role: "AI Product Manager", company: "Panomix", period: "2024 – Present", tag: t("Current", "현재"), tagColor: "bg-indigo-100 text-indigo-600", summary: t("Leading 0→1 GenAI product builds — from news-chat to AI-SDK. Own the full lifecycle: roadmap, specs, launch, and iteration with Engineering & Design.", "AI 프로덕트(NewsChat, AEKO) 전체 수명 주기 주도: 1M+ MAU 달성, 광고 CTR +10%·세션 시간 +250% 향상, AEKO MVP 론칭, 3.5x ARPU 맥락 광고 도입."), accent: "bg-indigo-400" },
-                  { role: "Branding & Marketing Intern", company: "Edelman", period: "2023", tag: t("Comms & Strategy", "커뮤니케이션 & 전략"), tagColor: "bg-cyan-100 text-cyan-600", summary: t("Learned how global brands tell stories. Executed campaigns, wrote performance reports, and contributed to new business strategy through deep competitor research.", "글로벌 브랜드의 스토리텔링 방식을 배웠습니다. 캠페인 집행, 성과 보고서 작성, 경쟁사 분석을 통한 신사업 전략 기여."), accent: "bg-cyan-300" },
-                  { role: "Council Development Intern", company: "Gerson Lehrman Group", period: "2022", tag: t("Research", "리서치"), tagColor: "bg-violet-100 text-violet-600", summary: t("Interviewed 20+ industry experts daily to surface insights for consulting clients. Built a muscle for rapid synthesis across wildly different domains.", "매일 20명 이상의 산업 전문가 인터뷰를 통해 컨설팅 인사이트 발굴. 다양한 도메인에 걸친 빠른 종합 역량 구축."), accent: "bg-violet-300" },
-                  { role: "Product Growth Intern", company: "Tridge", period: "2021", tag: t("First product role", "첫 프로덕트 역할"), tagColor: "bg-sky-100 text-sky-600", summary: t("First taste of product work — user interviews, data organization, and localizing content across Chinese and English markets.", "첫 프로덕트 경험 — 사용자 인터뷰, 데이터 정리, 중국어·영어 시장 콘텐츠 현지화."), accent: "bg-sky-300" },
-                ];
-                return (
-                  <motion.div initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-                    {/* Current role */}
-                    <div className="rounded-2xl bg-white/40 backdrop-blur-md border border-white/60 shadow-sm p-4 md:p-6 hover:bg-white/60 transition-all">
-                      <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${jobs[0].accent}`} />
-                        <span className="text-base font-bold text-slate-800">{jobs[0].role}</span>
-                        <span className="text-slate-300 text-sm">·</span>
-                        <span className="text-slate-500 text-sm">{jobs[0].company}</span>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${jobs[0].tagColor}`}>{jobs[0].tag}</span>
-                      </div>
-                      <p className="text-xs text-slate-400 mb-2 pl-[18px]">{jobs[0].period}</p>
-                      <p className="text-sm text-slate-500 leading-relaxed pl-[18px]">Led end-to-end product lifecycle for AI products (NewsChat, AEKO): scaled to 1M+ MAU, drove +10% ad CTR and +250% session time, spearheaded AEKO MVP, and pioneered contextual ads generating 3.5x ARPU.</p>
+                      {p.kicker}
                     </div>
-
-                    {/* Collapsed: peek + expand trigger as one unit */}
-                    {!careerExpanded && (
-                      <button
-                        onClick={() => setCareerExpanded(true)}
-                        className="w-full mt-2 relative rounded-2xl overflow-hidden border border-white/60 bg-white/40 backdrop-blur-md group hover:bg-white/55 transition-all"
-                      >
-                        {/* Blurred ghost row */}
-                        <div className="px-6 pt-4 pb-10 blur-[2px] opacity-40 select-none pointer-events-none">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${jobs[1].accent}`} />
-                            <span className="text-base font-bold text-slate-800">{jobs[1].role}</span>
-                            <span className="text-slate-300 text-sm">·</span>
-                            <span className="text-slate-500 text-sm">{jobs[1].company}</span>
+                  </div>
+                  <div className="col-span-12 md:col-span-4">
+                    <div className="mb-3">
+                      {p.logo ? (
+                        <img src={p.logo} alt={p.name} className="h-8" />
+                      ) : (
+                        <span
+                          className="font-serif-display text-[36px] leading-none"
+                          style={{ color: p.accent }}
+                        >
+                          {p.name}
+                        </span>
+                      )}
+                    </div>
+                    <span className="chip">{p.tag}</span>
+                  </div>
+                  <div className="col-span-12 md:col-span-5">
+                    <h3 className="font-serif-display text-[24px] md:text-[32px] leading-[1.05] tracking-tight mb-4">
+                      {p.headline}
+                    </h3>
+                    <p className="text-[14px] max-w-[54ch]" style={{ color: 'var(--ink-2)' }}>
+                      {p.body}
+                    </p>
+                    <div className="flex flex-wrap gap-5 mt-6">
+                      {p.metrics.map((m, j) => (
+                        <div key={j}>
+                          <div
+                            className="font-serif-display text-[20px] leading-none"
+                            style={{ color: p.accent }}
+                          >
+                            {m.v}
+                          </div>
+                          <div
+                            className="font-mono-tech text-[10px] tracking-widest uppercase mt-1"
+                            style={{ color: 'var(--ink-3)' }}
+                          >
+                            {m.l}
                           </div>
                         </div>
-                        {/* Fade gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/70 pointer-events-none" />
-                        {/* Always-visible label */}
-                        <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-2 py-3 border-t border-white/50">
-                          <span className="text-xs font-semibold text-indigo-500 group-hover:text-indigo-600 transition-colors">{t('See previous roles', '이전 경력 보기')}</span>
-                          <motion.span animate={{ y: [0, 2, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}>
-                            <ChevronRight className="w-3.5 h-3.5 text-indigo-500 rotate-90" />
-                          </motion.span>
-                        </div>
-                      </button>
-                    )}
-
-                    {/* Expanded: previous roles + collapse */}
-                    {careerExpanded && (
-                      <div className="mt-2 space-y-2">
-                        {jobs.slice(1).map((job, i) => (
-                          <motion.div key={i}
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.25, delay: i * 0.06 }}
-                            className="rounded-2xl bg-white/40 backdrop-blur-md border border-white/60 shadow-sm p-4 md:p-6 hover:bg-white/60 transition-all">
-                            <div className="flex flex-wrap items-center gap-2 mb-1">
-                              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${job.accent}`} />
-                              <span className="text-base font-bold text-slate-800">{job.role}</span>
-                              <span className="text-slate-300 text-sm">·</span>
-                              <span className="text-slate-500 text-sm">{job.company}</span>
-                              <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${job.tagColor}`}>{job.tag}</span>
-                            </div>
-                            <p className="text-xs text-slate-400 mb-2 pl-[18px]">{job.period}</p>
-                            <p className="text-sm text-slate-500 leading-relaxed pl-[18px]">{job.summary}</p>
-                          </motion.div>
-                        ))}
-                        <button
-                          onClick={() => setCareerExpanded(false)}
-                          className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-semibold text-slate-400 hover:text-indigo-500 transition-colors"
-                        >
-                          {t('Show less', '접기')} <ChevronRight className="w-3.5 h-3.5 rotate-[270deg]" />
-                        </button>
-                      </div>
-                    )}
-                  </motion.div>
-                );
-              })()}
-            </div>
-          </section>
-
-          {/* ── Featured Projects ──────────────────────────────────── */}
-          <section id="featured-work" className="py-20">
-            <div className="max-w-4xl mx-auto px-4 md:px-6">
-              <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-6">{t('Featured Projects', '주요 프로젝트')}</p>
-              </motion.div>
-              <div className="space-y-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  onClick={() => setPage('newschat')}
-                  className="group rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-8 shadow-sm hover:bg-white/65 hover:shadow-xl hover:shadow-indigo-100/40 transition-all cursor-pointer"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                    <div className="inline-flex items-center bg-slate-800 rounded-lg px-3 py-1.5">
-                      <img src="https://panomix.io/images/products/Newschat%20logo.svg" alt="NewsChat" className="h-5 object-contain" />
+                      ))}
                     </div>
-                    <span className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-600">{t('Featured Project', '주요 프로젝트')}</span>
                   </div>
-                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">{t('Scaling & Monetizing Generative AI', '생성형 AI 스케일링 및 수익화')}</h2>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-3">{t('Built the product architecture for a GenAI-powered news chat experience — from 0 to 1M MAU. Designed a contextual ad strategy that layered monetization without degrading the AI conversation, driving a +10% CTR lift and +250% session depth increase.', 'GenAI 기반 뉴스 채팅 경험의 프로덕트 아키텍처 설계 — 0에서 1M MAU까지. AI 대화를 해치지 않으면서 수익화를 더한 맥락 광고 전략 설계로 CTR +10%, 세션 깊이 +250% 달성.')}</p>
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {["0→1 Product", "1M MAU", "Contextual Ads", "GenAI", "Monetization"].map(t => (
-                      <span key={t} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500 border border-indigo-100">{t}</span>
-                    ))}
+                  <div className="col-span-12 md:col-span-2 flex md:justify-end">
+                    <span
+                      className="inline-flex items-center gap-2 font-mono-tech text-[11px] tracking-widest uppercase group-hover:gap-4 transition-all"
+                      style={{ color: p.accent }}
+                    >
+                      {t('Case study', '케이스')} <Icon.ArrowUpRight />
+                    </span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-sm font-semibold text-indigo-500 group-hover:gap-3 transition-all">
-                    {t('Read more', '자세히 보기')} <ChevronRight className="w-4 h-4" />
-                  </div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  onClick={() => setPage('aeko')}
-                  className="group rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-8 shadow-sm hover:bg-white/65 hover:shadow-xl hover:shadow-violet-100/40 transition-all cursor-pointer"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                    <div className="inline-flex items-center bg-white rounded-lg px-3 py-1.5 border border-slate-100">
-                      <img src="https://aeko-intelligence.com/logo.svg" alt="AEKO" className="h-8 object-contain" />
-                    </div>
-                    <span className="inline-flex items-center rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-600">{t('Featured Project', '주요 프로젝트')}</span>
-                  </div>
-                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">{t('AI Visibility for Cross-Border E-commerce', '크로스보더 이커머스를 위한 AI 가시성 분석')}</h2>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-3">{t('Defining the product strategy for an Answer Engine Optimization SaaS targeting cross-border e-commerce brands. Translating AI search behavior into actionable visibility tools — currently in MVP testing with MCP integration underway.', '크로스보더 이커머스 브랜드를 위한 AEO(답변 엔진 최적화) SaaS 프로덕트 전략 정의. AI 검색 행동을 실행 가능한 가시성 도구로 전환 — 현재 MVP 테스트 중이며 MCP 통합 진행 중.')}</p>
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {["AEO SaaS", "MVP", "MCP Integration", "E-commerce", "Pre-launch"].map(t => (
-                      <span key={t} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-500 border border-violet-100">{t}</span>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-sm font-semibold text-violet-500 group-hover:gap-3 transition-all">
-                    {t('Read more', '자세히 보기')} <ChevronRight className="w-4 h-4" />
-                  </div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  onClick={() => setPage('attn')}
-                  className="group rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 p-5 md:p-8 shadow-sm hover:bg-white/65 hover:shadow-xl hover:shadow-sky-100/40 transition-all cursor-pointer"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                    <div className="inline-flex items-center bg-white rounded-lg px-3 py-1.5 border border-slate-100">
-                      <img src="https://attn.today/icons/attn_logo.svg" alt="ATTN" className="h-4 object-contain" />
-                    </div>
-                    <span className="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-600">{t('Featured Project', '주요 프로젝트')}</span>
-                  </div>
-                  <h2 className="text-xl md:text-2xl font-semibold text-slate-700 mb-2">{t('Korea\'s #1 US Market Intelligence Platform', '한국 1위 미국 주식 시장 정보 플랫폼')}</h2>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-3">{t('Built an AI-native pipeline that aggregates SEC filings, US government signals, and breaking market news — translated into Korean at trading speed. Closing the information gap that had left Korean retail investors structurally behind in US equities.', 'SEC 공시, 미국 정부 신호, 실시간 시장 뉴스를 트레이딩 속도에 맞춰 한국어로 번역 제공하는 AI 네이티브 파이프라인 구축. 한국 개인 투자자들의 미국 주식 정보 격차를 해소.')}</p>
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {["Multi-Model AI", "Financial Media", "MCP Server", "Korea", "Launched"].map(t => (
-                      <span key={t} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-500 border border-sky-100">{t}</span>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-sm font-semibold text-sky-500 group-hover:gap-3 transition-all">
-                    {t('Read more', '자세히 보기')} <ChevronRight className="w-4 h-4" />
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </section>
-
-          {/* ── Side Projects ─────────────────────────────────── */}
-          <section id="side-projects" className="py-16 relative">
-            <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
-            <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-10">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-10">
-                <p className="text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-2">{t('Side Projects', '사이드 프로젝트')}</p>
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-800">{t('Building on the side', '사이드에서 빌드 중')}</h2>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="rounded-2xl bg-white/30 backdrop-blur border border-white/50 border-dashed p-6 flex flex-col items-center justify-center text-center gap-3 min-h-[140px]"
-              >
-                <div className="w-8 h-8 rounded-full bg-indigo-100/60 flex items-center justify-center">
-                  <span className="text-indigo-400 text-sm">✦</span>
                 </div>
-                <p className="text-xs font-semibold tracking-widest uppercase text-slate-400">{t('Coming Soon', '출시 예정')}</p>
-              </motion.div>
-            </div>
-          </section>
+              </button>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
-          <footer className="py-12 border-t border-white/40 bg-white/20 backdrop-blur-md">
-            <div className="max-w-7xl mx-auto px-6 text-center">
-              <div className="text-xs text-slate-400 tracking-widest uppercase">© 2026 Justina Yoo</div>
+
+function Career({ t }: { t: (en: string, kr: string) => string }) {
+  const roles = [
+    {
+      period: 'May 2024 — May 2026',
+      company: 'Panomix & AEKO Intelligence',
+      role: t('AI Product Manager', 'AI 프로덕트 매니저'),
+      body: t(
+        'Built AI agents to automate competitive research and product workflows. Owned AEKO end-to-end from concept to MVP as sole PM. Scaled NewsChat to 1M+ MAU in 5 months with +10% ad CTR and +250% session time.',
+        'AI 에이전트를 구축해 경쟁 리서치와 프로덕트 워크플로를 자동화. AEKO를 컨셉부터 MVP까지 단독 PM으로 소유. NewsChat을 5개월 만에 MAU 100만+으로 성장, 광고 CTR +10%, 세션 시간 +250%.',
+      ),
+    },
+    {
+      period: 'May 2023 — Jul 2023',
+      company: 'Edelman',
+      role: t('Branding & Marketing Intern', '브랜딩 & 마케팅 인턴'),
+      body: t(
+        'Supported marketing campaign execution and drafted performance reports based on engagement metrics. Participated in strategy development for new businesses through market research and competitor analysis.',
+        '마케팅 캠페인 실행 지원 및 참여 지표 기반 성과 보고서 작성. 시장 조사와 경쟁사 분석을 통해 신규 비즈니스 전략 개발에 참여.',
+      ),
+    },
+    {
+      period: 'May 2022 — Aug 2022',
+      company: 'GLG (Gerson Lehrman Group)',
+      role: t('Council Development Intern', '카운슬 개발 인턴'),
+      body: t(
+        'Interviewed 20+ international industry experts daily to assess project feasibility and surface actionable insights for consulting and corporate clients.',
+        '매일 20명 이상의 국제 업계 전문가를 인터뷰해 프로젝트 타당성 평가 및 컨설팅·기업 고객을 위한 실행 가능한 인사이트 도출.',
+      ),
+    },
+    {
+      period: 'Jun 2021 — Jul 2021',
+      company: 'Tridge',
+      role: t('Product Growth Intern', '프로덕트 그로스 인턴'),
+      body: t(
+        'Ran user research with regional Project Managers to surface insights shaping go-to-market positioning across international markets.',
+        '리전 PM과 함께 사용자 리서치를 수행해 글로벌 시장 GTM 포지셔닝에 기여하는 인사이트 도출.',
+      ),
+    },
+  ];
+  return (
+    <section id="career" className="border-b hairline">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+        <Reveal>
+          <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
+            <div>
+              <div className="eyebrow mb-3">{t('Career', '경력')}</div>
+              <h2 className="font-serif-display text-[36px] md:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
+                {t('Experience', '경력')}
+              </h2>
             </div>
-          </footer>
-              </>
-            );
-          })()}
-        </motion.div>
-      )}
-    </AnimatePresence>
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-primary">
+              {t('Download résumé', '이력서 다운로드')} <Icon.FileText />
+            </a>
+          </div>
+        </Reveal>
+        <div>
+          {roles.map((r, i) => (
+            <Reveal key={i} delay={i * 50}>
+              <div className="border-t hairline py-8 md:py-10 grid grid-cols-12 gap-6">
+                <div className="col-span-12 md:col-span-3">
+                  <div
+                    className="font-mono-tech text-[11px] tracking-widest uppercase"
+                    style={{ color: 'var(--accent)' }}
+                  >
+                    {r.period}
+                  </div>
+                </div>
+                <div className="col-span-12 md:col-span-9">
+                  <div className="flex flex-wrap items-baseline gap-4 mb-3">
+                    <span className="font-serif-display text-[24px] md:text-[30px] leading-none">
+                      {r.company}
+                    </span>
+                    <span
+                      className="font-serif-display text-[16px]"
+                      style={{ color: 'var(--ink-3)' }}
+                    >
+                      {r.role}
+                    </span>
+                  </div>
+                  <p
+                    className="text-[15px] leading-relaxed max-w-[64ch]"
+                    style={{ color: 'var(--ink-2)' }}
+                  >
+                    {r.body}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+          <div className="border-t hairline" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomePage({
+  t,
+  onOpen,
+}: {
+  t: (en: string, kr: string) => string;
+  onOpen: (p: Page) => void;
+}) {
+  return (
+    <>
+      <Hero t={t} />
+      <FeaturedWork t={t} onOpen={onOpen} />
+      <Career t={t} />
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24 md:py-32 text-center">
+          <Reveal>
+            <div className="eyebrow mb-6">{t('Say hello', '인사 남기기')}</div>
+            <h2 className="font-serif-display text-[44px] md:text-[72px] leading-[0.95] tracking-tight mb-8">
+              {t("Let's ", '함께 ')}
+              <span className="italic" style={{ color: 'var(--accent)' }}>
+                {t('build', '만들어요')}
+              </span>
+              <br />
+              {t('something that matters', '의미있는 것을')}
+              <span style={{ color: 'var(--accent)' }}>.</span>
+            </h2>
+            <p
+              className="max-w-[48ch] mx-auto text-[15px] mb-10"
+              style={{ color: 'var(--ink-3)' }}
+            >
+              {t(
+                'I reply to every serious message. Product strategy, 0→1 builds, AI monetization — happy to talk.',
+                '모든 진지한 메시지에 답장드립니다. 프로덕트 전략, 0→1 빌드, AI 수익화 — 언제든 이야기 나눠요.',
+              )}
+            </p>
+            <a href="mailto:justina.yoo@gmail.com" className="btn-primary">
+              {t('Start a conversation', '대화 시작하기')} <Icon.Mail />
+            </a>
+          </Reveal>
+        </div>
+      </section>
     </>
+  );
+}
+
+/* ─── Root App ─────────────────────────────── */
+export default function App() {
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem(AUTH_KEY) === '1');
+  const [lang, setLang] = useState<Lang>(() => (localStorage.getItem('jy_lang') as Lang) || 'en');
+  const pathToPage = (path: string): Page => {
+    if (path === '/work/newschat') return 'newschat';
+    if (path === '/work/aeko') return 'aeko';
+    if (path === '/work/attn') return 'attn';
+    if (path === '/work/workflow') return 'workflow';
+    return 'home';
+  };
+
+  const [page, setPage] = useState<Page>(() => {
+    // Handle GitHub Pages SPA redirect via ?p= param
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get('p');
+    if (redirect) {
+      const decoded = decodeURIComponent(redirect);
+      window.history.replaceState(null, '', decoded);
+      return pathToPage(decoded);
+    }
+    return pathToPage(window.location.pathname);
+  });
+
+  useEffect(() => {
+    localStorage.setItem('jy_lang', lang);
+  }, [lang]);
+
+  useEffect(() => {
+    const onPop = () => setPage(pathToPage(window.location.pathname));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  const t = useCallback((en: string, kr: string) => (lang === 'en' ? en : kr), [lang]);
+  const toggleLang = () => setLang(l => (l === 'en' ? 'kr' : 'en'));
+
+  const scrollTo = useCallback((id: string) => {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
+  }, []);
+
+  const openCase = (p: Page) => {
+    window.history.pushState(null, '', `/work/${p}`);
+    setPage(p);
+    window.scrollTo({ top: 0 });
+  };
+  const backHome = () => {
+    window.history.pushState(null, '', '/');
+    setPage('home');
+    window.scrollTo({ top: 0 });
+  };
+
+  if (!authed) return <PasswordGate onUnlock={() => setAuthed(true)} />;
+
+  if (page === 'newschat')
+    return <NewsChatCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+  if (page === 'aeko')
+    return <AekoCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+  if (page === 'attn')
+    return <AttnCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+  if (page === 'workflow')
+    return <WorkflowCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+
+  return (
+    <div className="canvas-tint grain" style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', zIndex: 2 }}>
+        <TopNav
+          onHome={backHome}
+          onScrollTo={scrollTo}
+          lang={lang}
+          onToggleLang={toggleLang}
+          tFn={t}
+        />
+        <HomePage t={t} onOpen={openCase} />
+        <Footer />
+      </div>
+    </div>
   );
 }
