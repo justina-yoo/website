@@ -102,17 +102,17 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                     className="inline-block w-1.5 h-1.5 rounded-full"
                     style={{ background: '#4ade80' }}
                   />
-                  {t('Open to opportunities', '기회 탐색 중')}
+                  {t('Open to opportunities', '새로운 기회를 찾고 있습니다')}
                 </span>
                 <span className="chip">{t('AI Product Consulting', 'AI 프로덕트 컨설팅')}</span>
               </div>
             </Reveal>
             <Reveal delay={120}>
-              <h1 className="font-serif-display text-[48px] md:text-[80px] lg:text-[96px] leading-[0.92] tracking-tight">
-                {t('Strategy to', '전략에서')}
+              <h1 className="font-serif-display text-[36px] sm:text-[48px] md:text-[80px] lg:text-[96px] leading-[0.92] tracking-tight">
+                {t('Strategy to', '전략부터')}
                 <br />
                 <span style={{ color: 'var(--accent)' }}>
-                  {t('shipped product', '출시까지')}
+                  {t('shipped product', '제품 출시까지')}
                 </span>
                 <span style={{ color: 'var(--accent)' }}>.</span>
               </h1>
@@ -124,7 +124,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               >
                 {t(
                   'AI product consulting, end to end — research, design, build, and launch. Embedded with the team, not outside it.',
-                  'AI 프로덕트 컨설팅, 엔드투엔드 — 리서치, 설계, 빌드, 론칭. 외부가 아닌 팀 안에서.',
+                  'AI 프로덕트를 처음부터 끝까지 — 리서치, 설계, 개발, 론칭. 팀 외부가 아닌, 팀과 함께.',
                 )}
               </p>
             </Reveal>
@@ -137,7 +137,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                   <div className="text-[14px]" style={{ color: 'var(--ink-2)' }}>
                     {t('Building ', '')}
                     <span className="font-serif-display italic">AEKO</span>
-                    {t(' — AEO for cross-border brands', ' — 크로스보더 브랜드를 위한 AEO 빌드 중')}
+                    {t(' — AEO for cross-border brands', ' — 크로스보더 브랜드를 위한 AEO 플랫폼 구축 중')}
                   </div>
                 </div>
                 <div>
@@ -151,7 +151,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                 <div>
                   <div className="eyebrow mb-2">{t('Focus', '관심 분야')}</div>
                   <div className="text-[14px]" style={{ color: 'var(--ink-2)' }}>
-                    {t('AX Consulting · GenAI · 0→1 · End-to-End Build', 'AX 컨설팅 · GenAI · 0→1 · 엔드투엔드 빌드')}
+                    {t('AX Consulting · GenAI · 0→1 · End-to-End Build', 'AX 컨설팅 · GenAI · 0→1 · 풀사이클 구축')}
                   </div>
                 </div>
               </div>
@@ -197,13 +197,13 @@ function FeaturedWork({
       ),
       body: t(
         'The AEO platform for cross-border e-commerce. Tracks brand visibility across ChatGPT, Claude, and Perplexity — multi-region, multi-language — with MCP agents that run optimization inside Claude Desktop and Cursor.',
-        '크로스보더 이커머스를 위한 AEO 플랫폼. ChatGPT·Claude·Perplexity 전반의 브랜드 가시성을 멀티 리전·멀티 언어로 추적. Claude Desktop과 Cursor 내에서 최적화를 실행하는 MCP Agents 지원.',
+        '크로스보더 이커머스 브랜드를 위한 AEO 플랫폼. ChatGPT, Claude, Perplexity에서 브랜드가 어떻게 노출되는지 다국어·다지역으로 추적하고, MCP 에이전트를 통해 Claude Desktop과 Cursor에서 바로 최적화를 실행할 수 있습니다.',
       ),
       accent: '#5B5BF5',
       metrics: [
         { v: 'MVP', l: t('In testing', '테스트 중') },
         { v: '3+', l: t('AI engines', 'AI 엔진') },
-        { v: '4', l: t('Markets tracked', '추적 시장') },
+        { v: '4', l: t('Markets tracked', '추적 중인 시장') },
       ],
     },
     {
@@ -215,11 +215,11 @@ function FeaturedWork({
       categories: ['B2C', 'GenAI', '0→1'],
       headline: t(
         'Turning passive news into conversation.',
-        '수동적 뉴스를 대화로.',
+        '뉴스를 읽는 것에서 대화하는 것으로.',
       ),
       body: t(
         'Contextual AI chat layer embedded in news articles. Grew to 1M MAU in 5 months, lifted dwell time 250%, and introduced a contextual ad product delivering 10% CTR.',
-        '뉴스 기사에 내장된 맥락형 AI 채팅 레이어. 5개월 만에 MAU 100만 돌파, 체류 시간 250% 상승, 10% CTR의 맥락 광고 프로덕트 론칭.',
+        '뉴스 기사 안에서 바로 대화할 수 있는 AI 채팅 레이어. 출시 5개월 만에 MAU 100만 돌파, 체류 시간 250% 증가, 맥락 광고 CTR 10% 달성.',
       ),
       accent: '#2E4BFF',
       metrics: [
@@ -237,11 +237,11 @@ function FeaturedWork({
       categories: ['B2B', 'B2C', 'GenAI', 'Financial Media'],
       headline: t(
         "Korea's #1 US market intelligence.",
-        '한국 1위 미국 시장 인텔리전스.',
+        '국내 1위 미국 증시 정보 플랫폼.',
       ),
       body: t(
         'Real-time SEC filings, government signals, and market news translated and delivered at trading speed. Built on multi-model AI orchestration and MCP infrastructure.',
-        '실시간 SEC 공시, 정부 시그널, 시장 뉴스를 번역해 트레이딩 속도로 전달. 멀티 모델 AI 오케스트레이션과 MCP 인프라로 구축.',
+        'SEC 공시, 정부 시그널, 시장 뉴스를 실시간으로 번역해 트레이딩 속도로 전달합니다. 멀티 모델 AI 오케스트레이션과 MCP 인프라 기반.',
       ),
       accent: '#0EA5E9',
       metrics: [
@@ -258,15 +258,15 @@ function FeaturedWork({
       categories: ['GenAI', '0→1'],
       headline: t(
         'Agents that do the work with me.',
-        '함께 일하는 에이전트.',
+        '나와 함께 일하는 AI 에이전트.',
       ),
       body: t(
         'Custom AI agents and MCP integrations built on Claude at Panomix / AEKO Intelligence — a sales & marketing plugin, a junior PM agent, and end-to-end content automation.',
-        'Panomix / AEKO Intelligence에서 Claude 기반으로 구축한 커스텀 AI 에이전트와 MCP 통합 — 세일즈·마케팅 플러그인, 주니어 PM 에이전트, 엔드투엔드 콘텐츠 자동화.',
+        'Panomix / AEKO Intelligence에서 Claude로 구축한 AI 에이전트와 MCP 통합 도구 — 세일즈·마케팅 플러그인, 주니어 PM 에이전트, 콘텐츠 자동화 파이프라인.',
       ),
       accent: '#8B5CF6',
       metrics: [
-        { v: '3+', l: t('Agents built', '구축 에이전트') },
+        { v: '3+', l: t('Agents built', '구축한 에이전트') },
         { v: 'MCP', l: t('Infrastructure', '인프라') },
         { v: 'Claude', l: t('Platform', '플랫폼') },
       ],
@@ -278,7 +278,7 @@ function FeaturedWork({
       <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
         <Reveal>
           <div className="flex items-end justify-between mb-8">
-            <h2 className="font-serif-display text-[36px] md:text-[56px] leading-[1] tracking-tight">
+            <h2 className="font-serif-display text-[28px] sm:text-[36px] md:text-[56px] leading-[1] tracking-tight">
               {t('Featured Work', '주요 프로젝트')}
             </h2>
             <div
@@ -384,7 +384,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
       role: t('AI Product Manager', 'AI 프로덕트 매니저'),
       body: t(
         'Built AI agents to automate competitive research and product workflows. Owned AEKO end-to-end from concept to MVP as sole PM. Scaled NewsChat to 1M+ MAU in 5 months with +10% ad CTR and +250% session time.',
-        'AI 에이전트를 구축해 경쟁 리서치와 프로덕트 워크플로를 자동화. AEKO를 컨셉부터 MVP까지 단독 PM으로 소유. NewsChat을 5개월 만에 MAU 100만+으로 성장, 광고 CTR +10%, 세션 시간 +250%.',
+        'AI 에이전트를 활용해 경쟁 리서치와 프로덕트 워크플로를 자동화했습니다. AEKO는 컨셉부터 MVP까지 단독 PM으로 이끌었고, NewsChat은 5개월 만에 MAU 100만 이상으로 성장시키며 광고 CTR +10%, 세션 시간 +250%를 달성했습니다.',
       ),
     },
     {
@@ -393,7 +393,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
       role: t('Branding & Marketing Intern', '브랜딩 & 마케팅 인턴'),
       body: t(
         'Supported marketing campaign execution and drafted performance reports based on engagement metrics. Participated in strategy development for new businesses through market research and competitor analysis.',
-        '마케팅 캠페인 실행 지원 및 참여 지표 기반 성과 보고서 작성. 시장 조사와 경쟁사 분석을 통해 신규 비즈니스 전략 개발에 참여.',
+        '마케팅 캠페인 실행을 지원하고 참여 지표 기반 성과 보고서를 작성했습니다. 시장 조사와 경쟁사 분석을 통해 신규 비즈니스 전략 수립에 참여했습니다.',
       ),
     },
     {
@@ -402,7 +402,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
       role: t('Council Development Intern', '카운슬 개발 인턴'),
       body: t(
         'Interviewed 20+ international industry experts daily to assess project feasibility and surface actionable insights for consulting and corporate clients.',
-        '매일 20명 이상의 국제 업계 전문가를 인터뷰해 프로젝트 타당성 평가 및 컨설팅·기업 고객을 위한 실행 가능한 인사이트 도출.',
+        '매일 20명 이상의 글로벌 업계 전문가를 인터뷰하며 프로젝트 타당성을 평가하고, 컨설팅 및 기업 고객을 위한 실행 가능한 인사이트를 도출했습니다.',
       ),
     },
     {
@@ -411,7 +411,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
       role: t('Product Growth Intern', '프로덕트 그로스 인턴'),
       body: t(
         'Ran user research with regional Project Managers to surface insights shaping go-to-market positioning across international markets.',
-        '리전 PM과 함께 사용자 리서치를 수행해 글로벌 시장 GTM 포지셔닝에 기여하는 인사이트 도출.',
+        '각 지역 PM과 함께 사용자 리서치를 진행하고, 글로벌 시장 진출 전략 수립에 활용할 인사이트를 도출했습니다.',
       ),
     },
   ];
@@ -422,7 +422,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
           <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
             <div>
               <div className="eyebrow mb-3">{t('Career', '경력')}</div>
-              <h2 className="font-serif-display text-[36px] md:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
+              <h2 className="font-serif-display text-[28px] sm:text-[36px] md:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
                 {t('Experience', '경력')}
               </h2>
             </div>
@@ -487,14 +487,14 @@ function HomePage({
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24 md:py-32 text-center">
           <Reveal>
-            <div className="eyebrow mb-6">{t('Say hello', '인사 남기기')}</div>
-            <h2 className="font-serif-display text-[44px] md:text-[72px] leading-[0.95] tracking-tight mb-8">
-              {t("Let's ", '함께 ')}
+            <div className="eyebrow mb-6">{t('Say hello', '연락하기')}</div>
+            <h2 className="font-serif-display text-[32px] sm:text-[44px] md:text-[72px] leading-[0.95] tracking-tight mb-8">
+              {t("Let's ", '의미 있는 것을 ')}
               <span className="italic" style={{ color: 'var(--accent)' }}>
-                {t('build', '만들어요')}
+                {t('build', '함께')}
               </span>
               <br />
-              {t('something that matters', '의미있는 것을')}
+              {t('something that matters', '만들어 봐요')}
               <span style={{ color: 'var(--accent)' }}>.</span>
             </h2>
             <p
@@ -503,11 +503,11 @@ function HomePage({
             >
               {t(
                 'I reply to every serious message. Product strategy, 0→1 builds, AI monetization — happy to talk.',
-                '모든 진지한 메시지에 답장드립니다. 프로덕트 전략, 0→1 빌드, AI 수익화 — 언제든 이야기 나눠요.',
+                '진심 어린 메시지에는 반드시 답장드립니다. 프로덕트 전략, 0→1 구축, AI 수익화 — 편하게 연락주세요.',
               )}
             </p>
             <a href="mailto:justina.yoo@gmail.com" className="btn-primary">
-              {t('Start a conversation', '대화 시작하기')} <Icon.Mail />
+              {t('Start a conversation', '이야기 나누기')} <Icon.Mail />
             </a>
           </Reveal>
         </div>

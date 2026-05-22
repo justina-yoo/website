@@ -158,7 +158,7 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
           <span className="font-serif-display text-[20px]" style={{ color: 'var(--ink)' }}>
             Justina Yoo
           </span>
-          <span className="font-mono-tech text-[10px] tracking-[0.2em] uppercase" style={{ color: 'var(--ink-3)' }}>
+          <span className="hidden sm:inline font-mono-tech text-[10px] tracking-[0.2em] uppercase" style={{ color: 'var(--ink-3)' }}>
             — AI PM
           </span>
         </button>
@@ -195,7 +195,7 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
             href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 flex items-center justify-center border hairline rounded-full hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors glass"
+            className="hidden sm:flex w-9 h-9 items-center justify-center border hairline rounded-full hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors glass"
             style={{ color: 'var(--ink-2)' } as CSSProperties}
           >
             <Icon.LinkedIn />
@@ -204,12 +204,12 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 flex items-center justify-center border hairline rounded-full hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors glass"
+            className="hidden sm:flex w-9 h-9 items-center justify-center border hairline rounded-full hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors glass"
             style={{ color: 'var(--ink-2)' } as CSSProperties}
           >
             <Icon.FileText />
           </a>
-          <a href="mailto:justina.yoo@gmail.com" className="btn-primary">
+          <a href="mailto:justina.yoo@gmail.com" className="btn-primary text-[12px] sm:text-[13px] px-3 py-2.5 sm:px-[22px] sm:py-[14px]">
             {t('Contact', '문의')} <Icon.Mail />
           </a>
         </div>
