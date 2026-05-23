@@ -158,9 +158,6 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
           <span className="font-serif-display text-[20px]" style={{ color: 'var(--ink)' }}>
             Justina Yoo
           </span>
-          <span className="hidden sm:inline font-mono-tech text-[10px] tracking-[0.2em] uppercase" style={{ color: 'var(--ink-3)' }}>
-            — AI PM
-          </span>
         </button>
         <div className="flex items-center gap-2 md:gap-5">
           {onScrollTo && (

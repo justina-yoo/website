@@ -12,10 +12,10 @@ import {
   TopNav,
   Footer,
 } from './ui';
-import { NewsChatCaseStudy, AekoCaseStudy, AttnCaseStudy, WorkflowCaseStudy } from './CaseStudies';
+import { NewsChatCaseStudy, AekoCaseStudy, AttnCaseStudy, WorkflowCaseStudy, StrategyCaseStudy, AISystemsCaseStudy, MonetizationCaseStudy, AgentsCaseStudy } from './CaseStudies';
 
 type Lang = 'en' | 'kr';
-type Page = 'home' | 'newschat' | 'aeko' | 'attn' | 'workflow';
+type Page = 'home' | 'newschat' | 'aeko' | 'attn' | 'workflow' | 'strategy' | 'ai-systems' | 'monetization' | 'agents';
 
 const PASSWORD = 'justina2026';
 const AUTH_KEY = 'justina_portfolio_auth_v2';
@@ -102,15 +102,14 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                     className="inline-block w-1.5 h-1.5 rounded-full"
                     style={{ background: '#4ade80' }}
                   />
-                  {t('Open to opportunities', '새로운 기회를 찾고 있습니다')}
+                  Open to strategic opportunities
                 </span>
-                <span className="chip">{t('AI Product Consulting', 'AI 프로덕트 컨설팅')}</span>
+                <span className="chip">Available for AI consulting & building</span>
               </div>
             </Reveal>
             <Reveal delay={120}>
-              <h1 className="font-serif-display text-[36px] sm:text-[48px] md:text-[80px] lg:text-[96px] leading-[0.92] tracking-tight">
-                {t('Strategy to', '전략부터')}
-                <br />
+              <h1 className="font-serif-display text-[32px] sm:text-[40px] md:text-[64px] lg:text-[76px] leading-[0.92] tracking-tight whitespace-nowrap">
+                {t('Strategy to ', '전략부터 ')}
                 <span style={{ color: 'var(--accent)' }}>
                   {t('shipped product', '제품 출시까지')}
                 </span>
@@ -123,8 +122,8 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                 style={{ color: 'var(--ink-3)' }}
               >
                 {t(
-                  'AI product consulting, end to end — research, design, build, and launch. Embedded with the team, not outside it.',
-                  'AI 프로덕트를 처음부터 끝까지 — 리서치, 설계, 개발, 론칭. 팀 외부가 아닌, 팀과 함께.',
+                  'From launching B2B SaaS frameworks to scaling generative AI products to millions of active users. I help tech organizations and SMBs design, build, and optimize next-generation AI experiences from concept to production.',
+                  'B2B SaaS 인프라 구축부터 수백만 명의 유저가 사용하는 생성형 AI 프로덕트 스케일업까지. 기술 기업과 중소·중견기업(SMB)이 차세대 AI 경험을 개념 정립부터 실제 출시까지 성공적으로 구축할 수 있도록 지원합니다.',
                 )}
               </p>
             </Reveal>
@@ -143,9 +142,9 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                 <div>
                   <div className="eyebrow mb-2">{t('Based across', '거점')}</div>
                   <div className="flex flex-col gap-1.5 text-[14px]" style={{ color: 'var(--ink-2)' }}>
-                    <span>🇨🇳 {t('Shanghai — 12 years', '상하이 — 12년')}</span>
-                    <span>🇺🇸 {t('Pittsburgh — 5 years', '피츠버그 — 5년')}</span>
-                    <span>🇰🇷 {t('Seoul — Now', '서울 — 현재')}</span>
+                    <span>🇨🇳 {t('Shanghai', '상하이')}</span>
+                    <span>🇺🇸 {t('Pittsburgh', '피츠버그')}</span>
+                    <span>🇰🇷 {t('Seoul', '서울')}</span>
                   </div>
                 </div>
                 <div>
@@ -157,6 +156,36 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ToolStack() {
+  const tools = [
+    { name: 'Claude', logo: '/tools/claude.svg' },
+    { name: 'Cursor', logo: '/tools/cursor.svg' },
+    { name: 'VS Code', logo: '/tools/vscode.svg' },
+    { name: 'Figma', logo: '/tools/figma.svg' },
+    { name: 'Canva', logo: '/tools/canva.svg' },
+    { name: 'Notion', logo: '/tools/notion.svg' },
+    { name: 'Supabase', logo: '/tools/supabase.svg' },
+    { name: 'GitHub', logo: '/tools/github.svg' },
+    { name: 'Google Analytics', logo: '/tools/google-analytics.svg' },
+    { name: 'Slack', logo: '/tools/slack.svg' },
+  ];
+  return (
+    <section className="border-b hairline">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <span className="eyebrow">Stack</span>
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+          {tools.map(tool => (
+            <div key={tool.name} className="flex items-center gap-2">
+              <img src={tool.logo} alt={tool.name} className="w-4 h-4" style={{ opacity: 0.6 }} />
+              <span className="text-[13px]" style={{ color: 'var(--ink-3)' }}>{tool.name}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -185,89 +214,86 @@ function FeaturedWork({
     metrics: { v: string; l: string }[];
   }[] = [
     {
-      id: 'aeko',
-      name: 'AEKO',
-      logo: '/aeko-logo.svg',
-      tag: t('AEO · SaaS', 'AEO · SaaS'),
+      id: 'strategy',
+      name: t('Product Strategy & 0→1', '프로덕트 전략 & 0→1'),
+      tag: t('Strategy · PM', '전략 · PM'),
       kicker: '01',
-      categories: ['B2B', 'AEO', 'SaaS', '0→1'],
+      categories: ['0→1', 'B2B', 'B2C'],
       headline: t(
-        'Analytics for the AI search era.',
-        'AI 검색 시대의 분석 도구.',
+        'From zero to product-market fit.',
+        '제로에서 프로덕트-마켓 핏까지.',
       ),
       body: t(
-        'The AEO platform for cross-border e-commerce. Tracks brand visibility across ChatGPT, Claude, and Perplexity — multi-region, multi-language — with MCP agents that run optimization inside Claude Desktop and Cursor.',
-        '크로스보더 이커머스 브랜드를 위한 AEO 플랫폼. ChatGPT, Claude, Perplexity에서 브랜드가 어떻게 노출되는지 다국어·다지역으로 추적하고, MCP 에이전트를 통해 Claude Desktop과 Cursor에서 바로 최적화를 실행할 수 있습니다.',
-      ),
-      accent: '#5B5BF5',
-      metrics: [
-        { v: 'MVP', l: t('In testing', '테스트 중') },
-        { v: '3+', l: t('AI engines', 'AI 엔진') },
-        { v: '4', l: t('Markets tracked', '추적 중인 시장') },
-      ],
-    },
-    {
-      id: 'newschat',
-      name: 'NewsChat',
-      logo: '/newschat-logo.svg',
-      tag: t('GenAI · Media', 'GenAI · 미디어'),
-      kicker: '02',
-      categories: ['B2C', 'GenAI', '0→1'],
-      headline: t(
-        'Turning passive news into conversation.',
-        '뉴스를 읽는 것에서 대화하는 것으로.',
-      ),
-      body: t(
-        'Contextual AI chat layer embedded in news articles. Grew to 1M MAU in 5 months, lifted dwell time 250%, and introduced a contextual ad product delivering 10% CTR.',
-        '뉴스 기사 안에서 바로 대화할 수 있는 AI 채팅 레이어. 출시 5개월 만에 MAU 100만 돌파, 체류 시간 250% 증가, 맥락 광고 CTR 10% 달성.',
+        'Owned AEKO end-to-end from concept to MVP as sole PM. Led NewsChat from hypothesis to 1M MAU in 5 months. Defined activation loops, pricing architecture, and go-to-market for both.',
+        'AEKO를 컨셉부터 MVP까지 단독 PM으로 이끌었고, NewsChat을 가설 단계에서 5개월 만에 MAU 100만까지 성장시켰습니다. 두 제품 모두 활성화 루프, 가격 체계, GTM 전략을 직접 설계했습니다.',
       ),
       accent: '#2E4BFF',
       metrics: [
-        { v: '1M', l: t('MAU in 5mo', '5개월 MAU') },
-        { v: '250%', l: t('Dwell time', '체류 시간') },
-        { v: '10%', l: 'Ad CTR' },
+        { v: '2', l: t('Products 0→1', '0→1 제품') },
+        { v: '1M', l: t('MAU', 'MAU') },
+        { v: '5mo', l: t('To PMF', 'PMF 달성') },
       ],
     },
     {
-      id: 'attn',
-      name: 'ATTN',
-      logo: '/attn-logo.svg',
-      tag: t('Financial Media', '금융 미디어'),
-      kicker: '03',
-      categories: ['B2B', 'B2C', 'GenAI', 'Financial Media'],
+      id: 'ai-systems',
+      name: t('AI Systems & Infrastructure', 'AI 시스템 & 인프라'),
+      tag: t('GenAI · MCP', 'GenAI · MCP'),
+      kicker: '02',
+      categories: ['GenAI', 'B2B'],
       headline: t(
-        "Korea's #1 US market intelligence.",
-        '국내 1위 미국 증시 정보 플랫폼.',
+        'Designing the AI that powers the product.',
+        '제품을 움직이는 AI를 설계하다.',
       ),
       body: t(
-        'Real-time SEC filings, government signals, and market news translated and delivered at trading speed. Built on multi-model AI orchestration and MCP infrastructure.',
-        'SEC 공시, 정부 시그널, 시장 뉴스를 실시간으로 번역해 트레이딩 속도로 전달합니다. 멀티 모델 AI 오케스트레이션과 MCP 인프라 기반.',
+        'RAG pipelines for NewsChat. ADK — an embeddable SDK auto-generating contextual AI features for publishers. Visibility scoring and source attribution systems for AEKO. MCP server integrations across the stack.',
+        'NewsChat의 RAG 파이프라인, 퍼블리셔용 맥락형 AI 기능을 자동 생성하는 임베더블 SDK ADK, AEKO의 가시성 스코어링 및 소스 어트리뷰션 시스템, 스택 전반의 MCP 서버 통합을 설계했습니다.',
+      ),
+      accent: '#5B5BF5',
+      metrics: [
+        { v: '3', l: t('Products', '제품') },
+        { v: 'RAG', l: t('+ Multi-model', '+ 멀티 모델') },
+        { v: 'MCP', l: t('Infra', '인프라') },
+      ],
+    },
+    {
+      id: 'monetization',
+      name: t('Monetization & Growth', '수익화 & 그로스'),
+      tag: t('Revenue · Growth', '수익 · 그로스'),
+      kicker: '03',
+      categories: ['B2C', 'B2B'],
+      headline: t(
+        'Revenue-first product thinking.',
+        '수익 중심 프로덕트 사고.',
+      ),
+      body: t(
+        "Designed NewsChat's contextual ad system — 10% CTR vs 0.1% industry average, 3.5x ARPU. Built AEKO's freemium pricing architecture. Grew NewsChat to 1M MAU with zero paid acquisition.",
+        'NewsChat의 맥락 광고 시스템을 설계해 업계 평균 0.1% 대비 10% CTR, ARPU 3.5배를 달성했습니다. AEKO의 프리미엄 가격 체계를 구축하고, NewsChat을 유료 마케팅 없이 MAU 100만까지 성장시켰습니다.',
       ),
       accent: '#0EA5E9',
       metrics: [
-        { v: '#1', l: t('In category', '카테고리 1위') },
-        { v: '3', l: t('Data pillars', '데이터 축') },
-        { v: 'RT', l: t('Latency', '레이턴시') },
+        { v: '10%', l: 'CTR' },
+        { v: '3.5x', l: 'ARPU' },
+        { v: '$0', l: 'CAC' },
       ],
     },
     {
-      id: 'workflow',
-      name: t('AI Workflow Stack', 'AI 워크플로우 스택'),
-      tag: t('Agentic · Internal Tools', '에이전틱 · 내부 도구'),
+      id: 'agents',
+      name: t('Agentic Tooling', '에이전틱 툴링'),
+      tag: t('Agents · MCP', '에이전트 · MCP'),
       kicker: '04',
       categories: ['GenAI', '0→1'],
       headline: t(
-        'Agents that do the work with me.',
-        '나와 함께 일하는 AI 에이전트.',
+        'AI agents that multiply output.',
+        '아웃풋을 배가하는 AI 에이전트.',
       ),
       body: t(
-        'Custom AI agents and MCP integrations built on Claude at Panomix / AEKO Intelligence — a sales & marketing plugin, a junior PM agent, and end-to-end content automation.',
-        'Panomix / AEKO Intelligence에서 Claude로 구축한 AI 에이전트와 MCP 통합 도구 — 세일즈·마케팅 플러그인, 주니어 PM 에이전트, 콘텐츠 자동화 파이프라인.',
+        'Built Claude-powered agents for sales prospecting, PM workflows, and content automation at Panomix / AEKO Intelligence. MCP integrations that run inside Claude Desktop and Cursor.',
+        'Panomix / AEKO Intelligence에서 Claude 기반 세일즈, PM 워크플로우, 콘텐츠 자동화 에이전트를 구축했습니다. Claude Desktop과 Cursor에서 바로 실행되는 MCP 통합.',
       ),
       accent: '#8B5CF6',
       metrics: [
-        { v: '3+', l: t('Agents built', '구축한 에이전트') },
-        { v: 'MCP', l: t('Infrastructure', '인프라') },
+        { v: '3+', l: t('Agents', '에이전트') },
+        { v: 'MCP', l: t('Infra', '인프라') },
         { v: 'Claude', l: t('Platform', '플랫폼') },
       ],
     },
@@ -289,7 +315,7 @@ function FeaturedWork({
             </div>
           </div>
           <div className="flex flex-wrap gap-2 mb-16">
-            {['B2B', 'B2C', 'AEO', 'GenAI', 'SaaS', 'Financial Media', '0→1'].map(cat => (
+            {['0→1', 'GenAI', 'B2B', 'B2C'].map(cat => (
               <button
                 key={cat}
                 onClick={() => setFilter(f => f === cat ? null : cat)}
@@ -482,6 +508,7 @@ function HomePage({
   return (
     <>
       <Hero t={t} />
+      <ToolStack />
       <FeaturedWork t={t} onOpen={onOpen} />
       <Career t={t} />
       <section className="border-b hairline">
@@ -525,6 +552,10 @@ export default function App() {
     if (path === '/work/aeko') return 'aeko';
     if (path === '/work/attn') return 'attn';
     if (path === '/work/workflow') return 'workflow';
+    if (path === '/work/strategy') return 'strategy';
+    if (path === '/work/ai-systems') return 'ai-systems';
+    if (path === '/work/monetization') return 'monetization';
+    if (path === '/work/agents') return 'agents';
     return 'home';
   };
 
@@ -579,6 +610,14 @@ export default function App() {
     return <AttnCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
   if (page === 'workflow')
     return <WorkflowCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+  if (page === 'strategy')
+    return <StrategyCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+  if (page === 'ai-systems')
+    return <AISystemsCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+  if (page === 'monetization')
+    return <MonetizationCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+  if (page === 'agents')
+    return <AgentsCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
 
   return (
     <div className="canvas-tint grain" style={{ position: 'relative' }}>

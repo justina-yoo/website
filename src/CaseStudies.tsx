@@ -993,3 +993,491 @@ export function WorkflowCaseStudy({
     </CaseStudyShell>
   );
 }
+
+/* ─── Product Strategy & 0→1 ───────────────────────────── */
+export function StrategyCaseStudy({
+  onBack,
+  lang,
+  onToggleLang,
+  t,
+}: {
+  onBack: () => void;
+  lang: 'en' | 'kr';
+  onToggleLang: () => void;
+  t: T;
+}) {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const examples: { icon: IconName; title: string; body: string }[] = [
+    {
+      icon: 'Zap',
+      title: 'AEKO',
+      body: t(
+        'Owned end-to-end from concept to MVP as sole PM — vision, feature scoping, prototype, engineering/design leadership.',
+        '유일한 PM으로서 컨셉부터 MVP까지 전 과정을 주도했습니다 — 비전 수립, 기능 범위 설정, 프로토타입, 엔지니어링/디자인 리더십.',
+      ),
+    },
+    {
+      icon: 'Trend',
+      title: 'NewsChat',
+      body: t(
+        'Led from hypothesis to 1M MAU in 5 months — user interviews, problem framing, PMF signals, publisher partnerships.',
+        '가설에서 5개월 만에 100만 MAU까지 이끌었습니다 — 사용자 인터뷰, 문제 정의, PMF 신호 포착, 퍼블리셔 파트너십.',
+      ),
+    },
+    {
+      icon: 'Target',
+      title: 'ATTN',
+      body: t(
+        'Defined the 3-pillar content strategy (SEC filings, gov signals, market news) that became the product\'s core differentiator.',
+        '제품의 핵심 차별화 요소가 된 3축 콘텐츠 전략(SEC 공시, 정부 시그널, 시장 뉴스)을 정의했습니다.',
+      ),
+    },
+  ];
+
+  const principles: { icon: IconName; title: string; body: string }[] = [
+    {
+      icon: 'Bulb',
+      title: t('Start with the activation loop', '활성화 루프부터 설계'),
+      body: t(
+        'Design the path from signup to aha moment before anything else.',
+        '가입에서 "아하" 순간까지의 경로를 다른 무엇보다 먼저 설계합니다.',
+      ),
+    },
+    {
+      icon: 'Bar',
+      title: t('Validate with behavior, not surveys', '설문이 아닌 행동으로 검증'),
+      body: t(
+        'PMF signals come from correlated behavior clusters, not stated preferences.',
+        'PMF 신호는 사용자의 진술이 아닌 상관된 행동 클러스터에서 나옵니다.',
+      ),
+    },
+    {
+      icon: 'Target',
+      title: t('Ship the smallest thing that teaches', '배울 수 있는 가장 작은 것을 출시'),
+      body: t(
+        "The goal of v1 isn't to be complete, it's to generate the data that shapes v2.",
+        'v1의 목표는 완성이 아니라, v2를 만들어줄 데이터를 생성하는 것입니다.',
+      ),
+    },
+  ];
+
+  return (
+    <CaseStudyShell accentClass="acc-indigo" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+      <CaseStudyHero
+        brandLabel={t('Product Strategy & 0→1', '프로덕트 전략 & 0→1')}
+        subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
+        title={t('Product Strategy & 0→1', '프로덕트 전략 & 0→1')}
+        subtitle={t(
+          'From zero to product-market fit — defining what to build, for whom, and how to win.',
+          '제로에서 프로덕트-마켓 핏까지 — 무엇을 만들고, 누구를 위해, 어떻게 이길지 정의합니다.',
+        )}
+        t={t}
+      />
+
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel
+            eyebrow={t('IN PRACTICE', '실전 사례')}
+            title={t('Where I applied it', '어디에 적용했는가')}
+          />
+          <CardGrid items={examples} />
+        </div>
+      </section>
+
+      <section
+        className="border-b hairline"
+        style={{
+          background: 'rgba(255,255,255,0.35)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}
+      >
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel
+            eyebrow={t('APPROACH', '접근')}
+            title={t('How I think about strategy', '전략에 대한 사고방식')}
+          />
+          <CardGrid items={principles} />
+        </div>
+      </section>
+
+      <CTASection
+        title={t('Want to talk strategy?', '전략에 대해 이야기할까요?')}
+        body={t(
+          "I'm always happy to go deeper on 0→1 builds, product-market fit, or early-stage product decisions.",
+          '0→1 제품 구축, 프로덕트-마켓 핏, 초기 단계 프로덕트 의사결정에 대해 언제든 이야기 나눌 수 있습니다.',
+        )}
+        ctaLabel={t('Get in touch', '연락하기')}
+      />
+    </CaseStudyShell>
+  );
+}
+
+/* ─── AI Systems & Infrastructure ──────────────────────── */
+export function AISystemsCaseStudy({
+  onBack,
+  lang,
+  onToggleLang,
+  t,
+}: {
+  onBack: () => void;
+  lang: 'en' | 'kr';
+  onToggleLang: () => void;
+  t: T;
+}) {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const examples: { icon: IconName; title: string; body: string }[] = [
+    {
+      icon: 'Msg',
+      title: 'NewsChat RAG',
+      body: t(
+        'Designed retrieval pipeline grounding AI responses in article content and verified sources. Defined latency budgets (<800ms), hallucination guardrails, and source attribution UI.',
+        'AI 응답을 기사 콘텐츠와 검증된 소스에 근거시키는 검색 파이프라인을 설계했습니다. 응답 시간 예산(<800ms), 환각 방지 가드레일, 출처 표기 UI를 정의했습니다.',
+      ),
+    },
+    {
+      icon: 'Zap',
+      title: 'ADK (AI-Driven Kit)',
+      body: t(
+        'Designed an embeddable SDK that auto-generates contextual AI features — follow-up Q&A, summaries, keyword tagging, polls, and floating chat — directly within article content. One-line script deployment with zero dev resources required from publishers.',
+        '기사 콘텐츠 안에 맥락형 AI 기능(후속 Q&A, 요약, 키워드 태깅, 투표, 플로팅 채팅)을 자동 생성하는 임베더블 SDK를 설계했습니다. 퍼블리셔 측 개발 리소스 없이 스크립트 한 줄로 배포할 수 있습니다.',
+      ),
+    },
+    {
+      icon: 'Globe',
+      title: t('AEKO Visibility Scoring', 'AEKO 가시성 스코어링'),
+      body: t(
+        'Built composite AI Visibility Score (mentions, citations, share of voice) across ChatGPT/Claude/Perplexity, segmented by market and language.',
+        'ChatGPT/Claude/Perplexity 전반에 걸쳐 멘션, 인용, 점유율을 종합한 AI Visibility Score를 구축하고 시장·언어별로 세분화했습니다.',
+      ),
+    },
+  ];
+
+  const principles: { icon: IconName; title: string; body: string }[] = [
+    {
+      icon: 'Bulb',
+      title: t('Latency is a product decision', '레이턴시는 프로덕트 결정'),
+      body: t(
+        'Every 100ms matters. Architecture choices flow from the UX requirement, not the other way around.',
+        '100ms 하나하나가 중요합니다. 아키텍처 선택은 UX 요구사항에서 출발해야 하며, 그 반대가 아닙니다.',
+      ),
+    },
+    {
+      icon: 'Target',
+      title: t('Guardrails before features', '기능보다 가드레일 먼저'),
+      body: t(
+        'Hallucination prevention, source attribution, and graceful degradation are table stakes, not nice-to-haves.',
+        '환각 방지, 출처 표기, 우아한 성능 저하는 있으면 좋은 것이 아니라 기본 요건입니다.',
+      ),
+    },
+    {
+      icon: 'Bar',
+      title: t('Multi-model by default', '멀티 모델이 기본'),
+      body: t(
+        "No single model does everything well. Orchestrate specialists, don't force a generalist.",
+        '단일 모델로 모든 것을 잘할 수는 없습니다. 제너럴리스트를 강제하지 말고 스페셜리스트를 오케스트레이션해야 합니다.',
+      ),
+    },
+  ];
+
+  return (
+    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+      <CaseStudyHero
+        brandLabel={t('AI Systems & Infrastructure', 'AI 시스템 & 인프라')}
+        subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
+        title={t('AI Systems & Infrastructure', 'AI 시스템 & 인프라')}
+        subtitle={t(
+          'Designing the AI architecture that makes the product work — from RAG pipelines to embeddable SDKs.',
+          '제품을 작동시키는 AI 아키텍처 설계 — RAG 파이프라인부터 임베더블 SDK까지.',
+        )}
+        t={t}
+      />
+
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel
+            eyebrow={t('IN PRACTICE', '실전 사례')}
+            title={t('Where I applied it', '어디에 적용했는가')}
+          />
+          <CardGrid items={examples} />
+        </div>
+      </section>
+
+      <section
+        className="border-b hairline"
+        style={{
+          background: 'rgba(255,255,255,0.35)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}
+      >
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel
+            eyebrow={t('APPROACH', '접근')}
+            title={t('How I think about AI systems', 'AI 시스템에 대한 사고방식')}
+          />
+          <CardGrid items={principles} />
+        </div>
+      </section>
+
+      <CTASection
+        title={t('Want to talk AI architecture?', 'AI 아키텍처에 대해 이야기할까요?')}
+        body={t(
+          'Happy to go deeper on RAG pipelines, multi-model orchestration, or building AI systems that actually ship.',
+          'RAG 파이프라인, 멀티 모델 오케스트레이션, 실제로 출시되는 AI 시스템 구축에 대해 더 자세히 이야기 나눌 수 있습니다.',
+        )}
+        ctaLabel={t('Get in touch', '연락하기')}
+      />
+    </CaseStudyShell>
+  );
+}
+
+/* ─── Monetization & Growth ─────────────────────────────── */
+export function MonetizationCaseStudy({
+  onBack,
+  lang,
+  onToggleLang,
+  t,
+}: {
+  onBack: () => void;
+  lang: 'en' | 'kr';
+  onToggleLang: () => void;
+  t: T;
+}) {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const examples: { icon: IconName; title: string; body: string }[] = [
+    {
+      icon: 'Trend',
+      title: t('NewsChat Contextual Ads', 'NewsChat 맥락 광고'),
+      body: t(
+        'Designed a contextual ad system with UX at the center — ads surface at natural conversation breakpoints, matched to semantic intent rather than page keywords. Never mid-sentence, never intrusive. The UX constraint drove the 10% CTR (vs 0.1% industry avg) because users experienced ads as content, not interruption. 3.2x CPM uplift, 3.5x ARPU.',
+        '사용자 경험을 중심에 둔 맥락 광고 시스템을 설계했습니다. 광고는 대화의 자연스러운 전환 지점에, 페이지 키워드가 아닌 의미 의도에 매칭되어 노출됩니다. 문장 중간에 끼어들지 않고 방해하지 않도록 설계한 UX 제약이 업계 평균 0.1% 대비 10% CTR을 만들었습니다. 사용자가 광고를 방해가 아닌 콘텐츠로 느꼈기 때문입니다. CPM 3.2배 상승, ARPU 3.5배 달성.',
+      ),
+    },
+    {
+      icon: 'Zap',
+      title: t('AEKO Freemium', 'AEKO 프리미엄'),
+      body: t(
+        'Designed activation-first pricing — free visibility score to create urgency, paid tiers for prompt tracking and optimization guidance.',
+        '활성화 우선 가격 모델을 설계했습니다 — 무료 가시성 점수로 긴급성을 만들고, 프롬프트 추적과 최적화 가이던스는 유료 티어로 제공합니다.',
+      ),
+    },
+    {
+      icon: 'Globe',
+      title: t('NewsChat Zero-CAC Growth', 'NewsChat 제로 CAC 성장'),
+      body: t(
+        'Grew to 1M MAU through publisher distribution alone, zero paid acquisition. The product was the growth channel.',
+        '퍼블리셔 배포만으로 100만 MAU를 달성했으며 유료 고객 획득 비용은 제로였습니다. 제품 자체가 성장 채널이었습니다.',
+      ),
+    },
+  ];
+
+  const principles: { icon: IconName; title: string; body: string }[] = [
+    {
+      icon: 'Bulb',
+      title: t('Design monetization in from day one', '수익화는 첫날부터 설계'),
+      body: t(
+        'Revenue model shapes data schemas, UX, and infrastructure. Bolting it on later creates debt.',
+        '수익 모델은 데이터 스키마, UX, 인프라를 결정합니다. 나중에 붙이면 기술 부채가 됩니다.',
+      ),
+    },
+    {
+      icon: 'Target',
+      title: t('The aha moment is the conversion event', '"아하" 순간이 곧 전환 이벤트'),
+      body: t(
+        'Show users the problem (or the value) before asking for commitment.',
+        '사용자에게 약속을 요구하기 전에 문제(또는 가치)를 먼저 보여줘야 합니다.',
+      ),
+    },
+    {
+      icon: 'Bar',
+      title: t('Distribution > acquisition', '유통 > 획득'),
+      body: t(
+        'Build products that grow through the channels they\'re embedded in, not through ad spend.',
+        '광고비가 아닌 제품이 내장된 채널을 통해 성장하는 제품을 만들어야 합니다.',
+      ),
+    },
+  ];
+
+  return (
+    <CaseStudyShell accentClass="acc-sky" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+      <CaseStudyHero
+        brandLabel={t('Monetization & Growth', '수익화 & 성장')}
+        subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
+        title={t('Monetization & Growth', '수익화 & 성장')}
+        subtitle={t(
+          'Revenue-first product thinking — designing business models that compound with usage.',
+          '수익 중심 프로덕트 사고 — 사용량과 함께 성장하는 비즈니스 모델을 설계합니다.',
+        )}
+        t={t}
+      />
+
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel
+            eyebrow={t('IN PRACTICE', '실전 사례')}
+            title={t('Where I applied it', '어디에 적용했는가')}
+          />
+          <CardGrid items={examples} />
+        </div>
+      </section>
+
+      <section
+        className="border-b hairline"
+        style={{
+          background: 'rgba(255,255,255,0.35)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}
+      >
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel
+            eyebrow={t('APPROACH', '접근')}
+            title={t('How I think about monetization', '수익화에 대한 사고방식')}
+          />
+          <CardGrid items={principles} />
+        </div>
+      </section>
+
+      <CTASection
+        title={t('Want to talk monetization?', '수익화에 대해 이야기할까요?')}
+        body={t(
+          'Happy to go deeper on revenue strategy, pricing architecture, or growth without paid acquisition.',
+          '수익 전략, 가격 설계, 유료 획득 없는 성장에 대해 더 자세히 이야기 나눌 수 있습니다.',
+        )}
+        ctaLabel={t('Get in touch', '연락하기')}
+      />
+    </CaseStudyShell>
+  );
+}
+
+/* ─── Agentic Tooling ──────────────────────────────────── */
+export function AgentsCaseStudy({
+  onBack,
+  lang,
+  onToggleLang,
+  t,
+}: {
+  onBack: () => void;
+  lang: 'en' | 'kr';
+  onToggleLang: () => void;
+  t: T;
+}) {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const examples: { icon: IconName; title: string; body: string }[] = [
+    {
+      icon: 'Zap',
+      title: t('Sales & Marketing Agent', '세일즈 & 마케팅 에이전트'),
+      body: t(
+        'Claude MCP plugin for AEKO — automates outbound research, personalized pitches, outreach drafting, and lead tracking. Replaced hours of manual prospecting with a single conversational workflow.',
+        'AEKO용 Claude MCP 플러그인입니다. 아웃바운드 리서치, 맞춤형 피치, 아웃리치 초안 작성, 리드 추적을 자동화하여 수시간의 수동 영업 준비를 하나의 대화형 워크플로우로 대체했습니다.',
+      ),
+    },
+    {
+      icon: 'News',
+      title: t('Research & News Agent', '리서치 & 뉴스 에이전트'),
+      body: t(
+        'Automated competitive research, market monitoring, and news aggregation across industries. Pulls from multiple sources, synthesizes insights, and delivers structured briefings — turning a daily manual process into an always-on intelligence feed.',
+        '경쟁사 리서치, 시장 모니터링, 업계 뉴스 수집을 자동화했습니다. 다양한 소스에서 정보를 수집하고 인사이트를 종합하여 구조화된 브리핑을 제공합니다. 매일 수동으로 하던 작업을 상시 가동되는 인텔리전스 피드로 전환했습니다.',
+      ),
+    },
+    {
+      icon: 'Globe',
+      title: t('Content Pipeline', '콘텐츠 파이프라인'),
+      body: t(
+        'End-to-end content automation agents — topic research, SEO/AEO scoring, bilingual writing, fact-checking, and publishing. Each agent is a modular skill that chains into the next, replacing a multi-person editorial workflow.',
+        '주제 리서치, SEO/AEO 스코어링, 이중 언어 작성, 팩트체킹, 발행까지 전 과정을 아우르는 콘텐츠 자동화 에이전트입니다. 각 에이전트는 모듈형 스킬로 다음 단계와 연결되어, 여러 명이 필요했던 편집 워크플로우를 대체합니다.',
+      ),
+    },
+  ];
+
+  const principles: { icon: IconName; title: string; body: string }[] = [
+    {
+      icon: 'Bulb',
+      title: t('Agents as teammates, not tools', '에이전트는 도구가 아닌 팀원'),
+      body: t(
+        'Each agent has a specific role and judgment scope, not just a prompt wrapper.',
+        '각 에이전트는 단순 프롬프트 래퍼가 아닌 특정 역할과 판단 범위를 갖습니다.',
+      ),
+    },
+    {
+      icon: 'Target',
+      title: t('MCP as the integration layer', 'MCP를 통합 레이어로'),
+      body: t(
+        'Agents operate inside existing tools (Claude Desktop, Cursor, terminal), not separate UIs.',
+        '에이전트는 별도 UI가 아닌 기존 도구(Claude Desktop, Cursor, 터미널) 안에서 작동합니다.',
+      ),
+    },
+    {
+      icon: 'Bar',
+      title: t('Compounding leverage', '복리적 레버리지'),
+      body: t(
+        'Each agent frees capacity to build the next one. The real ROI is cumulative.',
+        '에이전트 하나를 만들 때마다 다음 에이전트를 만들 여유가 생깁니다. 진정한 ROI는 누적됩니다.',
+      ),
+    },
+  ];
+
+  return (
+    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+      <CaseStudyHero
+        brandLabel={t('Agentic Tooling', '에이전틱 툴링')}
+        subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디'), 'Panomix & AEKO Intelligence']}
+        title={t('Agentic Tooling', '에이전틱 툴링')}
+        subtitle={t(
+          'Custom AI agents built on Claude — replacing manual workflows with autonomous, composable tooling.',
+          'Claude 기반 커스텀 AI 에이전트 — 수동 워크플로우를 자율적이고 조합 가능한 도구로 대체합니다.',
+        )}
+        t={t}
+      />
+
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel
+            eyebrow={t('WHAT I BUILT', '무엇을 만들었는가')}
+            title={t('Agent systems in production', '운영 중인 에이전트 시스템')}
+          />
+          <CardGrid items={examples} />
+        </div>
+      </section>
+
+      <section
+        className="border-b hairline"
+        style={{
+          background: 'rgba(255,255,255,0.35)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}
+      >
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel
+            eyebrow={t('APPROACH', '접근')}
+            title={t('How I think about agents', '에이전트에 대한 사고방식')}
+          />
+          <CardGrid items={principles} />
+        </div>
+      </section>
+
+      <CTASection
+        title={t('Want to talk agentic tooling?', '에이전틱 툴링에 대해 이야기할까요?')}
+        body={t(
+          'Happy to share how I design, build, and chain AI agents — from MCP architecture to compounding leverage.',
+          'AI 에이전트를 어떻게 설계하고 구축하고 연결하는지 공유할 수 있습니다 — MCP 아키텍처부터 복리적 레버리지까지.',
+        )}
+        ctaLabel={t('Get in touch', '연락하기')}
+      />
+    </CaseStudyShell>
+  );
+}
