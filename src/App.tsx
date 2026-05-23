@@ -108,7 +108,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
             <Reveal delay={120}>
-              <h1 className="font-serif-display text-[32px] sm:text-[40px] md:text-[64px] lg:text-[76px] leading-[0.92] tracking-tight whitespace-nowrap">
+              <h1 className="font-serif-display text-[32px] sm:text-[40px] md:text-[56px] lg:text-[68px] leading-[0.92] tracking-tight">
                 {t('Strategy to ', '전략부터 ')}
                 <span style={{ color: 'var(--accent)' }}>
                   {t('shipped product', '제품 출시까지')}
