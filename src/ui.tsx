@@ -170,7 +170,7 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
     >
       <div className="max-w-[1240px] mx-auto px-6 md:px-10 h-[68px] flex items-center justify-between">
         <button onClick={onHome} className="flex items-baseline gap-2 group">
-          <span className="font-serif-display text-[20px]" style={{ color: 'var(--ink)' }}>
+          <span className="font-serif-display text-[17px] sm:text-[20px]" style={{ color: 'var(--ink)' }}>
             Justina Yoo
           </span>
         </button>
@@ -234,7 +234,7 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
 export function Footer() {
   return (
     <footer className="border-t hairline py-10 mt-0">
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 flex flex-wrap items-center justify-between gap-4">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-2 sm:gap-4">
         <div className="font-serif-display text-[18px]">Justina Yoo</div>
         <div
           className="font-mono-tech text-[10px] tracking-widest uppercase"
@@ -268,7 +268,7 @@ export function SectionLabel({
       <div className="eyebrow mb-3" style={{ color: 'var(--acc)' } as CSSProperties}>
         {eyebrow}
       </div>
-      <h2 className="font-serif-display text-[30px] md:text-[44px] leading-[1.02] tracking-tight max-w-[20ch]">
+      <h2 className="font-serif-display text-[24px] sm:text-[30px] md:text-[36px] lg:text-[44px] leading-[1.02] tracking-tight max-w-[20ch]">
         {title}
       </h2>
       {kicker && (
@@ -289,7 +289,7 @@ export function TimelineList({
     <div>
       {steps.map((s, i) => (
         <Reveal key={i} delay={i * 60}>
-          <div className="border-t hairline py-8 md:py-10 grid grid-cols-12 gap-6">
+          <div className="border-t hairline py-6 md:py-8 lg:py-10 grid grid-cols-12 gap-4 md:gap-6">
             <div className="col-span-12 md:col-span-3">
               <div
                 className="font-mono-tech text-[11px] tracking-widest uppercase"
@@ -299,7 +299,7 @@ export function TimelineList({
               </div>
             </div>
             <div className="col-span-12 md:col-span-9">
-              <h3 className="font-serif-display text-[22px] md:text-[28px] leading-tight tracking-tight mb-3">
+              <h3 className="font-serif-display text-[18px] sm:text-[22px] md:text-[28px] leading-tight tracking-tight mb-3">
                 {s.title}
               </h3>
               <p className="text-[15px] leading-relaxed max-w-[68ch]" style={{ color: 'var(--ink-2)' }}>
@@ -339,7 +339,7 @@ export function CardGrid({
         return (
           <Reveal key={i} delay={i * 60}>
             <div
-              className="p-7 md:p-8 h-full flex flex-col gap-4"
+              className="p-5 md:p-7 lg:p-8 h-full flex flex-col gap-4"
               style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)' }}
             >
               <div className="flex items-center justify-between">
@@ -360,7 +360,7 @@ export function CardGrid({
                   {String(i + 1).padStart(2, '0')}
                 </span>
               </div>
-              <h3 className="font-serif-display text-[18px] md:text-[22px] leading-snug tracking-tight">
+              <h3 className="font-serif-display text-[16px] sm:text-[18px] md:text-[22px] leading-snug tracking-tight">
                 {item.title}
               </h3>
               <p className="text-[14px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
@@ -388,10 +388,10 @@ export function ContextBlock({
   rowAccent?: string;
 }) {
   return (
-    <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-start">
+    <div className="grid md:grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-start">
       <div className="md:col-span-6">
         <div className="eyebrow mb-3">{eyebrow}</div>
-        <h2 className="font-serif-display text-[30px] md:text-[44px] leading-[1.03] tracking-tight mb-6">
+        <h2 className="font-serif-display text-[24px] sm:text-[30px] md:text-[36px] lg:text-[44px] leading-[1.03] tracking-tight mb-6">
           {headline}
         </h2>
         <p className="text-[15px] leading-relaxed max-w-[56ch]" style={{ color: 'var(--ink-2)' }}>
@@ -437,7 +437,7 @@ export function CTASection({
     <section className="border-t hairline">
       <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24 md:py-32 text-center">
         <Reveal>
-          <h2 className="font-serif-display text-[36px] md:text-[56px] leading-[1] tracking-tight mb-6">
+          <h2 className="font-serif-display text-[28px] sm:text-[36px] md:text-[44px] lg:text-[56px] leading-[1] tracking-tight mb-6">
             {title}
           </h2>
           <p className="max-w-[48ch] mx-auto text-[15px] mb-10" style={{ color: 'var(--ink-3)' }}>

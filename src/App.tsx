@@ -46,7 +46,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
       <div className="relative z-10 w-full max-w-md">
         <div className="glass-strong rounded-sm p-10 md:p-12 border hairline">
           <div className="eyebrow mb-3">Access required</div>
-          <h1 className="font-serif-display text-[36px] leading-[1.05] tracking-tight mb-3">
+          <h1 className="font-serif-display text-[28px] sm:text-[36px] leading-[1.05] tracking-tight mb-3">
             Justina Yoo
           </h1>
           <p className="text-[14px] mb-8" style={{ color: 'var(--ink-3)' }}>
@@ -94,11 +94,11 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 function Hero({ t }: { t: (en: string, kr: string) => string }) {
   return (
     <section className="relative" style={{ background: '#1A1A1C', color: '#F5F2EA' }}>
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-16 pb-36 md:pt-20 md:pb-48">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-16 pb-24 sm:pb-36 md:pt-20 md:pb-48">
         <div className="grid grid-cols-12 gap-6 md:gap-14 items-start">
           <div className="col-span-12 md:col-span-7">
             <Reveal>
-              <div className="flex items-center gap-3 mb-8 flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap">
                 <span
                   className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[11px] font-mono-tech tracking-widest uppercase font-medium"
                   style={{ background: '#F5F2EA', color: '#1A1A1C' }}
@@ -118,7 +118,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
             <Reveal delay={120}>
-              <h1 className="font-serif-display text-[32px] sm:text-[40px] md:text-[56px] lg:text-[84px] leading-[0.98] tracking-tight" style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
+              <h1 className="font-serif-display text-[26px] sm:text-[32px] md:text-[48px] lg:text-[72px] xl:text-[84px] leading-[0.98] tracking-tight" style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
                 {t('Strategy to ', '전략부터 ')}
                 <span style={{ color: '#9E84FF' }}>
                   {t('shipped', '제품')}<br />
@@ -129,7 +129,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
             </Reveal>
             <Reveal delay={260}>
               <p
-                className="mt-8 text-[16px] md:text-[18px] leading-relaxed max-w-[560px]"
+                className="mt-8 text-[14px] sm:text-[15px] md:text-[17px] leading-relaxed max-w-[560px]"
                 style={{ color: '#C8C6BE', fontWeight: 500 }}
               >
                 {t(
@@ -142,9 +142,8 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
           <div className="col-span-12 md:col-span-5">
             <Reveal delay={300}>
               <div
-                className="relative rounded-lg overflow-hidden mb-7"
+                className="relative rounded-lg overflow-hidden mb-7 h-[240px] sm:h-[300px] md:h-[360px]"
                 style={{
-                  height: 360,
                   border: '1px dashed rgba(255,255,255,0.14)',
                   background: `
                     linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px) 0 0 / 28px 28px,
@@ -328,7 +327,7 @@ function FeaturedWork({
       <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
         <Reveal>
           <div className="flex items-end justify-between mb-8">
-            <h2 className="font-serif-display text-[28px] sm:text-[36px] md:text-[56px] leading-[1] tracking-tight">
+            <h2 className="font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[56px] leading-[1] tracking-tight">
               {t('Featured Work', '주요 프로젝트')}
             </h2>
             <div
@@ -372,7 +371,7 @@ function FeaturedWork({
                         <img src={p.logo} alt={p.name} className="h-8" />
                       ) : (
                         <span
-                          className="font-serif-display text-[36px] leading-none"
+                          className="font-serif-display text-[24px] sm:text-[30px] md:text-[36px] leading-none"
                           style={{ color: p.accent }}
                         >
                           {p.name}
@@ -382,7 +381,7 @@ function FeaturedWork({
                     <span className="chip">{p.tag}</span>
                   </div>
                   <div className="col-span-12 md:col-span-5">
-                    <h3 className="font-serif-display text-[24px] md:text-[32px] leading-[1.05] tracking-tight mb-4">
+                    <h3 className="font-serif-display text-[20px] sm:text-[24px] md:text-[32px] leading-[1.05] tracking-tight mb-4">
                       {p.headline}
                     </h3>
                     <p className="text-[14px] max-w-[54ch]" style={{ color: 'var(--ink-2)' }}>
@@ -472,7 +471,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
           <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
             <div>
               <div className="eyebrow mb-3">{t('Career', '경력')}</div>
-              <h2 className="font-serif-display text-[28px] sm:text-[36px] md:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
+              <h2 className="font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
                 {t('Experience', '경력')}
               </h2>
             </div>
@@ -495,7 +494,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
                 </div>
                 <div className="col-span-12 md:col-span-9">
                   <div className="flex flex-wrap items-baseline gap-4 mb-3">
-                    <span className="font-serif-display text-[24px] md:text-[30px] leading-none">
+                    <span className="font-serif-display text-[20px] sm:text-[24px] md:text-[30px] leading-none">
                       {r.company}
                     </span>
                     <span
@@ -536,7 +535,7 @@ function HomePage({
       <section className="relative z-10 -mt-16 md:-mt-20" style={{ color: '#fff' }}>
         <div className="max-w-[1240px] mx-auto px-6 md:px-10">
           <div className="rounded-sm py-10 md:py-14 px-6 md:px-10" style={{ background: 'var(--accent)' }}>
-          <div className="grid grid-cols-3 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
             {[
               { v: '4', l: t('Products shipped', '출시한 제품'), sub: '' },
               { v: '1M+', l: t('Users reached', '도달 사용자'), sub: 'NewsChat' },
@@ -544,7 +543,7 @@ function HomePage({
             ].map((m, i) => (
               <Reveal key={i} delay={i * 60}>
                 <div className="flex flex-col gap-2">
-                  <span className="font-serif-display text-[40px] md:text-[56px] leading-none tracking-tight" style={{ color: '#fff' }}>{m.v}</span>
+                  <span className="font-serif-display text-[32px] sm:text-[40px] md:text-[56px] leading-none tracking-tight" style={{ color: '#fff' }}>{m.v}</span>
                   <span className="font-mono-tech text-[10px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.55)' }}>{m.l}{m.sub && ` · ${m.sub}`}</span>
                 </div>
               </Reveal>
@@ -559,7 +558,7 @@ function HomePage({
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-10">
           <div className="eyebrow mb-6">{t('Products', '프로덕트')}</div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { name: 'AEKO', logo: '/aeko-logo.svg', desc: t('AEO platform for e-commerce brands', '이커머스 브랜드를 위한 AEO 플랫폼'), page: 'aeko' as Page },
               { name: 'NewsChat', logo: '/newschat-logo.svg', desc: t('AI chat layer for news publishers', '뉴스 퍼블리셔용 AI 채팅 레이어'), page: 'newschat' as Page },
@@ -593,10 +592,10 @@ function HomePage({
           <Reveal>
             <div className="eyebrow mb-6" style={{ color: 'var(--ink-3)' }}>{t("Let's connect", '연결하기')}</div>
           </Reveal>
-          <div className="grid grid-cols-12 gap-10 md:gap-16 items-start">
+          <div className="grid grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-start">
             <div className="col-span-12 md:col-span-7">
               <Reveal delay={60}>
-                <h2 className="font-serif-display text-[32px] sm:text-[44px] md:text-[64px] leading-[0.95] tracking-tight">
+                <h2 className="font-serif-display text-[26px] sm:text-[36px] md:text-[48px] lg:text-[64px] leading-[0.95] tracking-tight">
                   {t("Let's ", '의미 있는 것을 ')}
                   <span className="italic" style={{ color: 'var(--accent)' }}>
                     {t('build', '함께')}
@@ -620,7 +619,7 @@ function HomePage({
               <Reveal delay={120}>
                 <a
                   href="mailto:justina.yoo@gmail.com"
-                  className="flex items-center justify-between px-6 py-5 rounded-sm transition-colors hover:bg-white/5"
+                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-sm transition-colors hover:bg-white/5"
                   style={{ border: '1px solid var(--rule)' }}
                 >
                   <div className="flex items-center gap-4">
@@ -638,7 +637,7 @@ function HomePage({
                   href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between px-6 py-5 rounded-sm transition-colors hover:bg-white/5"
+                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-sm transition-colors hover:bg-white/5"
                   style={{ border: '1px solid var(--rule)' }}
                 >
                   <div className="flex items-center gap-4">
