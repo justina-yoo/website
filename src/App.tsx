@@ -142,7 +142,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
           <div className="col-span-12 md:col-span-5">
             <Reveal delay={300}>
               <div
-                className="relative rounded-lg overflow-hidden mb-4 md:mb-7 h-[180px] sm:h-[260px] md:h-[360px]"
+                className="relative rounded-lg overflow-hidden mb-7 h-[360px]"
                 style={{
                   border: '1px dashed rgba(255,255,255,0.14)',
                   background: `
@@ -156,7 +156,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
             <Reveal delay={360}>
-              <div className="flex flex-col gap-3 md:gap-5" style={{ borderLeft: '1px solid rgba(255,255,255,0.14)', paddingLeft: 24 }}>
+              <div className="flex flex-col gap-5" style={{ borderLeft: '1px solid rgba(255,255,255,0.14)', paddingLeft: 24 }}>
                 <div>
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Based across', '거점')}</div>
                   <div className="flex items-center gap-3 text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
@@ -532,10 +532,10 @@ function HomePage({
     <>
       <PageMeta title="Justina Yoo — AI Product Manager" description="Strategy to shipped product. From defining AI strategy to shipping systems at scale across Shanghai, Pittsburgh, and Seoul." />
       <Hero t={t} />
-      <section className="relative z-10 -mt-16 md:-mt-20" style={{ color: '#fff' }}>
+      <section className="relative z-10 mt-6 md:-mt-20 mb-6 md:mb-0" style={{ color: '#fff' }}>
         <div className="max-w-[1240px] mx-auto px-6 md:px-10">
-          <div className="rounded-sm py-6 md:py-10 lg:py-14 px-4 md:px-6 lg:px-10" style={{ background: 'var(--accent)' }}>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
+          <div className="rounded-sm py-10 md:py-12 lg:py-14 px-6 md:px-8 lg:px-10" style={{ background: 'var(--accent)' }}>
+          <div className="grid grid-cols-3 gap-4 sm:gap-8 md:gap-12">
             {[
               { v: '4', l: t('Products shipped', '출시한 제품'), sub: '' },
               { v: '1M+', l: t('Users reached', '도달 사용자'), sub: 'NewsChat' },
