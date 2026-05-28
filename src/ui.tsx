@@ -6,6 +6,7 @@
  */
 
 import React, { useEffect, useRef, type ReactNode, type CSSProperties } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 /* ─── Reveal on scroll ────────────────────────────────────────── */
 export function Reveal({
@@ -37,6 +38,20 @@ export function Reveal({
     <div ref={ref} className={`reveal ${className}`}>
       {children}
     </div>
+  );
+}
+
+/* ─── PageMeta (per-page <head> tags via react-helmet-async) ───── */
+export function PageMeta({ title, description }: { title: string; description: string }) {
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+    </Helmet>
   );
 }
 
@@ -151,7 +166,7 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
   return (
     <nav
       className="sticky top-0 z-40 border-b hairline"
-      style={{ background: 'rgba(250,248,244,0.85)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}
+      style={{ background: 'rgba(26,26,28,0.88)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}
     >
       <div className="max-w-[1240px] mx-auto px-6 md:px-10 h-[68px] flex items-center justify-between">
         <button onClick={onHome} className="flex items-baseline gap-2 group">
@@ -181,7 +196,7 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
           {lang && onToggleLang && (
             <button
               onClick={onToggleLang}
-              className="flex items-center gap-1 px-3 py-1.5 border hairline rounded-full font-mono-tech text-[11px] font-semibold glass hover:bg-white/80 transition-all"
+              className="flex items-center gap-1 px-3 py-1.5 border hairline rounded-full font-mono-tech text-[11px] font-semibold glass hover:bg-white/10 transition-all"
             >
               <span style={{ color: lang === 'en' ? 'var(--accent)' : 'var(--ink-3)' }}>EN</span>
               <span style={{ color: 'var(--ink-3)' }}>·</span>
@@ -314,7 +329,7 @@ export function CardGrid({
   items,
   iconKey = 'Bulb',
 }: {
-  items: { icon?: IconName; title: string; body: string }[];
+  items: { icon?: IconName; logo?: string; title: string; body: string }[];
   iconKey?: IconName;
 }) {
   return (
@@ -325,15 +340,19 @@ export function CardGrid({
           <Reveal key={i} delay={i * 60}>
             <div
               className="p-7 md:p-8 h-full flex flex-col gap-4"
-              style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(10px)' }}
+              style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)' }}
             >
               <div className="flex items-center justify-between">
+                {item.logo ? (
+                  <img src={item.logo} alt={item.title} className="h-6" />
+                ) : (
                 <div
                   className="w-8 h-8 border hairline rounded-full flex items-center justify-center"
                   style={{ color: 'var(--acc)' } as CSSProperties}
                 >
                   <IconComp />
                 </div>
+                )}
                 <span
                   className="font-mono-tech text-[10px] tracking-widest"
                   style={{ color: 'var(--ink-3)' }}

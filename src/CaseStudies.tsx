@@ -18,6 +18,7 @@ import {
   CardGrid,
   ContextBlock,
   CTASection,
+  PageMeta,
   type IconName,
 } from './ui';
 
@@ -31,6 +32,8 @@ function CaseStudyShell({
   lang,
   onToggleLang,
   t,
+  pageTitle,
+  pageDescription,
 }: {
   children: ReactNode;
   accentClass: string;
@@ -38,9 +41,12 @@ function CaseStudyShell({
   lang: 'en' | 'kr';
   onToggleLang: () => void;
   t: T;
+  pageTitle?: string;
+  pageDescription?: string;
 }) {
   return (
     <div className={`canvas-tint ${accentClass}`} style={{ position: 'relative', zIndex: 2 }}>
+      {pageTitle && pageDescription && <PageMeta title={pageTitle} description={pageDescription} />}
       <TopNav onHome={onBack} lang={lang} onToggleLang={onToggleLang} tFn={t} />
       {children}
       <Footer />
@@ -257,7 +263,7 @@ export function NewsChatCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-indigo" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+    <CaseStudyShell accentClass="acc-indigo" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="NewsChat Case Study — Justina Yoo" pageDescription="AI chat layer for news publishers. 1M MAU in 5 months.">
       <CaseStudyHero
         brandLabel="NewsChat"
         logoSrc="/newschat-logo.svg"
@@ -272,7 +278,7 @@ export function NewsChatCaseStudy({
       />
 
       {/* Product UI showcase — mobile */}
-      <section className="border-b hairline" style={{ background: 'rgba(255,255,255,0.3)' }}>
+      <section className="border-b hairline" style={{ background: 'rgba(255,255,255,0.04)' }}>
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
           <Reveal>
             <div className="flex items-center gap-4 mb-10">
@@ -363,7 +369,7 @@ export function NewsChatCaseStudy({
       <section
         className="border-b hairline"
         style={{
-          background: 'rgba(255,255,255,0.35)',
+          background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
         }}
@@ -497,7 +503,7 @@ export function AekoCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="AEKO Case Study — Justina Yoo" pageDescription="AEO platform for cross-border e-commerce brands.">
       <CaseStudyHero
         brandLabel="AEKO"
         logoSrc="/aeko-logo.svg"
@@ -583,7 +589,7 @@ export function AekoCaseStudy({
       <section
         className="border-b hairline"
         style={{
-          background: 'rgba(255,255,255,0.35)',
+          background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
         }}
@@ -737,7 +743,7 @@ export function AttnCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-sky" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+    <CaseStudyShell accentClass="acc-sky" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="ATTN Case Study — Justina Yoo" pageDescription="US market intelligence for Korean investors.">
       <CaseStudyHero
         brandLabel="ATTN"
         logoSrc="/attn-logo.svg"
@@ -824,7 +830,7 @@ export function AttnCaseStudy({
       <section
         className="border-b hairline"
         style={{
-          background: 'rgba(255,255,255,0.35)',
+          background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
         }}
@@ -935,7 +941,7 @@ export function WorkflowCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="Workflow Case Study — Justina Yoo" pageDescription="AI-powered workflow automation.">
       <CaseStudyHero
         brandLabel={t('AI Workflow Stack', 'AI 워크플로우 스택')}
         subLabels={[t('Agentic · MCP · Claude', '에이전틱 · MCP · Claude'), 'Panomix & AEKO Intelligence']}
@@ -968,7 +974,7 @@ export function WorkflowCaseStudy({
       <section
         className="border-b hairline"
         style={{
-          background: 'rgba(255,255,255,0.35)',
+          background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
         }}
@@ -1010,9 +1016,10 @@ export function StrategyCaseStudy({
     window.scrollTo({ top: 0 });
   }, []);
 
-  const examples: { icon: IconName; title: string; body: string }[] = [
+  const examples: { icon: IconName; logo?: string; title: string; body: string }[] = [
     {
       icon: 'Zap',
+      logo: '/aeko-logo.svg',
       title: 'AEKO',
       body: t(
         'Owned end-to-end from concept to MVP as sole PM — vision, feature scoping, prototype, engineering/design leadership.',
@@ -1021,6 +1028,7 @@ export function StrategyCaseStudy({
     },
     {
       icon: 'Trend',
+      logo: '/newschat-logo.svg',
       title: 'NewsChat',
       body: t(
         'Led from hypothesis to 1M MAU in 5 months — user interviews, problem framing, PMF signals, publisher partnerships.',
@@ -1029,6 +1037,7 @@ export function StrategyCaseStudy({
     },
     {
       icon: 'Target',
+      logo: '/attn-logo.svg',
       title: 'ATTN',
       body: t(
         'Defined the 3-pillar content strategy (SEC filings, gov signals, market news) that became the product\'s core differentiator.',
@@ -1065,7 +1074,7 @@ export function StrategyCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-indigo" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+    <CaseStudyShell accentClass="acc-indigo" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="Product Strategy & 0→1 — Justina Yoo" pageDescription="From zero to product-market fit. AEKO, NewsChat, and ATTN case studies.">
       <CaseStudyHero
         brandLabel={t('Product Strategy & 0→1', '프로덕트 전략 & 0→1')}
         subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
@@ -1087,10 +1096,29 @@ export function StrategyCaseStudy({
         </div>
       </section>
 
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel eyebrow={t('VISUALS', '비주얼')} title={t('Visual Evidence', '시각적 근거')} />
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { title: 'AEKO Activation Loop', desc: 'Diagram showing the user journey: connect domain → define prompts → see AI Visibility Score → optimization guidance' },
+              { title: 'NewsChat PMF Timeline', desc: 'Timeline graphic showing key milestones from hypothesis to 1M MAU in 5 months, with PMF signals marked' },
+            ].map((item, i) => (
+              <Reveal key={i} delay={i * 80}>
+                <div className="border-2 border-dashed rounded-sm p-8 md:p-12 flex flex-col items-center justify-center text-center gap-3 min-h-[200px]" style={{ borderColor: 'var(--rule)' }}>
+                  <div className="eyebrow">{item.title}</div>
+                  <p className="text-[13px] max-w-[36ch]" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section
         className="border-b hairline"
         style={{
-          background: 'rgba(255,255,255,0.35)',
+          background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
         }}
@@ -1187,7 +1215,7 @@ export function AISystemsCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="AI Systems & Infrastructure — Justina Yoo" pageDescription="RAG pipelines, ADK, visibility scoring, and MCP integrations.">
       <CaseStudyHero
         brandLabel={t('AI Systems & Infrastructure', 'AI 시스템 & 인프라')}
         subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
@@ -1209,10 +1237,29 @@ export function AISystemsCaseStudy({
         </div>
       </section>
 
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel eyebrow={t('VISUALS', '비주얼')} title={t('System Architecture', '시스템 아키텍처')} />
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { title: 'NewsChat RAG Pipeline', desc: 'Architecture diagram showing retrieval flow: article content → vector DB → LLM → source-attributed response (<800ms)' },
+              { title: 'ADK Integration Flow', desc: 'Diagram showing how the one-line SDK script generates contextual AI features (Q&A, polls, summaries) within publisher articles' },
+            ].map((item, i) => (
+              <Reveal key={i} delay={i * 80}>
+                <div className="border-2 border-dashed rounded-sm p-8 md:p-12 flex flex-col items-center justify-center text-center gap-3 min-h-[200px]" style={{ borderColor: 'var(--rule)' }}>
+                  <div className="eyebrow">{item.title}</div>
+                  <p className="text-[13px] max-w-[36ch]" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section
         className="border-b hairline"
         style={{
-          background: 'rgba(255,255,255,0.35)',
+          background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
         }}
@@ -1309,7 +1356,7 @@ export function MonetizationCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-sky" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+    <CaseStudyShell accentClass="acc-sky" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="Monetization & Growth — Justina Yoo" pageDescription="10% ad CTR, 3.5x ARPU, $0 CAC. Revenue-first product thinking.">
       <CaseStudyHero
         brandLabel={t('Monetization & Growth', '수익화 & 성장')}
         subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
@@ -1331,10 +1378,29 @@ export function MonetizationCaseStudy({
         </div>
       </section>
 
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel eyebrow={t('VISUALS', '비주얼')} title={t('UX & Revenue Design', 'UX 및 수익 설계')} />
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { title: 'Contextual Ad Placement UX', desc: 'Before/after mockup showing ad placement at natural conversation breakpoints vs. traditional banner ads — the UX constraint that drove 10% CTR' },
+              { title: 'AEKO Freemium Funnel', desc: 'Funnel diagram: free visibility score → urgency trigger → paid prompt tracking → optimization tier' },
+            ].map((item, i) => (
+              <Reveal key={i} delay={i * 80}>
+                <div className="border-2 border-dashed rounded-sm p-8 md:p-12 flex flex-col items-center justify-center text-center gap-3 min-h-[200px]" style={{ borderColor: 'var(--rule)' }}>
+                  <div className="eyebrow">{item.title}</div>
+                  <p className="text-[13px] max-w-[36ch]" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section
         className="border-b hairline"
         style={{
-          background: 'rgba(255,255,255,0.35)',
+          background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
         }}
@@ -1395,10 +1461,10 @@ export function AgentsCaseStudy({
     },
     {
       icon: 'Globe',
-      title: t('Content Pipeline', '콘텐츠 파이프라인'),
+      title: t('Content Pipeline → ana2me', '콘텐츠 파이프라인 → ana2me'),
       body: t(
-        'End-to-end content automation agents — topic research, SEO/AEO scoring, bilingual writing, fact-checking, and publishing. Each agent is a modular skill that chains into the next, replacing a multi-person editorial workflow.',
-        '주제 리서치, SEO/AEO 스코어링, 이중 언어 작성, 팩트체킹, 발행까지 전 과정을 아우르는 콘텐츠 자동화 에이전트입니다. 각 에이전트는 모듈형 스킬로 다음 단계와 연결되어, 여러 명이 필요했던 편집 워크플로우를 대체합니다.',
+        'End-to-end content automation agents — topic research, SEO/AEO scoring, bilingual writing, fact-checking, and publishing. Powers ana2me (ana2me.com), a Korean beauty & ingredient database built as a side project. Each agent is a modular skill that chains into the next, replacing a multi-person editorial workflow.',
+        '주제 리서치, SEO/AEO 스코어링, 이중 언어 작성, 팩트체킹, 발행까지 전 과정을 아우르는 콘텐츠 자동화 에이전트입니다. 사이드 프로젝트로 구축한 한국 뷰티 & 성분 데이터베이스 ana2me(ana2me.com)를 운영하고 있습니다. 각 에이전트는 모듈형 스킬로 다음 단계와 연결되어, 여러 명이 필요했던 편집 워크플로우를 대체합니다.',
       ),
     },
   ];
@@ -1431,7 +1497,7 @@ export function AgentsCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t}>
+    <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="Agentic Tooling — Justina Yoo" pageDescription="Claude-powered agents for sales, PM workflows, and content automation.">
       <CaseStudyHero
         brandLabel={t('Agentic Tooling', '에이전틱 툴링')}
         subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디'), 'Panomix & AEKO Intelligence']}
@@ -1453,10 +1519,29 @@ export function AgentsCaseStudy({
         </div>
       </section>
 
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <SectionLabel eyebrow={t('VISUALS', '비주얼')} title={t('Agent Architecture', '에이전트 아키텍처')} />
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { title: 'Agent Workflow Map', desc: 'Diagram showing how the 3 agents (Sales, Research, Content) connect via MCP and chain into each other' },
+              { title: 'Content Pipeline Flow', desc: 'Flow chart: topic research → SEO/AEO scoring → bilingual writing → fact-checking → publishing to ana2me.com' },
+            ].map((item, i) => (
+              <Reveal key={i} delay={i * 80}>
+                <div className="border-2 border-dashed rounded-sm p-8 md:p-12 flex flex-col items-center justify-center text-center gap-3 min-h-[200px]" style={{ borderColor: 'var(--rule)' }}>
+                  <div className="eyebrow">{item.title}</div>
+                  <p className="text-[13px] max-w-[36ch]" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section
         className="border-b hairline"
         style={{
-          background: 'rgba(255,255,255,0.35)',
+          background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
         }}
