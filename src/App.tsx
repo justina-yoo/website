@@ -94,7 +94,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 function Hero({ t }: { t: (en: string, kr: string) => string }) {
   return (
     <section className="relative" style={{ background: '#1A1A1C', color: '#F5F2EA' }}>
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-16 pb-24 sm:pb-36 md:pt-20 md:pb-48">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-10 pb-16 sm:pb-28 md:pt-20 md:pb-48">
         <div className="grid grid-cols-12 gap-6 md:gap-14 items-start">
           <div className="col-span-12 md:col-span-7">
             <Reveal>
@@ -129,7 +129,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
             </Reveal>
             <Reveal delay={260}>
               <p
-                className="mt-8 text-[14px] sm:text-[15px] md:text-[17px] leading-relaxed max-w-[560px]"
+                className="mt-5 md:mt-8 text-[14px] sm:text-[15px] md:text-[17px] leading-relaxed max-w-[560px]"
                 style={{ color: '#C8C6BE', fontWeight: 500 }}
               >
                 {t(
@@ -142,7 +142,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
           <div className="col-span-12 md:col-span-5">
             <Reveal delay={300}>
               <div
-                className="relative rounded-lg overflow-hidden mb-7 h-[240px] sm:h-[300px] md:h-[360px]"
+                className="relative rounded-lg overflow-hidden mb-4 md:mb-7 h-[180px] sm:h-[260px] md:h-[360px]"
                 style={{
                   border: '1px dashed rgba(255,255,255,0.14)',
                   background: `
@@ -156,7 +156,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
             <Reveal delay={360}>
-              <div className="flex flex-col gap-5" style={{ borderLeft: '1px solid rgba(255,255,255,0.14)', paddingLeft: 24 }}>
+              <div className="flex flex-col gap-3 md:gap-5" style={{ borderLeft: '1px solid rgba(255,255,255,0.14)', paddingLeft: 24 }}>
                 <div>
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Based across', '거점')}</div>
                   <div className="flex items-center gap-3 text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
@@ -200,7 +200,7 @@ function ToolStack() {
   ];
   return (
     <section className="border-b hairline">
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-4 md:py-6 flex flex-wrap items-center gap-x-6 gap-y-3">
         <span className="eyebrow">Stack</span>
         <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
           {tools.map(tool => (
@@ -324,7 +324,7 @@ function FeaturedWork({
 
   return (
     <section id="featured-work" className="border-b hairline">
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-12 md:py-20 lg:py-28">
         <Reveal>
           <div className="flex items-end justify-between mb-8">
             <h2 className="font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[56px] leading-[1] tracking-tight">
@@ -337,7 +337,7 @@ function FeaturedWork({
               2023 — 2026
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 mb-16">
+          <div className="flex flex-wrap gap-2 mb-8 md:mb-16">
             {['0→1', 'GenAI', 'B2B', 'B2C'].map(cat => (
               <button
                 key={cat}
@@ -354,7 +354,7 @@ function FeaturedWork({
             <Reveal key={p.id} delay={i * 80}>
               <button
                 onClick={() => onOpen(p.id)}
-                className="group relative w-full text-left border-t hairline last:border-b py-10 md:py-14 transition-colors"
+                className="group relative w-full text-left border-t hairline last:border-b py-6 md:py-10 lg:py-14 transition-colors"
               >
                 <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
                   <div className="col-span-12 md:col-span-1">
@@ -466,9 +466,9 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
   ];
   return (
     <section id="career" className="border-b hairline" style={{ background: 'var(--paper-2)' }}>
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-12 md:py-20 lg:py-28">
         <Reveal>
-          <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
+          <div className="flex items-end justify-between mb-8 md:mb-16 flex-wrap gap-6">
             <div>
               <div className="eyebrow mb-3">{t('Career', '경력')}</div>
               <h2 className="font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
@@ -534,7 +534,7 @@ function HomePage({
       <Hero t={t} />
       <section className="relative z-10 -mt-16 md:-mt-20" style={{ color: '#fff' }}>
         <div className="max-w-[1240px] mx-auto px-6 md:px-10">
-          <div className="rounded-sm py-10 md:py-14 px-6 md:px-10" style={{ background: 'var(--accent)' }}>
+          <div className="rounded-sm py-6 md:py-10 lg:py-14 px-4 md:px-6 lg:px-10" style={{ background: 'var(--accent)' }}>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
             {[
               { v: '4', l: t('Products shipped', '출시한 제품'), sub: '' },
@@ -556,7 +556,7 @@ function HomePage({
       <FeaturedWork t={t} onOpen={onOpen} />
       <Career t={t} />
       <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-10">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-8 md:py-10">
           <div className="eyebrow mb-6">{t('Products', '프로덕트')}</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
@@ -588,7 +588,7 @@ function HomePage({
         </div>
       </section>
       <section style={{ background: '#212123', color: 'var(--ink)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24 md:py-32">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-14 md:py-24 lg:py-32">
           <Reveal>
             <div className="eyebrow mb-6" style={{ color: 'var(--ink-3)' }}>{t("Let's connect", '연결하기')}</div>
           </Reveal>

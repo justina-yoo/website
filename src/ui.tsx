@@ -264,7 +264,7 @@ export function SectionLabel({
   kicker?: string;
 }) {
   return (
-    <div className="mb-12 md:mb-16">
+    <div className="mb-8 md:mb-12 lg:mb-16">
       <div className="eyebrow mb-3" style={{ color: 'var(--acc)' } as CSSProperties}>
         {eyebrow}
       </div>
@@ -339,7 +339,7 @@ export function CardGrid({
         return (
           <Reveal key={i} delay={i * 60}>
             <div
-              className="p-5 md:p-7 lg:p-8 h-full flex flex-col gap-4"
+              className="p-4 md:p-6 lg:p-8 h-full flex flex-col gap-4"
               style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)' }}
             >
               <div className="flex items-center justify-between">
@@ -435,7 +435,7 @@ export function CTASection({
 }) {
   return (
     <section className="border-t hairline">
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24 md:py-32 text-center">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-14 md:py-24 lg:py-32 text-center">
         <Reveal>
           <h2 className="font-serif-display text-[28px] sm:text-[36px] md:text-[44px] lg:text-[56px] leading-[1] tracking-tight mb-6">
             {title}
