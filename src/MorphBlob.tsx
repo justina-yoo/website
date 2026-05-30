@@ -87,12 +87,14 @@ interface MorphBlobProps {
   palette?: string;
   holeScale?: number;
   showLabel?: boolean;
+  blobOnly?: boolean;
 }
 
 const MorphBlob: React.FC<MorphBlobProps> = ({
   palette = 'iris',
   holeScale = 0.46,
   showLabel = false,
+  blobOnly = false,
 }) => {
   const uidRaw = useId();
   const uid = uidRaw.replace(/:/g, '_');
@@ -118,13 +120,15 @@ const MorphBlob: React.FC<MorphBlobProps> = ({
       baseR = 118;
     const N = 96;
 
-    const stages = [
-      { name: 'BLOB', hold: 1200, morph: 1600 },
-      { name: 'CIRCLE', hold: 700, morph: 1100 },
-      { name: 'DIAMOND', hold: 700, morph: 1100 },
-      { name: 'HEXAGON', hold: 700, morph: 1100 },
-      { name: 'TRIANGLE', hold: 700, morph: 1100 },
-    ];
+    const stages = blobOnly
+      ? [{ name: 'BLOB', hold: 4000, morph: 0 }]
+      : [
+          { name: 'BLOB', hold: 1200, morph: 1600 },
+          { name: 'CIRCLE', hold: 700, morph: 1100 },
+          { name: 'DIAMOND', hold: 700, morph: 1100 },
+          { name: 'HEXAGON', hold: 700, morph: 1100 },
+          { name: 'TRIANGLE', hold: 700, morph: 1100 },
+        ];
     const totalCycle = stages.reduce((s, x) => s + x.hold + x.morph, 0);
 
     const polyR = (theta: number, K: number, R: number): number => {

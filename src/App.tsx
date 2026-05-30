@@ -93,21 +93,18 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 /* ─── Home sections ─────────────────────────────── */
 function Hero({ t }: { t: (en: string, kr: string) => string }) {
   return (
-    <section className="relative" style={{ background: '#1A1A1C', color: '#F5F2EA' }}>
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-10 pb-16 sm:pb-28 md:pt-20 md:pb-48">
-        <div className="grid grid-cols-12 gap-6 md:gap-14 items-start">
-          <div className="col-span-12 md:col-span-7">
+    <section className="relative" style={{ background: 'rgba(26,26,28,0.92)', boxShadow: '0 40px 80px -20px rgba(0,0,0,0.5)', color: '#F5F2EA' }}>
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-2 pb-24 sm:pb-28 md:pt-4 md:pb-32">
+        <div className="grid grid-cols-12 gap-6 md:gap-14 items-stretch">
+          <div className="col-span-12 md:col-span-7 md:order-2 flex flex-col">
             <Reveal>
               <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap">
                 <span
-                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[11px] font-mono-tech tracking-widest uppercase font-medium"
-                  style={{ background: '#F5F2EA', color: '#1A1A1C' }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full font-mono-tech text-[10px] tracking-widest uppercase font-medium"
+                  style={{ background: 'rgba(152,232,193,0.12)', color: '#98E8C1', border: '1px solid rgba(152,232,193,0.25)' }}
                 >
-                  <span
-                    className="inline-block w-1.5 h-1.5 rounded-full"
-                    style={{ background: '#3DDC8E', boxShadow: '0 0 0 2px rgba(61,220,142,0.2)' }}
-                  />
-                  Open to strategic opportunities
+                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: '#98E8C1' }} />
+                  {t('Open to opportunities', '기회에 열려 있습니다')}
                 </span>
                 <span
                   className="inline-flex items-center px-3.5 py-2 rounded-lg text-[11px] font-mono-tech tracking-widest uppercase font-medium"
@@ -118,28 +115,33 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
             <Reveal delay={120}>
-              <h1 className="font-serif-display text-[26px] sm:text-[32px] md:text-[48px] lg:text-[72px] xl:text-[84px] leading-[0.98] tracking-tight" style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
-                {t('Strategy to ', '전략부터 ')}
-                <span style={{ color: '#9E84FF' }}>
-                  {t('shipped', '제품')}<br />
-                  {t('product', '출시까지')}
-                </span>
-                <span style={{ color: '#9E84FF' }}>.</span>
-              </h1>
+              <div className="flex items-start gap-0">
+                <h1 className="title-glow font-serif-display text-[26px] sm:text-[32px] md:text-[40px] lg:text-[56px] xl:text-[68px] leading-[0.98] tracking-tight" style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
+                  {t('Strategy to', '전략부터')}
+                  <br />
+                  <span className="accent-glow">{t('shipped', '제품')}</span><br />
+                  <span className="accent-glow">{t('product', '출시까지')}</span><span className="accent-glow">.</span>
+                </h1>
+                <img
+                  src="/avatar.png"
+                  alt="Justina Yoo"
+                  className="w-[100px] sm:w-[130px] md:w-[190px] lg:w-[240px] flex-shrink-0 -ml-4 md:-ml-8 mt-1 md:mt-1"
+                />
+              </div>
             </Reveal>
             <Reveal delay={260}>
               <p
-                className="mt-5 md:mt-8 text-[14px] sm:text-[15px] md:text-[17px] leading-relaxed max-w-[560px]"
+                className="mt-2 md:mt-4 text-[14px] sm:text-[15px] md:text-[17px] leading-relaxed max-w-[560px]"
                 style={{ color: '#C8C6BE', fontWeight: 500 }}
               >
                 {t(
-                  'I figure out where AI creates real value — in products, experiences, and user interactions. From defining strategy to shipping AI systems at scale, I work across the full stack of AI transformation: opportunity framing, experience design, and hands-on delivery.',
+                  'From defining strategy to shipping AI systems at scale, I work across the full stack of AI transformation: opportunity framing, experience design, and hands-on delivery.',
                   'AI가 실질적인 가치를 만드는 지점을 찾아냅니다 — 제품, 경험, 그리고 사용자와의 상호작용 방식에서. 전략 수립부터 대규모 AI 시스템 출시까지, AI 트랜스포메이션의 전 과정을 아우릅니다: 기회 프레이밍, 경험 설계, 그리고 직접 실행까지.',
                 )}
               </p>
             </Reveal>
           </div>
-          <div className="col-span-12 md:col-span-5">
+          <div className="col-span-12 md:col-span-5 md:order-1 flex flex-col">
             <Reveal delay={300}>
               <div
                 className="relative rounded-lg overflow-hidden mb-7 h-[360px]"
@@ -155,25 +157,33 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                 <MorphBlob palette="iris" />
               </div>
             </Reveal>
+          </div>
+          {/* Context row — full width */}
+          <div className="col-span-12 md:order-3">
             <Reveal delay={360}>
-              <div className="flex flex-col gap-5" style={{ borderLeft: '1px solid rgba(255,255,255,0.14)', paddingLeft: 24 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 -mt-6" style={{}}>
                 <div>
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Based across', '거점')}</div>
-                  <div className="flex items-center gap-3 text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
+                  <div className="flex items-center gap-3 text-[14px] flex-wrap" style={{ color: '#F5F2EA', fontWeight: 500 }}>
                     <span>🇨🇳 {t('Shanghai', '상하이')}</span>
                     <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
                     <span>🇺🇸 {t('Pittsburgh', '피츠버그')}</span>
                     <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
                     <span>🇰🇷 {t('Seoul', '서울')}</span>
+                    <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+                    <span>🇭🇰 {t('Hong Kong', '홍콩')}</span>
                   </div>
-                  <div className="mt-2 font-mono-tech text-[10px] tracking-widest uppercase" style={{ color: '#9E84FF' }}>
-                    {t('Open to opportunities across Asia', '아시아 전역의 기회에 열려 있습니다')}
+                </div>
+                <div>
+                  <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Education', '학력')}</div>
+                  <div className="text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
+                    {t('Carnegie Mellon University — Decision Science + HCI', '카네기멜론대학교 — 의사결정과학 + HCI')}
                   </div>
                 </div>
                 <div>
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Focus', '관심 분야')}</div>
                   <div className="text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
-                    {t('AX Consulting · GenAI · 0→1 · End-to-End Build', 'AX 컨설팅 · GenAI · 0→1 · 풀사이클 구축')}
+                    {t('AX Consulting · AI Strategist · 0→1 · End-to-End Build', 'AX 컨설팅 · AI 전략가 · 0→1 · 풀사이클 구축')}
                   </div>
                 </div>
               </div>
@@ -200,9 +210,9 @@ function ToolStack() {
   ];
   return (
     <section className="border-b hairline">
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-4 md:py-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-4 md:py-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
         <span className="eyebrow">Stack</span>
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
           {tools.map(tool => (
             <div key={tool.name} className="flex items-center gap-2">
               <img src={tool.logo} alt={tool.name} className="w-4 h-4" style={{ opacity: 0.6, filter: 'invert(1) brightness(0.85)' }} />
@@ -323,11 +333,14 @@ function FeaturedWork({
   ];
 
   return (
-    <section id="featured-work" className="border-b hairline">
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-12 md:py-20 lg:py-28">
+    <section id="featured-work" className="border-b hairline relative overflow-hidden">
+      <div className="absolute -right-20 top-20 w-[400px] h-[400px] opacity-[0.25] pointer-events-none hidden md:block z-[2]">
+        <MorphBlob palette="iris" holeScale={0} blobOnly />
+      </div>
+      <div className="relative z-[1] max-w-[1240px] mx-auto px-6 md:px-10 py-12 md:py-20 lg:py-28">
         <Reveal>
           <div className="flex items-end justify-between mb-8">
-            <h2 className="font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[56px] leading-[1] tracking-tight">
+            <h2 className="title-glow font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[56px] leading-[1] tracking-tight">
               {t('Featured Work', '주요 프로젝트')}
             </h2>
             <div
@@ -354,9 +367,9 @@ function FeaturedWork({
             <Reveal key={p.id} delay={i * 80}>
               <button
                 onClick={() => onOpen(p.id)}
-                className="group relative w-full text-left border-t hairline last:border-b py-6 md:py-10 lg:py-14 transition-colors"
+                className="group relative w-full text-left border-t hairline last:border-b py-6 md:py-10 lg:py-14"
               >
-                <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
+                <div className="grid grid-cols-12 gap-6 md:gap-10 items-start transition-transform duration-300 origin-left group-hover:scale-[1.02]">
                   <div className="col-span-12 md:col-span-1">
                     <div
                       className="font-mono-tech text-[11px] tracking-widest"
@@ -465,47 +478,56 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
     },
   ];
   return (
-    <section id="career" className="border-b hairline" style={{ background: 'var(--paper-2)' }}>
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-12 md:py-20 lg:py-28">
+    <section id="career" className="border-b hairline relative overflow-hidden" style={{ background: 'rgba(33,33,35,0.88)' }}>
+      <div className="absolute -left-24 bottom-10 w-[340px] h-[340px] opacity-[0.22] pointer-events-none hidden md:block z-[2]">
+        <MorphBlob palette="iris" holeScale={0} blobOnly />
+      </div>
+      <div className="absolute -right-16 top-20 w-[260px] h-[260px] opacity-[0.18] pointer-events-none hidden lg:block z-[2]">
+        <MorphBlob palette="iris" holeScale={0} blobOnly />
+      </div>
+      <div className="relative z-[1] max-w-[1240px] mx-auto px-6 md:px-10 py-12 md:py-20 lg:py-28">
         <Reveal>
           <div className="flex items-end justify-between mb-8 md:mb-16 flex-wrap gap-6">
             <div>
               <div className="eyebrow mb-3">{t('Career', '경력')}</div>
-              <h2 className="font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
+              <h2 className="title-glow font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
                 {t('Experience', '경력')}
               </h2>
             </div>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 px-5 py-3 border-2 rounded-sm text-[13px] font-medium tracking-wide transition-colors hover:bg-[var(--ink)] hover:text-[var(--paper)]" style={{ borderColor: 'var(--ink)', color: 'var(--ink)' }}>
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-primary">
               {t('Download résumé', '이력서 다운로드')} <Icon.FileText />
             </a>
           </div>
         </Reveal>
-        <div>
+        <div className="relative max-w-[900px] mx-auto">
+          {/* Vertical line */}
+          <div className="absolute left-[7px] md:left-[7px] top-0 bottom-0 w-px" style={{ background: 'rgba(125,232,255,0.15)' }} />
           {roles.map((r, i) => (
             <Reveal key={i} delay={i * 50}>
-              <div className="border-t hairline py-8 md:py-10 grid grid-cols-12 gap-6">
-                <div className="col-span-12 md:col-span-3">
-                  <div
-                    className="font-mono-tech text-[11px] tracking-widest uppercase"
-                    style={{ color: 'var(--accent)' }}
-                  >
-                    {r.period}
-                  </div>
+              <div className="relative pl-10 md:pl-12 py-5 md:py-7">
+                {/* Circle on the line */}
+                <div className="absolute left-0 top-8 md:top-10 w-[15px] h-[15px] rounded-full" style={{
+                  background: '#1A1A1C',
+                  border: '2px solid #7DE8FF',
+                  boxShadow: '0 0 8px rgba(125,232,255,0.3)',
+                }} />
+                <div
+                  className="font-mono-tech text-[11px] tracking-widest uppercase mb-3"
+                  style={{ color: '#7DE8FF' }}
+                >
+                  {r.period}
                 </div>
-                <div className="col-span-12 md:col-span-9">
-                  <div className="flex flex-wrap items-baseline gap-4 mb-3">
-                    <span className="font-serif-display text-[20px] sm:text-[24px] md:text-[30px] leading-none">
-                      {r.company}
-                    </span>
-                    <span
-                      className="font-serif-display text-[16px]"
-                      style={{ color: 'var(--ink-3)' }}
-                    >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                  <div>
+                    <div className="font-serif-display text-[18px] sm:text-[20px] md:text-[24px] leading-tight">
                       {r.role}
-                    </span>
+                    </div>
+                    <div className="font-mono-tech text-[11px] tracking-wider uppercase mt-1" style={{ color: 'var(--ink-3)' }}>
+                      {r.company}
+                    </div>
                   </div>
                   <p
-                    className="text-[15px] leading-relaxed max-w-[64ch]"
+                    className="text-[14px] leading-relaxed"
                     style={{ color: 'var(--ink-2)' }}
                   >
                     {r.body}
@@ -514,7 +536,6 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
           ))}
-          <div className="border-t hairline" />
         </div>
       </div>
     </section>
@@ -534,16 +555,21 @@ function HomePage({
       <Hero t={t} />
       <section className="relative z-10 mt-6 md:-mt-20 mb-6 md:mb-0" style={{ color: '#fff' }}>
         <div className="max-w-[1240px] mx-auto px-6 md:px-10">
-          <div className="rounded-sm py-10 md:py-12 lg:py-14 px-6 md:px-8 lg:px-10" style={{ background: 'var(--accent)' }}>
+          <div className="rounded-full py-5 md:py-6 lg:py-8 px-6 md:px-8 lg:px-10 overflow-hidden" style={{
+            background: 'transparent',
+            boxShadow: '0 0 8px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3.5px rgba(255,255,255,0.09), inset -3px -3px 0.5px -3.5px rgba(255,255,255,0.85), inset 1px 1px 1px -0.5px rgba(255,255,255,0.6), inset -1px -1px 1px -0.5px rgba(255,255,255,0.6), inset 0 0 6px 6px rgba(255,255,255,0.12), inset 0 0 2px 2px rgba(255,255,255,0.06), 0 0 12px rgba(0,0,0,0.15)',
+            backdropFilter: 'url(#liquid-glass) blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+          }}>
           <div className="grid grid-cols-3 gap-4 sm:gap-8 md:gap-12">
             {[
-              { v: '4', l: t('Products shipped', '출시한 제품'), sub: '' },
-              { v: '1M+', l: t('Users reached', '도달 사용자'), sub: 'NewsChat' },
-              { v: '10%', l: t('Ad CTR achieved', '달성 광고 CTR'), sub: 'NewsChat' },
+              { v: '4', l: t('Products shipped', '출시한 제품'), sub: '', color: '#9E84FF' },
+              { v: '1M+', l: t('Users reached', '도달 사용자'), sub: 'NewsChat', color: '#7DE8FF' },
+              { v: '10%', l: t('Ad CTR achieved', '달성 광고 CTR'), sub: 'NewsChat', color: '#98E8C1' },
             ].map((m, i) => (
               <Reveal key={i} delay={i * 60}>
-                <div className="flex flex-col gap-2">
-                  <span className="font-serif-display text-[32px] sm:text-[40px] md:text-[56px] leading-none tracking-tight" style={{ color: '#fff' }}>{m.v}</span>
+                <div className="flex flex-col gap-2 items-center text-center">
+                  <span className="font-serif-display text-[32px] sm:text-[40px] md:text-[56px] leading-none tracking-tight" style={{ color: m.color }}>{m.v}</span>
                   <span className="font-mono-tech text-[10px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.55)' }}>{m.l}{m.sub && ` · ${m.sub}`}</span>
                 </div>
               </Reveal>
@@ -587,8 +613,11 @@ function HomePage({
           </div>
         </div>
       </section>
-      <section style={{ background: '#212123', color: 'var(--ink)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-14 md:py-24 lg:py-32">
+      <section className="relative overflow-hidden" style={{ background: 'rgba(33,33,35,0.88)', color: 'var(--ink)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="absolute right-10 top-1/2 -translate-y-1/2 w-[440px] h-[440px] opacity-[0.20] pointer-events-none hidden lg:block z-[2]">
+          <MorphBlob palette="iris" holeScale={0} blobOnly />
+        </div>
+        <div className="relative z-[1] max-w-[1240px] mx-auto px-6 md:px-10 py-14 md:py-24 lg:py-32">
           <Reveal>
             <div className="eyebrow mb-6" style={{ color: 'var(--ink-3)' }}>{t("Let's connect", '연결하기')}</div>
           </Reveal>
@@ -597,12 +626,12 @@ function HomePage({
               <Reveal delay={60}>
                 <h2 className="font-serif-display text-[26px] sm:text-[36px] md:text-[48px] lg:text-[64px] leading-[0.95] tracking-tight">
                   {t("Let's ", '의미 있는 것을 ')}
-                  <span className="italic" style={{ color: 'var(--accent)' }}>
+                  <span className="italic accent-glow">
                     {t('build', '함께')}
                   </span>
                   <br />
                   {t('something that matters', '만들어 봐요')}
-                  <span style={{ color: 'var(--accent)' }}>.</span>
+                  <span className="accent-glow">.</span>
                 </h2>
                 <p
                   className="mt-6 text-[15px] max-w-[44ch]"
@@ -619,8 +648,14 @@ function HomePage({
               <Reveal delay={120}>
                 <a
                   href="mailto:justina.yoo@gmail.com"
-                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-sm transition-colors hover:bg-white/5"
-                  style={{ border: '1px solid var(--rule)' }}
+                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-full transition-all hover:scale-[1.02]"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(158,132,255,0.08) 0%, rgba(158,132,255,0.02) 100%)',
+                    border: 'none',
+                    boxShadow: '0 0 8px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3.5px rgba(158,132,255,0.12), inset -3px -3px 0.5px -3.5px rgba(255,255,255,0.85), inset 1px 1px 1px -0.5px rgba(255,255,255,0.6), inset -1px -1px 1px -0.5px rgba(255,255,255,0.6), inset 0 0 6px 6px rgba(158,132,255,0.08), inset 0 0 2px 2px rgba(255,255,255,0.06), 0 0 12px rgba(158,132,255,0.08)',
+                    backdropFilter: 'url(#liquid-glass) blur(12px)',
+                    overflow: 'hidden',
+                  }}
                 >
                   <div className="flex items-center gap-4">
                     <Icon.Mail />
@@ -637,8 +672,14 @@ function HomePage({
                   href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-sm transition-colors hover:bg-white/5"
-                  style={{ border: '1px solid var(--rule)' }}
+                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-full transition-all hover:scale-[1.02]"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(158,132,255,0.08) 0%, rgba(158,132,255,0.02) 100%)',
+                    border: 'none',
+                    boxShadow: '0 0 8px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3.5px rgba(158,132,255,0.12), inset -3px -3px 0.5px -3.5px rgba(255,255,255,0.85), inset 1px 1px 1px -0.5px rgba(255,255,255,0.6), inset -1px -1px 1px -0.5px rgba(255,255,255,0.6), inset 0 0 6px 6px rgba(158,132,255,0.08), inset 0 0 2px 2px rgba(255,255,255,0.06), 0 0 12px rgba(158,132,255,0.08)',
+                    backdropFilter: 'url(#liquid-glass) blur(12px)',
+                    overflow: 'hidden',
+                  }}
                 >
                   <div className="flex items-center gap-4">
                     <Icon.LinkedIn />
@@ -735,7 +776,18 @@ export default function App() {
     return <AgentsCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
 
   return (
-    <div className="canvas-tint grain" style={{ position: 'relative' }}>
+    <div className="canvas-tint grain perspective-grid" style={{ position: 'relative' }}>
+      <svg className="hidden" aria-hidden="true">
+        <defs>
+          <filter id="liquid-glass" x="0%" y="0%" width="100%" height="100%" colorInterpolationFilters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves={1} seed={1} result="turbulence" />
+            <feGaussianBlur in="turbulence" stdDeviation={2} result="blurredNoise" />
+            <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale={70} xChannelSelector="R" yChannelSelector="B" result="displaced" />
+            <feGaussianBlur in="displaced" stdDeviation={4} result="finalBlur" />
+            <feComposite in="finalBlur" in2="finalBlur" operator="over" />
+          </filter>
+        </defs>
+      </svg>
       <div style={{ position: 'relative', zIndex: 2 }}>
         <TopNav
           onHome={backHome}

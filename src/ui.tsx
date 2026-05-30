@@ -80,8 +80,9 @@ export const Icon = {
     </svg>
   ),
   LinkedIn: (p: React.SVGProps<SVGSVGElement>) => (
-    <svg {...p} width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    <svg {...p} width="14" height="14" viewBox="0 0 24 24">
+      <rect width="24" height="24" rx="4" fill="#0A66C2" />
+      <path d="M7.5 18.5h-3V9.5h3v9zm-1.5-10.2a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zm13 10.2h-3v-4.7c0-1.1-.4-1.9-1.4-1.9-.8 0-1.2.5-1.4 1-.1.2-.1.4-.1.7v4.9h-3s0-7.9 0-8.7h3v1.2c.4-.6 1.1-1.5 2.7-1.5 2 0 3.2 1.3 3.2 4v5z" fill="#fff" />
     </svg>
   ),
   Users: (p: React.SVGProps<SVGSVGElement>) => (
@@ -196,7 +197,11 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
           {lang && onToggleLang && (
             <button
               onClick={onToggleLang}
-              className="flex items-center gap-1 px-3 py-1.5 border hairline rounded-full font-mono-tech text-[11px] font-semibold glass hover:bg-white/10 transition-all"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-full font-mono-tech text-[11px] font-semibold hover:scale-105 transition-all"
+              style={{
+                boxShadow: 'inset 1px 1px 1px -0.5px rgba(255,255,255,0.5), inset -1px -1px 1px -0.5px rgba(255,255,255,0.5), inset 0 0 4px 3px rgba(255,255,255,0.06), 0 0 6px rgba(0,0,0,0.1)',
+                backdropFilter: 'blur(10px)',
+              } as CSSProperties}
             >
               <span style={{ color: lang === 'en' ? 'var(--accent)' : 'var(--ink-3)' }}>EN</span>
               <span style={{ color: 'var(--ink-3)' }}>·</span>
@@ -207,8 +212,12 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
             href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex w-9 h-9 items-center justify-center border hairline rounded-full hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors glass"
-            style={{ color: 'var(--ink-2)' } as CSSProperties}
+            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full hover:scale-105 transition-all"
+            style={{
+              color: 'var(--ink-2)',
+              boxShadow: 'inset 1px 1px 1px -0.5px rgba(255,255,255,0.5), inset -1px -1px 1px -0.5px rgba(255,255,255,0.5), inset 0 0 4px 3px rgba(255,255,255,0.06), 0 0 6px rgba(0,0,0,0.1)',
+              backdropFilter: 'blur(10px)',
+            } as CSSProperties}
           >
             <Icon.LinkedIn />
           </a>
@@ -216,8 +225,12 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex w-9 h-9 items-center justify-center border hairline rounded-full hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors glass"
-            style={{ color: 'var(--ink-2)' } as CSSProperties}
+            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full hover:scale-105 transition-all"
+            style={{
+              color: 'var(--ink-2)',
+              boxShadow: 'inset 1px 1px 1px -0.5px rgba(255,255,255,0.5), inset -1px -1px 1px -0.5px rgba(255,255,255,0.5), inset 0 0 4px 3px rgba(255,255,255,0.06), 0 0 6px rgba(0,0,0,0.1)',
+              backdropFilter: 'blur(10px)',
+            } as CSSProperties}
           >
             <Icon.FileText />
           </a>
