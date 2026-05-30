@@ -19,7 +19,7 @@ import { NewsChatCaseStudy, AekoCaseStudy, AttnCaseStudy, WorkflowCaseStudy, Str
 type Lang = 'en' | 'kr';
 type Page = 'home' | 'newschat' | 'aeko' | 'attn' | 'workflow' | 'strategy' | 'ai-systems' | 'monetization' | 'agents';
 
-const PASSWORD = 'justina2026';
+const PASSWORD = import.meta.env.VITE_PORTFOLIO_PASSWORD || '';
 const AUTH_KEY = 'justina_portfolio_auth_v2';
 
 /* ─── Password Gate ─────────────────────────────── */
@@ -92,40 +92,47 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 
 /* ─── Home sections ─────────────────────────────── */
 function Hero({ t }: { t: (en: string, kr: string) => string }) {
+  const isKr = t('en', 'kr') === 'kr';
   return (
-    <section className="relative" style={{ background: 'rgba(26,26,28,0.92)', boxShadow: '0 40px 80px -20px rgba(0,0,0,0.5)', color: '#F5F2EA' }}>
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-2 pb-24 sm:pb-28 md:pt-4 md:pb-32">
+    <section className="relative overflow-hidden" style={{ background: 'rgba(26,26,28,0.92)', boxShadow: '0 40px 80px -20px rgba(0,0,0,0.5)', color: '#F5F2EA' }}>
+      {/* Torus as background on mobile */}
+      <div className="absolute right-[-15%] top-1/2 -translate-y-1/2 w-[300px] h-[300px] opacity-[0.12] pointer-events-none md:hidden">
+        <MorphBlob palette="iris" />
+      </div>
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-2 pb-24 sm:pb-28 md:pt-4 md:pb-32 relative z-[1]">
         <div className="grid grid-cols-12 gap-6 md:gap-14 items-stretch">
           <div className="col-span-12 md:col-span-7 md:order-2 flex flex-col">
             <Reveal>
-              <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap">
+              <div className="flex items-center gap-1.5 sm:gap-3 mb-6 sm:mb-8 flex-nowrap">
                 <span
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full font-mono-tech text-[10px] tracking-widest uppercase font-medium"
+                  className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-mono-tech text-[7px] sm:text-[10px] tracking-wider sm:tracking-widest uppercase font-medium whitespace-nowrap"
                   style={{ background: 'rgba(152,232,193,0.12)', color: '#98E8C1', border: '1px solid rgba(152,232,193,0.25)' }}
                 >
-                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: '#98E8C1' }} />
-                  {t('Open to opportunities', '기회에 열려 있습니다')}
+                  <span className="inline-block w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full" style={{ background: '#98E8C1' }} />
+                  Open to opportunities
                 </span>
                 <span
-                  className="inline-flex items-center px-3.5 py-2 rounded-lg text-[11px] font-mono-tech tracking-widest uppercase font-medium"
-                  style={{ border: '1px solid rgba(255,255,255,0.14)', color: '#F5F2EA' }}
+                  className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-mono-tech text-[7px] sm:text-[10px] tracking-wider sm:tracking-widest uppercase font-medium whitespace-nowrap"
+                  style={{ background: 'rgba(158,132,255,0.12)', color: '#9E84FF', border: '1px solid rgba(158,132,255,0.25)' }}
                 >
+                  <span className="inline-block w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full" style={{ background: '#9E84FF' }} />
                   Available for AI consulting &amp; building
                 </span>
               </div>
             </Reveal>
             <Reveal delay={120}>
               <div className="flex items-start gap-0">
-                <h1 className="title-glow font-serif-display text-[26px] sm:text-[32px] md:text-[40px] lg:text-[56px] xl:text-[68px] leading-[0.98] tracking-tight" style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
-                  {t('Strategy to', '전략부터')}
-                  <br />
-                  <span className="accent-glow">{t('shipped', '제품')}</span><br />
-                  <span className="accent-glow">{t('product', '출시까지')}</span><span className="accent-glow">.</span>
+                <h1 className={`title-glow font-serif-display leading-[1.5] md:leading-[1.1] tracking-tight ${isKr ? 'text-[32px] sm:text-[38px] md:text-[40px] lg:text-[54px] xl:text-[66px]' : 'text-[36px] sm:text-[44px] md:text-[48px] lg:text-[64px] xl:text-[80px]'}`} style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
+                  {t('Strategy to', 'AX')}
+                  {isKr ? <br /> : <br className="md:hidden" />}
+                  {' '}<span className="accent-glow">{t('shipped', '전략부터')}</span>
+                  {isKr ? <br /> : <br className="hidden md:block" />}
+                  {' '}<span className="accent-glow">{t('product', '딜리버리까지')}</span><span className="accent-glow">.</span>
                 </h1>
                 <img
                   src="/avatar.png"
                   alt="Justina Yoo"
-                  className="w-[100px] sm:w-[130px] md:w-[190px] lg:w-[240px] flex-shrink-0 -ml-4 md:-ml-8 mt-1 md:mt-1"
+                  className={`w-[110px] sm:w-[130px] md:w-[190px] lg:w-[240px] flex-shrink-0 -mt-3 md:-mt-2 ${isKr ? 'ml-12 sm:ml-6 md:ml-0' : 'ml-4 sm:ml-0 sm:-ml-4 md:-ml-8'}`}
                 />
               </div>
             </Reveal>
@@ -136,12 +143,12 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               >
                 {t(
                   'From defining strategy to shipping AI systems at scale, I work across the full stack of AI transformation: opportunity framing, experience design, and hands-on delivery.',
-                  'AI가 실질적인 가치를 만드는 지점을 찾아냅니다 — 제품, 경험, 그리고 사용자와의 상호작용 방식에서. 전략 수립부터 대규모 AI 시스템 출시까지, AI 트랜스포메이션의 전 과정을 아우릅니다: 기회 프레이밍, 경험 설계, 그리고 직접 실행까지.',
+                  '전략 수립부터 대규모 AI 시스템 출시까지, AI 트랜스포메이션의 전 과정을 함께합니다. 기회 발굴, 경험 설계, 그리고 직접 구현까지.',
                 )}
               </p>
             </Reveal>
           </div>
-          <div className="col-span-12 md:col-span-5 md:order-1 flex flex-col">
+          <div className="hidden md:flex col-span-12 md:col-span-5 md:order-1 flex-col">
             <Reveal delay={300}>
               <div
                 className="relative rounded-lg overflow-hidden mb-7 h-[360px]"
@@ -161,7 +168,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
           {/* Context row — full width */}
           <div className="col-span-12 md:order-3">
             <Reveal delay={360}>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 -mt-6" style={{}}>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mt-4 md:-mt-6" style={{}}>
                 <div>
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Based across', '거점')}</div>
                   <div className="flex items-center gap-3 text-[14px] flex-wrap" style={{ color: '#F5F2EA', fontWeight: 500 }}>
@@ -176,14 +183,17 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                 </div>
                 <div>
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Education', '학력')}</div>
-                  <div className="text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
-                    {t('Carnegie Mellon University — Decision Science + HCI', '카네기멜론대학교 — 의사결정과학 + HCI')}
+                  <div className="flex items-center gap-3">
+                    <img src="/cmu-logo.png" alt="CMU" className="w-7 h-7 rounded" />
+                    <div className="text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
+                      {t('Carnegie Mellon University — Decision Science + HCI', '카네기멜론대학교 — 의사결정과학 + HCI')}
+                    </div>
                   </div>
                 </div>
                 <div>
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Focus', '관심 분야')}</div>
                   <div className="text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
-                    {t('AX Consulting · AI Strategist · 0→1 · End-to-End Build', 'AX 컨설팅 · AI 전략가 · 0→1 · 풀사이클 구축')}
+                    {t('AX Consulting · AI Strategist · UX · End-to-End Build', 'AX 컨설팅 · AI 전략가 · UX · 풀사이클 구축')}
                   </div>
                 </div>
               </div>
@@ -254,7 +264,7 @@ function FeaturedWork({
       categories: ['0→1', 'B2B', 'B2C'],
       headline: t(
         'From zero to product-market fit.',
-        '제로에서 프로덕트-마켓 핏까지.',
+        '아이디어에서 PMF까지.',
       ),
       body: t(
         'Owned AEKO end-to-end from concept to MVP as sole PM. Led NewsChat from hypothesis to 1M MAU in 5 months. Defined activation loops, pricing architecture, and go-to-market for both.',
@@ -262,7 +272,7 @@ function FeaturedWork({
       ),
       accent: '#9E84FF',
       metrics: [
-        { v: '2', l: t('Products 0→1', '0→1 제품') },
+        { v: 'GTM', l: t('Go-to-Market', 'Go-to-Market') },
         { v: '1M', l: t('MAU', 'MAU') },
         { v: '5mo', l: t('To PMF', 'PMF 달성') },
       ],
@@ -275,16 +285,16 @@ function FeaturedWork({
       categories: ['GenAI', 'B2B'],
       headline: t(
         'Designing the AI that powers the product.',
-        '제품을 움직이는 AI를 설계하다.',
+        '제품의 핵심이 되는 AI를 직접 설계.',
       ),
       body: t(
         'RAG pipelines for NewsChat. ADK — an embeddable SDK auto-generating contextual AI features for publishers. Visibility scoring and source attribution systems for AEKO. MCP server integrations across the stack.',
         'NewsChat의 RAG 파이프라인, 퍼블리셔용 맥락형 AI 기능을 자동 생성하는 임베더블 SDK ADK, AEKO의 가시성 스코어링 및 소스 어트리뷰션 시스템, 스택 전반의 MCP 서버 통합을 설계했습니다.',
       ),
-      accent: '#B988FF',
+      accent: '#7DE8FF',
       metrics: [
-        { v: '3', l: t('Products', '제품') },
-        { v: 'RAG', l: t('+ Multi-model', '+ 멀티 모델') },
+        { v: 'SDK', l: t('+ API', '+ API') },
+        { v: 'RAG', l: t('+ LLM', '+ LLM') },
         { v: 'MCP', l: t('Infra', '인프라') },
       ],
     },
@@ -296,17 +306,17 @@ function FeaturedWork({
       categories: ['B2C', 'B2B'],
       headline: t(
         'Revenue-first product thinking.',
-        '수익 중심 프로덕트 사고.',
+        '수익을 먼저 생각하는 프로덕트.',
       ),
       body: t(
         "Designed NewsChat's contextual ad system — 10% CTR vs 0.1% industry average, 3.5x ARPU. Built AEKO's freemium pricing architecture. Grew NewsChat to 1M MAU with zero paid acquisition.",
         'NewsChat의 맥락 광고 시스템을 설계해 업계 평균 0.1% 대비 10% CTR, ARPU 3.5배를 달성했습니다. AEKO의 프리미엄 가격 체계를 구축하고, NewsChat을 유료 마케팅 없이 MAU 100만까지 성장시켰습니다.',
       ),
-      accent: '#7DE8FF',
+      accent: '#98E8C1',
       metrics: [
         { v: '10%', l: 'CTR' },
         { v: '3.5x', l: 'ARPU' },
-        { v: '$0', l: 'CAC' },
+        { v: 'A/B', l: t('Testing', '테스팅') },
       ],
     },
     {
@@ -317,7 +327,7 @@ function FeaturedWork({
       categories: ['GenAI', '0→1'],
       headline: t(
         'AI agents that multiply output.',
-        '아웃풋을 배가하는 AI 에이전트.',
+        '생산성을 극대화하는 AI 에이전트.',
       ),
       body: t(
         'Built Claude-powered agents for sales prospecting, PM workflows, and content automation at Panomix / AEKO Intelligence. MCP integrations that run inside Claude Desktop and Cursor.',
@@ -326,7 +336,7 @@ function FeaturedWork({
       accent: '#C4A5FF',
       metrics: [
         { v: '3+', l: t('Agents', '에이전트') },
-        { v: 'MCP', l: t('Infra', '인프라') },
+        { v: 'Prompt', l: t('Engineering', '엔지니어링') },
         { v: 'Claude', l: t('Platform', '플랫폼') },
       ],
     },
@@ -334,12 +344,15 @@ function FeaturedWork({
 
   return (
     <section id="featured-work" className="border-b hairline relative overflow-hidden">
-      <div className="absolute -right-20 top-20 w-[400px] h-[400px] opacity-[0.25] pointer-events-none hidden md:block z-[2]">
+      <div className="absolute -right-20 top-20 w-[200px] h-[200px] opacity-[0.25] pointer-events-none hidden md:block z-[2]">
         <MorphBlob palette="iris" holeScale={0} blobOnly />
       </div>
-      <div className="relative z-[1] max-w-[1240px] mx-auto px-6 md:px-10 py-12 md:py-20 lg:py-28">
+      <div className="absolute -left-20 top-[65%] w-[180px] h-[180px] opacity-[0.20] pointer-events-none hidden md:block z-[2]">
+        <MorphBlob palette="iris" holeScale={0} blobOnly />
+      </div>
+      <div className="relative z-[1] max-w-[1240px] mx-auto px-6 md:px-10 py-8 md:py-14 lg:py-20">
         <Reveal>
-          <div className="flex items-end justify-between mb-8">
+          <div className="flex items-end justify-between mb-6">
             <h2 className="title-glow font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[56px] leading-[1] tracking-tight">
               {t('Featured Work', '주요 프로젝트')}
             </h2>
@@ -350,15 +363,11 @@ function FeaturedWork({
               2023 — 2026
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 mb-8 md:mb-16">
+          <div className="flex flex-wrap gap-2 mb-6 md:mb-10">
             {['0→1', 'GenAI', 'B2B', 'B2C'].map(cat => (
-              <button
-                key={cat}
-                onClick={() => setFilter(f => f === cat ? null : cat)}
-                className={`chip cursor-pointer transition-colors ${filter === cat ? 'chip-filled' : ''}`}
-              >
+              <span key={cat} className="chip">
                 {cat}
-              </button>
+              </span>
             ))}
           </div>
         </Reveal>
@@ -367,7 +376,7 @@ function FeaturedWork({
             <Reveal key={p.id} delay={i * 80}>
               <button
                 onClick={() => onOpen(p.id)}
-                className="group relative w-full text-left border-t hairline last:border-b py-6 md:py-10 lg:py-14"
+                className="group relative w-full text-left border-t hairline last:border-b py-5 md:py-8 lg:py-10"
               >
                 <div className="grid grid-cols-12 gap-6 md:gap-10 items-start transition-transform duration-300 origin-left group-hover:scale-[1.02]">
                   <div className="col-span-12 md:col-span-1">
@@ -419,7 +428,7 @@ function FeaturedWork({
                       ))}
                     </div>
                   </div>
-                  <div className="col-span-12 md:col-span-2 flex md:justify-end">
+                  <div className="hidden md:flex col-span-12 md:col-span-2 md:justify-end">
                     <span
                       className="inline-flex items-center gap-2 font-mono-tech text-[11px] tracking-widest uppercase group-hover:gap-4 transition-all"
                       style={{ color: p.accent }}
@@ -443,7 +452,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
     {
       period: 'May 2024 — May 2026',
       company: 'Panomix & AEKO Intelligence',
-      role: t('AI Product Manager', 'AI 프로덕트 매니저'),
+      role: 'AI Product Manager',
       body: t(
         'Built AI agents to automate competitive research and product workflows. Owned AEKO end-to-end from concept to MVP as sole PM. Scaled NewsChat to 1M+ MAU in 5 months with +10% ad CTR and +250% session time.',
         'AI 에이전트를 활용해 경쟁 리서치와 프로덕트 워크플로를 자동화했습니다. AEKO는 컨셉부터 MVP까지 단독 PM으로 이끌었고, NewsChat은 5개월 만에 MAU 100만 이상으로 성장시키며 광고 CTR +10%, 세션 시간 +250%를 달성했습니다.',
@@ -452,7 +461,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
     {
       period: 'May 2023 — Jul 2023',
       company: 'Edelman',
-      role: t('Branding & Marketing Intern', '브랜딩 & 마케팅 인턴'),
+      role: 'Branding & Marketing Intern',
       body: t(
         'Supported marketing campaign execution and drafted performance reports based on engagement metrics. Participated in strategy development for new businesses through market research and competitor analysis.',
         '마케팅 캠페인 실행을 지원하고 참여 지표 기반 성과 보고서를 작성했습니다. 시장 조사와 경쟁사 분석을 통해 신규 비즈니스 전략 수립에 참여했습니다.',
@@ -461,7 +470,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
     {
       period: 'May 2022 — Aug 2022',
       company: 'GLG (Gerson Lehrman Group)',
-      role: t('Council Development Intern', '카운슬 개발 인턴'),
+      role: 'Council Development Intern',
       body: t(
         'Interviewed 20+ international industry experts daily to assess project feasibility and surface actionable insights for consulting and corporate clients.',
         '매일 20명 이상의 글로벌 업계 전문가를 인터뷰하며 프로젝트 타당성을 평가하고, 컨설팅 및 기업 고객을 위한 실행 가능한 인사이트를 도출했습니다.',
@@ -470,7 +479,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
     {
       period: 'Jun 2021 — Jul 2021',
       company: 'Tridge',
-      role: t('Product Growth Intern', '프로덕트 그로스 인턴'),
+      role: 'Product Growth Intern',
       body: t(
         'Ran user research with regional Project Managers to surface insights shaping go-to-market positioning across international markets.',
         '각 지역 PM과 함께 사용자 리서치를 진행하고, 글로벌 시장 진출 전략 수립에 활용할 인사이트를 도출했습니다.',
@@ -479,17 +488,17 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
   ];
   return (
     <section id="career" className="border-b hairline relative overflow-hidden" style={{ background: 'rgba(33,33,35,0.88)' }}>
-      <div className="absolute -left-24 bottom-10 w-[340px] h-[340px] opacity-[0.22] pointer-events-none hidden md:block z-[2]">
+      <div className="absolute -left-24 bottom-10 w-[180px] h-[180px] opacity-[0.22] pointer-events-none hidden md:block z-[2]">
         <MorphBlob palette="iris" holeScale={0} blobOnly />
       </div>
-      <div className="absolute -right-16 top-20 w-[260px] h-[260px] opacity-[0.18] pointer-events-none hidden lg:block z-[2]">
+      <div className="absolute -right-16 top-20 w-[140px] h-[140px] opacity-[0.18] pointer-events-none hidden lg:block z-[2]">
         <MorphBlob palette="iris" holeScale={0} blobOnly />
       </div>
-      <div className="relative z-[1] max-w-[1240px] mx-auto px-6 md:px-10 py-12 md:py-20 lg:py-28">
+      <div className="relative z-[1] max-w-[1240px] mx-auto px-6 md:px-10 py-8 md:py-14 lg:py-20">
         <Reveal>
-          <div className="flex items-end justify-between mb-8 md:mb-16 flex-wrap gap-6">
+          <div className="flex items-end justify-between mb-6 md:mb-10 flex-wrap gap-6">
             <div>
-              <div className="eyebrow mb-3">{t('Career', '경력')}</div>
+              <div className="eyebrow mb-3">{t('Career', '커리어')}</div>
               <h2 className="title-glow font-serif-display text-[24px] sm:text-[32px] md:text-[44px] lg:text-[52px] leading-[1] tracking-tight max-w-[22ch]">
                 {t('Experience', '경력')}
               </h2>
@@ -504,7 +513,7 @@ function Career({ t }: { t: (en: string, kr: string) => string }) {
           <div className="absolute left-[7px] md:left-[7px] top-0 bottom-0 w-px" style={{ background: 'rgba(125,232,255,0.15)' }} />
           {roles.map((r, i) => (
             <Reveal key={i} delay={i * 50}>
-              <div className="relative pl-10 md:pl-12 py-5 md:py-7">
+              <div className="relative pl-10 md:pl-12 py-4 md:py-5">
                 {/* Circle on the line */}
                 <div className="absolute left-0 top-8 md:top-10 w-[15px] h-[15px] rounded-full" style={{
                   background: '#1A1A1C',
@@ -553,9 +562,9 @@ function HomePage({
     <>
       <PageMeta title="Justina Yoo — AI Product Manager" description="Strategy to shipped product. From defining AI strategy to shipping systems at scale across Shanghai, Pittsburgh, and Seoul." />
       <Hero t={t} />
-      <section className="relative z-10 mt-6 md:-mt-20 mb-6 md:mb-0" style={{ color: '#fff' }}>
+      <section className="relative z-10 -mt-10 sm:-mt-14 md:-mt-20 mb-6 md:mb-0" style={{ color: '#fff' }}>
         <div className="max-w-[1240px] mx-auto px-6 md:px-10">
-          <div className="rounded-full py-5 md:py-6 lg:py-8 px-6 md:px-8 lg:px-10 overflow-hidden" style={{
+          <div className="rounded-2xl sm:rounded-full py-5 md:py-6 lg:py-8 px-6 md:px-8 lg:px-10 overflow-hidden" style={{
             background: 'transparent',
             boxShadow: '0 0 8px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3.5px rgba(255,255,255,0.09), inset -3px -3px 0.5px -3.5px rgba(255,255,255,0.85), inset 1px 1px 1px -0.5px rgba(255,255,255,0.6), inset -1px -1px 1px -0.5px rgba(255,255,255,0.6), inset 0 0 6px 6px rgba(255,255,255,0.12), inset 0 0 2px 2px rgba(255,255,255,0.06), 0 0 12px rgba(0,0,0,0.15)',
             backdropFilter: 'url(#liquid-glass) blur(12px)',
@@ -570,7 +579,7 @@ function HomePage({
               <Reveal key={i} delay={i * 60}>
                 <div className="flex flex-col gap-2 items-center text-center">
                   <span className="font-serif-display text-[32px] sm:text-[40px] md:text-[56px] leading-none tracking-tight" style={{ color: m.color }}>{m.v}</span>
-                  <span className="font-mono-tech text-[10px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.55)' }}>{m.l}{m.sub && ` · ${m.sub}`}</span>
+                  <span className="font-mono-tech text-[8px] sm:text-[9px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.55)' }}>{m.l}{m.sub && ` · ${m.sub}`}</span>
                 </div>
               </Reveal>
             ))}
@@ -584,37 +593,42 @@ function HomePage({
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-8 md:py-10">
           <div className="eyebrow mb-6">{t('Products', '프로덕트')}</div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { name: 'AEKO', logo: '/aeko-logo.svg', desc: t('AEO platform for e-commerce brands', '이커머스 브랜드를 위한 AEO 플랫폼'), page: 'aeko' as Page },
-              { name: 'NewsChat', logo: '/newschat-logo.svg', desc: t('AI chat layer for news publishers', '뉴스 퍼블리셔용 AI 채팅 레이어'), page: 'newschat' as Page },
-              { name: 'ATTN', logo: '/attn-logo.svg', desc: t('US market intelligence for KR investors', '한국 투자자를 위한 미국 증시 인텔리전스'), page: 'attn' as Page },
-              { name: 'ana2me', desc: t('Korean beauty & ingredient database', '한국 뷰티 & 성분 데이터베이스'), side: true },
+              { name: 'AEKO', logo: '/aeko-logo.svg', logoH: 'h-6', desc: t('AEO for e-commerce', '이커머스를 위한 AEO'), page: 'aeko' as Page },
+              { name: 'NewsChat', logo: '/newschat-logo.svg', logoH: 'h-5', desc: t('AI contextual chat for news readers', '뉴스 독자를 위한 AI 맥락 채팅'), page: 'newschat' as Page },
+              { name: 'ATTN', logo: '/attn-logo.svg', logoH: 'h-3.5', desc: t('US market intelligence for KR investors', '한국 투자자를 위한 미국 증시 인텔리전스'), page: 'attn' as Page },
+              { name: 'ana2me', logo: '/ana2me-logo.svg', logoH: 'h-5', desc: t('Korean beauty & ingredient database', '한국 뷰티 & 성분 데이터베이스'), side: true },
             ].map(p => (
               <button
                 key={p.name}
-                onClick={() => p.page ? onOpen(p.page) : window.open('https://ana2me.com', '_blank')}
-                className="group flex flex-col gap-2 p-4 border hairline rounded-sm hover:bg-white/5 transition-colors text-left"
+                onClick={() => p.page && onOpen(p.page)}
+                className="group flex flex-col gap-2 sm:gap-3 p-3 sm:p-5 md:p-8 rounded-xl hover:scale-[1.02] transition-all text-left"
+                style={{
+                  background: 'rgba(255,255,255,0.10)',
+                  boxShadow: 'inset 1px 1px 1px -0.5px rgba(255,255,255,0.2), inset -1px -1px 1px -0.5px rgba(255,255,255,0.2), inset 0 0 4px 3px rgba(255,255,255,0.04), 0 0 4px rgba(0,0,0,0.04)',
+                  backdropFilter: 'blur(8px)',
+                }}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-3">
                   {p.logo ? (
-                    <img src={p.logo} alt={p.name} className="h-5" />
+                    <span className="inline-flex items-center justify-center w-[72px] h-[40px] rounded-lg flex-shrink-0" style={{ background: 'rgba(255,255,255,0.85)' }}>
+                      <img src={p.logo} alt={p.name} className="max-h-[22px] max-w-[58px] object-contain" />
+                    </span>
                   ) : (
-                    <span className="text-[15px] font-medium">{p.name}</span>
+                    <span className="text-[15px] font-medium flex-shrink-0">{p.name}</span>
                   )}
-                  {(p as any).side && <span className="font-mono-tech text-[9px] tracking-widest uppercase px-1.5 py-0.5 border hairline rounded-sm" style={{ color: 'var(--ink-3)' }}>Side project</span>}
+                  <span className="text-[13px] leading-snug" style={{ color: 'var(--ink-2)' }}>{p.desc}</span>
+                  {p.page && <span className="font-mono-tech text-[9px] tracking-widest uppercase px-1.5 py-0.5 border rounded-sm ml-auto flex-shrink-0" style={{ color: '#F0C87A', borderColor: 'rgba(240,200,122,0.3)' }}>{t('Case study', '케이스 스터디')}</span>}
+                  {(p as any).side && <span className="font-mono-tech text-[9px] tracking-widest uppercase px-1.5 py-0.5 border hairline rounded-sm ml-auto flex-shrink-0" style={{ color: 'var(--ink-3)' }}>Side project</span>}
                 </div>
-                <span className="text-[12px] leading-snug" style={{ color: 'var(--ink-3)' }}>{p.desc}</span>
-                <span className="font-mono-tech text-[10px] tracking-widest uppercase mt-auto" style={{ color: 'var(--accent)' }}>
-                  {p.page ? t('Case study', '케이스 스터디') : 'Visit ↗'}
-                </span>
               </button>
             ))}
           </div>
         </div>
       </section>
       <section className="relative overflow-hidden" style={{ background: 'rgba(33,33,35,0.88)', color: 'var(--ink)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="absolute right-10 top-1/2 -translate-y-1/2 w-[440px] h-[440px] opacity-[0.20] pointer-events-none hidden lg:block z-[2]">
+        <div className="absolute right-10 top-1/2 -translate-y-1/2 w-[220px] h-[220px] opacity-[0.20] pointer-events-none hidden lg:block z-[2]">
           <MorphBlob palette="iris" holeScale={0} blobOnly />
         </div>
         <div className="relative z-[1] max-w-[1240px] mx-auto px-6 md:px-10 py-14 md:py-24 lg:py-32">
@@ -625,13 +639,10 @@ function HomePage({
             <div className="col-span-12 md:col-span-7">
               <Reveal delay={60}>
                 <h2 className="font-serif-display text-[26px] sm:text-[36px] md:text-[48px] lg:text-[64px] leading-[0.95] tracking-tight">
-                  {t("Let's ", '의미 있는 것을 ')}
-                  <span className="italic accent-glow">
-                    {t('build', '함께')}
-                  </span>
+                  {t('Inquire about', 'AX 컨설팅에 대해')}
                   <br />
-                  {t('something that matters', '만들어 봐요')}
-                  <span className="accent-glow">.</span>
+                  {t('AX consulting', '문의주세요')}
+                  .
                 </h2>
                 <p
                   className="mt-6 text-[15px] max-w-[44ch]"
@@ -648,7 +659,7 @@ function HomePage({
               <Reveal delay={120}>
                 <a
                   href="mailto:justina.yoo@gmail.com"
-                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-full transition-all hover:scale-[1.02]"
+                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-2xl sm:rounded-full transition-all hover:scale-[1.02]"
                   style={{
                     background: 'linear-gradient(135deg, rgba(158,132,255,0.08) 0%, rgba(158,132,255,0.02) 100%)',
                     border: 'none',
@@ -672,7 +683,7 @@ function HomePage({
                   href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-full transition-all hover:scale-[1.02]"
+                  className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 rounded-2xl sm:rounded-full transition-all hover:scale-[1.02]"
                   style={{
                     background: 'linear-gradient(135deg, rgba(158,132,255,0.08) 0%, rgba(158,132,255,0.02) 100%)',
                     border: 'none',
@@ -756,24 +767,27 @@ export default function App() {
     window.scrollTo({ top: 0 });
   };
 
-  if (!authed) return <PasswordGate onUnlock={() => setAuthed(true)} />;
+  // Case study pages require auth
+  if (page !== 'home') {
+    if (!authed) return <PasswordGate onUnlock={() => setAuthed(true)} />;
 
-  if (page === 'newschat')
-    return <NewsChatCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
-  if (page === 'aeko')
-    return <AekoCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
-  if (page === 'attn')
-    return <AttnCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
-  if (page === 'workflow')
-    return <WorkflowCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
-  if (page === 'strategy')
-    return <StrategyCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
-  if (page === 'ai-systems')
-    return <AISystemsCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
-  if (page === 'monetization')
-    return <MonetizationCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
-  if (page === 'agents')
-    return <AgentsCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+    if (page === 'newschat')
+      return <NewsChatCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+    if (page === 'aeko')
+      return <AekoCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+    if (page === 'attn')
+      return <AttnCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+    if (page === 'workflow')
+      return <WorkflowCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+    if (page === 'strategy')
+      return <StrategyCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+    if (page === 'ai-systems')
+      return <AISystemsCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+    if (page === 'monetization')
+      return <MonetizationCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+    if (page === 'agents')
+      return <AgentsCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+  }
 
   return (
     <div className="canvas-tint grain perspective-grid" style={{ position: 'relative' }}>

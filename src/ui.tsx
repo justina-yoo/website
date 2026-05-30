@@ -255,12 +255,6 @@ export function Footer() {
         >
           © 2026 — All rights reserved
         </div>
-        <div
-          className="font-mono-tech text-[10px] tracking-widest uppercase"
-          style={{ color: 'var(--ink-3)' }}
-        >
-          Shanghai · Pennsylvania · Seoul
-        </div>
       </div>
     </footer>
   );
