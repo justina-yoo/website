@@ -1362,8 +1362,8 @@ export function MonetizationCaseStudy({
         subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
         title={t('Monetization & Growth', '수익화 & 성장')}
         subtitle={t(
-          'Our monetization was primarily ad-driven — my focus was designing ad experiences that felt native to the product, placing them where context was strongest and UX impact was zero.',
-          '수익화는 주로 광고 기반이었으며, 제 역할은 광고가 제품에 자연스럽게 녹아드는 경험을 설계하는 것이었습니다. 맥락이 가장 강하고 UX 영향이 없는 지점에 광고를 배치했습니다.',
+          'Ads were our main business model. My role was making product decisions that balanced monetization goals with user experience — deciding where, when, and how ads appeared so revenue grew without degrading the product.',
+          '광고가 주요 비즈니스 모델이었습니다. 수익화 목표와 사용자 경험 사이에서 균형을 잡는 프로덕트 의사결정이 제 역할이었습니다 — 광고가 언제, 어디서, 어떻게 노출될지 결정하며 제품을 해치지 않으면서 매출을 성장시켰습니다.',
         )}
         t={t}
       />
