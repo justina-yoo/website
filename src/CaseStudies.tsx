@@ -1044,6 +1044,14 @@ export function StrategyCaseStudy({
         '제품의 핵심 차별화 요소가 된 3축 콘텐츠 전략(SEC 공시, 정부 시그널, 시장 뉴스)을 정의했습니다.',
       ),
     },
+    {
+      icon: 'FileText',
+      title: t('Sales & Investor Decks', '상품소개서 & 투자 덱'),
+      body: t(
+        'Created product introduction decks (상품소개서) for client-facing sales and investor decks for fundraising — translating product vision and traction into narratives tailored to each audience.',
+        '클라이언트 세일즈용 상품소개서와 투자 유치용 덱을 제작했습니다 — 제품 비전과 성과를 각 대상에 맞는 내러티브로 전환했습니다.',
+      ),
+    },
   ];
 
   const principles: { icon: IconName; title: string; body: string }[] = [
