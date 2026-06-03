@@ -189,8 +189,8 @@ export function NewsChatCaseStudy({
       phase: '04 — ' + t('Monetization Strategy', '수익화 전략'),
       title: t('Contextual ads that feel native', '자연스럽게 녹아드는 맥락 광고'),
       content: t(
-        "Designed a contextual ad injection system that reads the semantic thread of each conversation turn and surfaces relevant sponsored content at natural breakpoints — never mid-sentence, never intrusive. Ads are tagged to conversation intent, not page keywords, achieving 10x industry-average CTR. Modeled a CPM uplift of 3.2x over standard display inventory.",
-        '각 대화 턴의 의미 흐름을 읽고 자연스러운 지점에 스폰서 콘텐츠를 노출하는 맥락 광고 시스템을 설계했습니다. 문장 중간에 끼어들지 않고 방해되지 않게 배치했습니다. 광고는 페이지 키워드가 아닌 대화 의도에 매칭되어 업계 평균 대비 10배 CTR을 달성했습니다. 일반 디스플레이 대비 CPM 3.2배 상승을 모델링했습니다.',
+        "Designed a contextual ad injection system that reads the semantic thread of each conversation turn and surfaces relevant sponsored content at natural breakpoints — never mid-sentence, never intrusive. Ads are tagged to conversation intent, not page keywords, achieving 10% CTR.",
+        '각 대화 턴의 의미 흐름을 읽고 자연스러운 지점에 스폰서 콘텐츠를 노출하는 맥락 광고 시스템을 설계했습니다. 문장 중간에 끼어들지 않고 방해되지 않게 배치했습니다. 광고는 페이지 키워드가 아닌 대화 의도에 매칭되어 10% CTR을 달성했습니다.',
       ),
       tags: ['Ad Strategy', 'Intent Targeting', 'Revenue Modeling', 'A/B Testing'],
     },
@@ -198,8 +198,8 @@ export function NewsChatCaseStudy({
       phase: '05 — ' + t('Launch & Scale', '출시 및 확장'),
       title: t('0 → 1M MAU in 5 months', '5개월 만에 0에서 100만 MAU'),
       content: t(
-        'Ran a soft launch with 3 publisher partners, iterating on response quality, UI placement, and chat trigger UX based on real engagement data. After hitting PMF signals (>30% of readers who saw the chat prompt engaged with it), scaled to additional publishers. Hit 1M MAU 5 months post-launch with zero paid acquisition — entirely through publisher distribution.',
-        '3개 퍼블리셔 파트너와 소프트 론칭을 진행했습니다. 실제 인게이지먼트 데이터를 바탕으로 응답 품질, UI 배치, 채팅 트리거 UX를 반복적으로 개선했습니다. PMF 신호(노출 독자 30% 이상 참여)를 확인한 후 추가 퍼블리셔로 확장했습니다. 유료 마케팅 없이 퍼블리셔 배포만으로 론칭 5개월 만에 100만 MAU를 달성했습니다.',
+        'Ran a soft launch with 3 publisher partners, iterating on response quality, UI placement, and chat trigger UX based on real engagement data. After hitting PMF signals (>30% of readers who saw the chat prompt engaged with it), scaled to additional publishers. Hit 1M MAU 5 months post-launch with minimal paid acquisition — driven primarily through publisher distribution.',
+        '3개 퍼블리셔 파트너와 소프트 론칭을 진행했습니다. 실제 인게이지먼트 데이터를 바탕으로 응답 품질, UI 배치, 채팅 트리거 UX를 반복적으로 개선했습니다. PMF 신호(노출 독자 30% 이상 참여)를 확인한 후 추가 퍼블리셔로 확장했습니다. 최소한의 유료 마케팅으로, 주로 퍼블리셔 배포를 통해 론칭 5개월 만에 100만 MAU를 달성했습니다.',
       ),
       tags: ['Go-to-Market', 'PMF Signals', 'Publisher Partnerships', 'Growth'],
     },
@@ -226,8 +226,8 @@ export function NewsChatCaseStudy({
       icon: 'Trend',
       title: t('Monetize the conversation', '대화를 수익화'),
       body: t(
-        'Sponsored content surfaces contextually at natural breakpoints in the conversation thread — matched to semantic intent, not page keywords. 10% CTR vs. 0.1% industry average.',
-        '스폰서 콘텐츠가 대화 흐름의 자연스러운 지점에 맥락에 맞게 노출됩니다. 페이지 키워드가 아닌 대화 의도에 매칭하여 업계 평균 0.1% 대비 10% CTR을 달성합니다.',
+        'Sponsored content surfaces contextually at natural breakpoints in the conversation thread — matched to semantic intent, not page keywords. 10% CTR.',
+        '스폰서 콘텐츠가 대화 흐름의 자연스러운 지점에 맥락에 맞게 노출됩니다. 페이지 키워드가 아닌 대화 의도에 매칭하여 10% CTR을 달성합니다.',
       ),
     },
   ];
@@ -349,7 +349,7 @@ export function NewsChatCaseStudy({
             rows={[
               { label: t('Average article read time', '평균 기사 읽는 시간'), value: '48 sec' },
               { label: t('Reader return rate (7-day)', '7일 재방문율'), value: '12%' },
-              { label: t('Ad CPM (display)', '디스플레이 CPM'), value: '$1.20' },
+              { label: t('Ad CTR (contextual)', '맥락 광고 CTR'), value: '10%' },
               { label: t('AI content investment ROI', 'AI 콘텐츠 투자 ROI'), value: t('Unmeasured', '측정 불가') },
             ]}
             rowAccent="#B91C1C"
@@ -1163,10 +1163,10 @@ export function AISystemsCaseStudy({
   const examples: { icon: IconName; title: string; body: string }[] = [
     {
       icon: 'Msg',
-      title: 'NewsChat RAG',
+      title: t('NewsChat AI Evaluation', 'NewsChat AI 평가'),
       body: t(
-        'Designed retrieval pipeline grounding AI responses in article content and verified sources. Defined latency budgets (<800ms), hallucination guardrails, and source attribution UI.',
-        'AI 응답을 기사 콘텐츠와 검증된 소스에 근거시키는 검색 파이프라인을 설계했습니다. 응답 시간 예산(<800ms), 환각 방지 가드레일, 출처 표기 UI를 정의했습니다.',
+        'Benchmarked GPT, Claude, and other LLMs to determine optimal model-task fit for each feature. Led prompt engineering and systematic testing — defining evaluation criteria, comparing output quality, latency, and cost across models to ship the best-performing configuration.',
+        'GPT, Claude 등 LLM을 벤치마킹하여 각 기능에 최적화된 모델-태스크 조합을 도출했습니다. 프롬프트 엔지니어링과 체계적 테스팅을 주도하며 평가 기준을 정의하고, 모델별 출력 품질·레이턴시·비용을 비교해 최적 구성으로 출시했습니다.',
       ),
     },
     {
@@ -1306,8 +1306,8 @@ export function MonetizationCaseStudy({
       icon: 'Trend',
       title: t('NewsChat Contextual Ads', 'NewsChat 맥락 광고'),
       body: t(
-        'Designed a contextual ad system with UX at the center — ads surface at natural conversation breakpoints, matched to semantic intent rather than page keywords. Never mid-sentence, never intrusive. The UX constraint drove the 10% CTR (vs 0.1% industry avg) because users experienced ads as content, not interruption. 3.2x CPM uplift, 3.5x ARPU.',
-        '사용자 경험을 중심에 둔 맥락 광고 시스템을 설계했습니다. 광고는 대화의 자연스러운 전환 지점에, 페이지 키워드가 아닌 의미 의도에 매칭되어 노출됩니다. 문장 중간에 끼어들지 않고 방해하지 않도록 설계한 UX 제약이 업계 평균 0.1% 대비 10% CTR을 만들었습니다. 사용자가 광고를 방해가 아닌 콘텐츠로 느꼈기 때문입니다. CPM 3.2배 상승, ARPU 3.5배 달성.',
+        'Monetization was ad-driven, so the core challenge was inserting ads without breaking the reading experience. I focused on context and UX — ads appeared only at natural conversation breakpoints, matched to the semantic intent of the discussion rather than generic page keywords. Never mid-sentence, never intrusive. Ran A/B tests on placement timing, prompt engineering for intent matching, and ad format variations to optimize performance. This UX-first constraint is what drove the 10% CTR: users experienced ads as relevant content, not interruption. 3.5x ARPU.',
+        '수익화는 광고 기반이었기에, 핵심 과제는 읽기 경험을 해치지 않으면서 광고를 삽입하는 것이었습니다. 맥락과 UX에 집중했습니다 — 광고는 대화의 자연스러운 전환 지점에만, 일반 페이지 키워드가 아닌 대화의 의미 의도에 매칭되어 노출됩니다. 배치 타이밍, 의도 매칭을 위한 프롬프트 엔지니어링, 광고 포맷 변형에 대한 A/B 테스트를 실시해 성과를 최적화했습니다. 문장 중간에 끼어들지 않고 방해하지 않는 이 UX 우선 제약이 10% CTR을 만들었습니다. 사용자가 광고를 방해가 아닌 관련 콘텐츠로 느꼈기 때문입니다. ARPU 3.5배 달성.',
       ),
     },
     {
@@ -1320,10 +1320,10 @@ export function MonetizationCaseStudy({
     },
     {
       icon: 'Globe',
-      title: t('NewsChat Zero-CAC Growth', 'NewsChat 제로 CAC 성장'),
+      title: t('NewsChat Product-Match Ads', 'NewsChat 상품 매칭 광고'),
       body: t(
-        'Grew to 1M MAU through publisher distribution alone, zero paid acquisition. The product was the growth channel.',
-        '퍼블리셔 배포만으로 100만 MAU를 달성했으며 유료 고객 획득 비용은 제로였습니다. 제품 자체가 성장 채널이었습니다.',
+        'Built a second contextual ad format — product-match ads powered by Coupang integration. The system searched for products most relevant to the article or conversation context and surfaced them as native shopping recommendations. A separate monetization layer from the conversational ads, designed to feel like a natural extension of the reading experience.',
+        'Coupang 연동 기반의 두 번째 맥락 광고 포맷인 상품 매칭 광고를 구축했습니다. 기사나 대화 맥락에 가장 관련 높은 상품을 검색해 네이티브 쇼핑 추천으로 노출합니다. 대화형 광고와는 별도의 수익화 레이어로, 읽기 경험의 자연스러운 확장처럼 느껴지도록 설계했습니다.',
       ),
     },
   ];
@@ -1356,14 +1356,14 @@ export function MonetizationCaseStudy({
   ];
 
   return (
-    <CaseStudyShell accentClass="acc-sky" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="Monetization & Growth — Justina Yoo" pageDescription="10% ad CTR, 3.5x ARPU, $0 CAC. Revenue-first product thinking.">
+    <CaseStudyShell accentClass="acc-sky" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="Monetization & Growth — Justina Yoo" pageDescription="10% ad CTR, 3.5x ARPU, minimal CAC. Revenue-first product thinking.">
       <CaseStudyHero
         brandLabel={t('Monetization & Growth', '수익화 & 성장')}
         subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
         title={t('Monetization & Growth', '수익화 & 성장')}
         subtitle={t(
-          'Revenue-first product thinking — designing business models that compound with usage.',
-          '수익 중심 프로덕트 사고 — 사용량과 함께 성장하는 비즈니스 모델을 설계합니다.',
+          'Our monetization was primarily ad-driven — my focus was designing ad experiences that felt native to the product, placing them where context was strongest and UX impact was zero.',
+          '수익화는 주로 광고 기반이었으며, 제 역할은 광고가 제품에 자연스럽게 녹아드는 경험을 설계하는 것이었습니다. 맥락이 가장 강하고 UX 영향이 없는 지점에 광고를 배치했습니다.',
         )}
         t={t}
       />

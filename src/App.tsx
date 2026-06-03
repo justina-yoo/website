@@ -14,22 +14,30 @@ import {
   PageMeta,
 } from './ui';
 import MorphBlob from './MorphBlob';
-import { NewsChatCaseStudy, AekoCaseStudy, AttnCaseStudy, WorkflowCaseStudy, StrategyCaseStudy, AISystemsCaseStudy, MonetizationCaseStudy, AgentsCaseStudy } from './CaseStudies';
+import { NewsChatCaseStudy, AekoCaseStudy, AttnCaseStudy, WorkflowCaseStudy, StrategyCaseStudy, MonetizationCaseStudy, AgentsCaseStudy } from './CaseStudies';
 
 type Lang = 'en' | 'kr';
-type Page = 'home' | 'newschat' | 'aeko' | 'attn' | 'workflow' | 'strategy' | 'ai-systems' | 'monetization' | 'agents';
+type Page = 'home' | 'newschat' | 'aeko' | 'attn' | 'workflow' | 'strategy' | 'monetization' | 'agents';
 
-const PASSWORD = import.meta.env.VITE_PORTFOLIO_PASSWORD || '';
+const PASSWORD_HASH = '12cd5b45cdaafd02e3bfd278a1b5b1723fcaa0c9a291f50acd125297f513ec23';
 const AUTH_KEY = 'justina_portfolio_auth_v2';
+
+async function sha256(message: string): Promise<string> {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 /* ─── Password Gate ─────────────────────────────── */
 function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   const [value, setValue] = useState('');
   const [error, setError] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (value === PASSWORD) {
+    const hash = await sha256(value);
+    if (hash === PASSWORD_HASH) {
       sessionStorage.setItem(AUTH_KEY, '1');
       onUnlock();
     } else {
@@ -143,7 +151,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               >
                 {t(
                   'From defining strategy to shipping AI systems at scale, I work across the full stack of AI transformation: opportunity framing, experience design, and hands-on delivery.',
-                  '전략 수립부터 대규모 AI 시스템 출시까지, AI 트랜스포메이션의 전 과정을 함께합니다. 기회 발굴, 경험 설계, 그리고 직접 구현까지.',
+                  'AI 전략 수립부터 대규모 시스템 구축까지, AI 트랜스포메이션의 전 과정을 아우릅니다. 기회 발굴과 UX/경험 설계, 그리고 엔드투엔드(End-to-End) 제품 구현까지 지원합니다.',
                 )}
               </p>
             </Reveal>
@@ -278,39 +286,18 @@ function FeaturedWork({
       ],
     },
     {
-      id: 'ai-systems',
-      name: t('AI Systems & Infrastructure', 'AI 시스템 & 인프라'),
-      tag: t('GenAI · MCP', 'GenAI · MCP'),
-      kicker: '02',
-      categories: ['GenAI', 'B2B'],
-      headline: t(
-        'Designing the AI that powers the product.',
-        '제품의 핵심이 되는 AI를 직접 설계.',
-      ),
-      body: t(
-        'RAG pipelines for NewsChat. ADK — an embeddable SDK auto-generating contextual AI features for publishers. Visibility scoring and source attribution systems for AEKO. MCP server integrations across the stack.',
-        'NewsChat의 RAG 파이프라인, 퍼블리셔용 맥락형 AI 기능을 자동 생성하는 임베더블 SDK ADK, AEKO의 가시성 스코어링 및 소스 어트리뷰션 시스템, 스택 전반의 MCP 서버 통합을 설계했습니다.',
-      ),
-      accent: '#7DE8FF',
-      metrics: [
-        { v: 'SDK', l: t('+ API', '+ API') },
-        { v: 'RAG', l: t('+ LLM', '+ LLM') },
-        { v: 'MCP', l: t('Infra', '인프라') },
-      ],
-    },
-    {
       id: 'monetization',
       name: t('Monetization & Growth', '수익화 & 그로스'),
       tag: t('Revenue · Growth', '수익 · 그로스'),
-      kicker: '03',
+      kicker: '02',
       categories: ['B2C', 'B2B'],
       headline: t(
         'Revenue-first product thinking.',
-        '수익을 먼저 생각하는 프로덕트.',
+        'AI 맥락형 광고와 수익화 전반.',
       ),
       body: t(
-        "Designed NewsChat's contextual ad system — 10% CTR vs 0.1% industry average, 3.5x ARPU. Built AEKO's freemium pricing architecture. Grew NewsChat to 1M MAU with zero paid acquisition.",
-        'NewsChat의 맥락 광고 시스템을 설계해 업계 평균 0.1% 대비 10% CTR, ARPU 3.5배를 달성했습니다. AEKO의 프리미엄 가격 체계를 구축하고, NewsChat을 유료 마케팅 없이 MAU 100만까지 성장시켰습니다.',
+        "Designed NewsChat's contextual ad system — 10% CTR, 3.5x ARPU. Grew NewsChat to 1M MAU with minimal paid acquisition.",
+        'NewsChat의 맥락 광고 시스템을 설계해 10% CTR, ARPU 3.5배를 달성했습니다. NewsChat을 최소한의 유료 마케팅으로 MAU 100만까지 성장시켰습니다.',
       ),
       accent: '#98E8C1',
       metrics: [
@@ -323,7 +310,7 @@ function FeaturedWork({
       id: 'agents',
       name: t('Agentic Tooling', '에이전틱 툴링'),
       tag: t('Agents · MCP', '에이전트 · MCP'),
-      kicker: '04',
+      kicker: '03',
       categories: ['GenAI', '0→1'],
       headline: t(
         'AI agents that multiply output.',
@@ -719,8 +706,8 @@ export default function App() {
     if (path === '/work/aeko') return 'aeko';
     if (path === '/work/attn') return 'attn';
     if (path === '/work/workflow') return 'workflow';
-    if (path === '/work/strategy') return 'strategy';
-    if (path === '/work/ai-systems') return 'ai-systems';
+    if (path === '/work/product-strategy') return 'strategy';
+
     if (path === '/work/monetization') return 'monetization';
     if (path === '/work/agents') return 'agents';
     return 'home';
@@ -756,8 +743,12 @@ export default function App() {
     if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
   }, []);
 
+  const pageToSlug = (p: Page): string => {
+    if (p === 'strategy') return 'product-strategy';
+    return p;
+  };
   const openCase = (p: Page) => {
-    window.history.pushState(null, '', `/work/${p}`);
+    window.history.pushState(null, '', `/work/${pageToSlug(p)}`);
     setPage(p);
     window.scrollTo({ top: 0 });
   };
@@ -781,8 +772,7 @@ export default function App() {
       return <WorkflowCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
     if (page === 'strategy')
       return <StrategyCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
-    if (page === 'ai-systems')
-      return <AISystemsCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+
     if (page === 'monetization')
       return <MonetizationCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
     if (page === 'agents')
