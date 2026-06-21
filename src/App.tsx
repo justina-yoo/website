@@ -111,7 +111,10 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
         <div className="grid grid-cols-12 gap-6 md:gap-14 items-stretch">
           <div className="col-span-12 md:col-span-7 md:order-2 flex flex-col">
             <Reveal>
-              <div className="flex items-center gap-1.5 sm:gap-3 mb-6 sm:mb-8 flex-nowrap">
+              <div className="flex items-center gap-2.5 sm:gap-3 mb-6 sm:mb-8 flex-wrap">
+                <div className="flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center" style={{ background: '#fff' }}>
+                  <img src="/avatar.png" alt="Justina Yoo" className="w-7 h-7 sm:w-8 sm:h-8 object-cover" />
+                </div>
                 <span
                   className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-mono-tech text-[7px] sm:text-[10px] tracking-wider sm:tracking-widest uppercase font-medium whitespace-nowrap"
                   style={{ background: 'rgba(152,232,193,0.12)', color: '#98E8C1', border: '1px solid rgba(152,232,193,0.25)' }}
@@ -129,20 +132,13 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
             <Reveal delay={120}>
-              <div className="flex items-start gap-0">
-                <h1 className={`title-glow font-serif-display leading-[1.5] md:leading-[1.1] tracking-tight ${isKr ? 'text-[32px] sm:text-[38px] md:text-[40px] lg:text-[54px] xl:text-[66px]' : 'text-[36px] sm:text-[44px] md:text-[48px] lg:text-[64px] xl:text-[80px]'}`} style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
-                  {t('Strategy to', 'AX')}
-                  {isKr ? <br /> : <br className="md:hidden" />}
-                  {' '}<span className="accent-glow">{t('shipped', '전략부터')}</span>
-                  {isKr ? <br /> : <br className="hidden md:block" />}
-                  {' '}<span className="accent-glow">{t('product', '딜리버리까지')}</span><span className="accent-glow">.</span>
-                </h1>
-                <img
-                  src="/avatar.png"
-                  alt="Justina Yoo"
-                  className={`w-[110px] sm:w-[130px] md:w-[190px] lg:w-[240px] flex-shrink-0 -mt-3 md:-mt-2 ${isKr ? 'ml-12 sm:ml-6 md:ml-0' : 'ml-4 sm:ml-0 sm:-ml-4 md:-ml-8'}`}
-                />
-              </div>
+              <h1 className={`title-glow font-serif-display leading-[1.5] md:leading-[1.1] tracking-tight ${isKr ? 'text-[32px] sm:text-[38px] md:text-[40px] lg:text-[54px] xl:text-[66px]' : 'text-[36px] sm:text-[44px] md:text-[48px] lg:text-[64px] xl:text-[80px]'}`} style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
+                {t('Strategy to', 'AX')}
+                {isKr ? <br /> : <br className="md:hidden" />}
+                {' '}<span className="accent-glow">{t('shipped', '전략부터')}</span>
+                {isKr ? <br /> : <br className="hidden md:block" />}
+                {' '}<span className="accent-glow">{t('product', '딜리버리까지')}</span><span className="accent-glow">.</span>
+              </h1>
             </Reveal>
             <Reveal delay={260}>
               <p
