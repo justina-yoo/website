@@ -159,49 +159,31 @@ export function NewsChatCaseStudy({
 
   const timeline = [
     {
-      phase: '01 — ' + t('Discovery', '리서치'),
+      phase: '01 — ' + t('Research & Problem', '리서치 & 문제 정의'),
       title: t('Why are readers bouncing?', '독자들은 왜 이탈하는가?'),
       content: t(
-        "Partnered with a South Korean digital news publisher facing a 40% YoY drop in session duration. Ran user interviews, session replay analysis, and heatmapping across 3M monthly sessions. The core insight: readers wanted to go deeper on a topic but had no path forward — they'd read the headline, skim the article, and leave.",
-        '세션 시간이 전년 대비 40% 감소한 한국 디지털 뉴스 퍼블리셔와 협업했습니다. 월 300만 세션을 대상으로 사용자 인터뷰, 세션 리플레이, 히트맵 분석을 진행했습니다. 핵심 인사이트는 명확했습니다. 독자는 특정 주제를 더 깊이 알고 싶어했지만 더 나아갈 경로가 없었고, 헤드라인과 본문만 훑고 이탈했습니다.',
+        "Analyzed 3M monthly sessions via user interviews, session replays, and heatmapping. Readers wanted to go deeper but had no path forward — they'd skim the article and leave. The core problem: news was broadcast-only, with no way to ask questions.",
+        '월 300만 세션을 사용자 인터뷰, 세션 리플레이, 히트맵으로 분석했습니다. 독자는 더 깊이 알고 싶어했지만 방법이 없었고, 훑고 이탈했습니다. 뉴스는 일방향이었고, 질문할 수단이 없었습니다.',
       ),
-      tags: ['User Interviews', 'Session Analytics', 'Heatmapping', 'Stakeholder Alignment'],
+      tags: ['User Interviews', 'Session Analytics', 'Heatmapping', 'Problem Statement'],
     },
     {
-      phase: '02 — ' + t('Problem Framing', '문제 정의'),
-      title: t('Passive consumption is a dead end', '수동적 소비는 더 이상 통하지 않는다'),
-      content: t(
-        "Defined the core problem: news content was broadcast-only. Readers had questions the article didn't answer, but no way to ask them. This created a gap between reader intent and publisher experience — and left monetization value on the table. Framed the opportunity as: can we make news a conversation?",
-        '핵심 문제를 정의했습니다. 뉴스 콘텐츠는 일방적 전달에 그치고 있었습니다. 독자는 기사에서 답을 얻지 못한 질문을 던질 방법이 없었고, 이는 독자 의도와 퍼블리셔 경험 사이의 간극을 만들어 수익화 기회를 놓치게 했습니다. "뉴스를 대화로 만들 수 있을까?"라는 질문으로 기회를 정의했습니다.',
-      ),
-      tags: ['Jobs-to-be-Done', 'Opportunity Sizing', 'Problem Statement'],
-    },
-    {
-      phase: '03 — ' + t('Solution Design', '솔루션 설계'),
+      phase: '02 — ' + t('Solution Design', '솔루션 설계'),
       title: t('NewsChat: Ask anything about the story', 'NewsChat: 기사에 대해 무엇이든 물어보세요'),
       content: t(
-        'Designed a contextual conversational layer embedded directly in news articles. Readers can ask follow-up questions, get source summaries, explore related topics, and request simplified explanations — all grounded in the article and vetted source material via RAG pipelines. Worked closely with ML and infra teams to define retrieval quality, latency budgets (<800ms), and hallucination guardrails.',
-        '뉴스 기사 내부에 맥락 기반 대화 레이어를 설계했습니다. 독자는 추가 질문, 소스 요약, 관련 주제 탐색, 쉬운 설명 요청이 가능하며, 모든 응답은 RAG 파이프라인을 통해 기사와 검증된 자료에 근거합니다. ML·인프라 팀과 협업하여 검색 품질, 응답 시간(<800ms), 환각 방지 가드레일을 정의했습니다.',
+        'Built a conversational layer embedded in news articles, grounded via RAG pipelines. Analyzed user groups, journeys, and behavior data to design the experience — then worked with ML and infra to hit <800ms latency with hallucination guardrails.',
+        '유저 그룹, 여정, 행동 데이터를 분석해 뉴스 기사 내부에 RAG 기반 대화 레이어를 설계했습니다. ML·인프라 팀과 협업해 응답 시간 800ms 이하, 환각 방지 가드레일을 구현했습니다.',
       ),
       tags: ['GenAI / LLM', 'RAG Architecture', 'UX Design', 'Latency Optimization'],
     },
     {
-      phase: '04 — ' + t('Monetization Strategy', '수익화 전략'),
+      phase: '03 — ' + t('Monetization Strategy', '수익화 전략'),
       title: t('Contextual ads that feel native', '자연스럽게 녹아드는 맥락 광고'),
       content: t(
-        "Designed a contextual ad injection system that reads the semantic thread of each conversation turn and surfaces relevant sponsored content at natural breakpoints — never mid-sentence, never intrusive. Ads are tagged to conversation intent, not page keywords, achieving 10% CTR.",
-        '각 대화 턴의 의미 흐름을 읽고 자연스러운 지점에 스폰서 콘텐츠를 노출하는 맥락 광고 시스템을 설계했습니다. 문장 중간에 끼어들지 않고 방해되지 않게 배치했습니다. 광고는 페이지 키워드가 아닌 대화 의도에 매칭되어 10% CTR을 달성했습니다.',
+        'Built an ad injection system matched to conversation intent — not page keywords. Sponsored content surfaces at natural breakpoints, never intrusively. Achieved 10% CTR.',
+        '페이지 키워드가 아닌 대화 의도에 매칭되는 광고 시스템을 구축했습니다. 스폰서 콘텐츠는 대화의 자연스러운 흐름에 배치되며, 10% CTR을 달성했습니다.',
       ),
       tags: ['Ad Strategy', 'Intent Targeting', 'Revenue Modeling', 'A/B Testing'],
-    },
-    {
-      phase: '05 — ' + t('Launch & Scale', '출시 및 확장'),
-      title: t('0 → 1M MAU in 5 months', '5개월 만에 0에서 100만 MAU'),
-      content: t(
-        'Ran a soft launch with 3 publisher partners, iterating on response quality, UI placement, and chat trigger UX based on real engagement data. After hitting PMF signals (>30% of readers who saw the chat prompt engaged with it), scaled to additional publishers. Hit 1M MAU 5 months post-launch with minimal paid acquisition — driven primarily through publisher distribution.',
-        '3개 퍼블리셔 파트너와 소프트 론칭을 진행했습니다. 실제 인게이지먼트 데이터를 바탕으로 응답 품질, UI 배치, 채팅 트리거 UX를 반복적으로 개선했습니다. PMF 신호(노출 독자 30% 이상 참여)를 확인한 후 추가 퍼블리셔로 확장했습니다. 최소한의 유료 마케팅으로, 주로 퍼블리셔 배포를 통해 론칭 5개월 만에 100만 MAU를 달성했습니다.',
-      ),
-      tags: ['Go-to-Market', 'PMF Signals', 'Publisher Partnerships', 'Growth'],
     },
   ];
 
@@ -267,11 +249,11 @@ export function NewsChatCaseStudy({
       <CaseStudyHero
         brandLabel="NewsChat"
         logoSrc="/newschat-logo.svg"
-        subLabels={['GenAI · Media · Monetization']}
+        subLabels={['GenAI · Media · Monetization', 'Azure · FastAPI · Vector DB · Multi-Model AI · Redis']}
         title="NewsChat"
         subtitle={t(
           'Turning passive news consumption into interactive conversation — and monetizing the engagement gap.',
-          '수동적 뉴스 소비를 대화형 경험으로 전환하고, 인게이지먼트 격차를 수익으로 연결합니다.',
+          '수동적인 뉴스 소비를 대화형 경험으로 전환하는 AI 뉴스 챗 플랫폼입니다. 사용자는 뉴스 주제에 대해 질문하고 실시간으로 맥락에 맞는 답변을 받으며, 미디어 파트너의 참여도, 체류 시간, 광고 수익을 향상시킵니다.',
         )}
         meta={[{ label: t('Market', '시장'), value: t('Digital News Publishers', '디지털 뉴스 퍼블리셔') }]}
         t={t}
@@ -306,12 +288,12 @@ export function NewsChatCaseStudy({
         </div>
       </section>
 
-      {/* metrics band */}
+      {/* metrics + results */}
       <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16">
-          <div className="eyebrow mb-8">{t('Impact at a glance', '한눈에 보는 성과')}</div>
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-20">
+          <div className="eyebrow mb-8">{t('Results', '주요 성과')}</div>
           <div
-            className="grid grid-cols-2 md:grid-cols-4 gap-[1px] rounded-sm overflow-hidden border hairline"
+            className="grid grid-cols-2 md:grid-cols-4 gap-[1px] rounded-sm overflow-hidden border hairline mb-10"
             style={{ background: 'var(--rule)' }}
           >
             {metrics.map((m, i) => (
@@ -330,6 +312,29 @@ export function NewsChatCaseStudy({
               </Reveal>
             ))}
           </div>
+          <p className="text-sm mb-8 max-w-[640px]" style={{ color: 'var(--ink-2)' }}>
+            {t(
+              'Ran a soft launch with 3 publisher partners, iterating on response quality, UI placement, and chat trigger UX based on real engagement data. After hitting PMF signals (>30% of readers who saw the chat prompt engaged with it), scaled to additional publishers. Hit 1M MAU 5 months post-launch with minimal paid acquisition — driven primarily through publisher distribution.',
+              '3개 퍼블리셔 파트너와 소프트 론칭을 진행했습니다. 실제 인게이지먼트 데이터를 바탕으로 응답 품질, UI 배치, 채팅 트리거 UX를 반복적으로 개선했습니다. PMF 신호(노출 독자 30% 이상 참여)를 확인한 후 추가 퍼블리셔로 확장했습니다. 최소한의 유료 마케팅으로, 주로 퍼블리셔 배포를 통해 론칭 5개월 만에 100만 MAU를 달성했습니다.',
+            )}
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-[800px]">
+            {[
+              t('MAU 1M reached within 5 months of launch', 'MAU 100만 명 돌파 (출시 5개월)'),
+              t('Articles per session & ad revenue growth (CTR 10%)', '세션당 기사 조회 수 & 광고 수익 증가 (CTR 10%)'),
+              t('250% increase in dwell time for NewsChat users', '뉴스챗 유저 한정 체류시간 250% 증가'),
+              t('Improved UX and user satisfaction through AI-driven innovation', 'AI를 통한 새로운 시도로 유저 경험과 만족도 상승'),
+              t('Established a self-reinforcing traffic flywheel', '트래픽 선순환 구조 확보'),
+              t('Continued growth through ongoing updates and content quality improvements', '지속적인 업데이트와 콘텐츠 품질 향상으로 성장 중'),
+            ].map((item, i) => (
+              <Reveal key={i} delay={i * 50}>
+                <div className="flex items-start gap-3">
+                  <span style={{ color: 'var(--acc)' } as React.CSSProperties} className="mt-0.5 text-sm font-semibold shrink-0">✓</span>
+                  <span className="text-sm" style={{ color: 'var(--ink-2)' }}>{item}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -344,7 +349,7 @@ export function NewsChatCaseStudy({
             )}
             body={t(
               "Publishers invested in AI-powered content generation — and saw article output double. But session duration kept falling. More content didn't mean more engagement. The real problem was structural: readers had no reason to stay.",
-              '퍼블리셔들은 AI 기반 콘텐츠 생성에 투자해 기사 생산량을 두 배로 늘렸습니다. 하지만 세션 시간은 계속 감소했습니다. 콘텐츠가 늘어난다고 인게이지먼트가 따라오는 것은 아니었습니다. 진짜 문제는 구조적이었습니다 — 독자가 머무를 이유가 없었던 것입니다.',
+              '뉴스 소비 흐름이 SNS, 유튜브, 커뮤니티 등으로 다변화되면서 기존 뉴스 사이트만으로는 새로운 트래픽 유입과 사용자 만족도 향상이 어려운 상황이었습니다. 독자들은 기사를 일방향적으로 소비할 뿐, 읽는 도중 떠오른 궁금증을 즉시 해결할 수단이 없었고, 이탈률이 높고 광고 수익이 하락하는 문제가 있었습니다.',
             )}
             rows={[
               { label: t('Average article read time', '평균 기사 읽는 시간'), value: '48 sec' },
