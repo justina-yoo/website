@@ -761,7 +761,7 @@ export default function App() {
     if (page === 'newschat')
       return <NewsChatCaseStudy onBack={backHome} onNavigate={openCase} lang={lang} onToggleLang={toggleLang} t={t} />;
     if (page === 'aeko')
-      return <AekoCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+      return <AekoCaseStudy onBack={backHome} onNavigate={openCase} lang={lang} onToggleLang={toggleLang} t={t} />;
     if (page === 'attn')
       return <AttnCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
     if (page === 'workflow')

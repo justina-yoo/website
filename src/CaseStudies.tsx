@@ -1580,11 +1580,13 @@ export function NewsChatCaseStudy({
 /* ─── AEKO ─────────────────────────────────────────────── */
 export function AekoCaseStudy({
   onBack,
+  onNavigate,
   lang,
   onToggleLang,
   t,
 }: {
   onBack: () => void;
+  onNavigate?: (page: string) => void;
   lang: 'en' | 'kr';
   onToggleLang: () => void;
   t: T;
@@ -1726,14 +1728,44 @@ export function AekoCaseStudy({
         </div>
       </section>
 
-      <CTASection
-        title={t('Curious about AEKO?', 'AEKO가 궁금하신가요?')}
-        body={t(
-          "Happy to go deeper on the strategy, the AEO category, or what we're learning from early users.",
-          '전략, AEO 카테고리, 얼리 유저에게서 배우고 있는 것에 대해 더 자세히 이야기 나눌 수 있습니다.',
-        )}
-        ctaLabel={t('Get in touch', '연락하기')}
-      />
+      {/* Next project + CTA */}
+      <section className="border-t hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
+          <Reveal>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 40 }}>
+              {/* Left: CTA */}
+              <div style={{ maxWidth: '52ch' }}>
+                <h2 className="font-serif-display text-[24px] md:text-[36px] leading-tight tracking-tight mb-8" style={{ color: 'var(--ink)' }}>
+                  {t(
+                    'Curious about AEKO or want to talk AEO strategy? Reach out anytime.',
+                    '전략, AEO 카테고리, 얼리 유저에게서 배우고 있는 것에 대해 언제든 연락주세요.',
+                  )}
+                </h2>
+                <a href="mailto:justina.yoo@gmail.com" className="btn-primary">
+                  {t('Get in touch', '연락하기')} <Icon.Mail />
+                </a>
+              </div>
+              {/* Right: next project */}
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: 'var(--ink-3)', marginBottom: 8 }}>
+                  {t('Next Project', '다음 프로젝트')}
+                </div>
+                <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.3px', marginBottom: 4 }}>ATTN</div>
+                <div style={{ fontSize: 14, color: 'var(--ink-2)', marginBottom: 16 }}>
+                  {t('US market intelligence for Korean investors', '한국 투자자를 위한 미국 시장 인텔리전스')}
+                </div>
+                <button
+                  onClick={() => onNavigate ? onNavigate('attn') : onBack()}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 24px', borderRadius: 999, background: 'var(--acc)', border: 'none', cursor: 'pointer', color: '#fff', fontWeight: 700, fontSize: 15 }}
+                >
+                  {t('View case study', '케이스 스터디 보기')}
+                  <span style={{ fontSize: 18, lineHeight: 1 }}>→</span>
+                </button>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </CaseStudyShell>
   );
 }
