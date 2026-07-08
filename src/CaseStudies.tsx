@@ -1601,7 +1601,7 @@ export function AekoCaseStudy({
         '데이터 분석가가 아닌 이커머스 사업자를 위한 설계',
       ),
       content: t(
-        <>Started with competitive research across existing AEO and SEO analytics tools — most were built for marketers fluent in data. Through interviews with cross-border sellers, a clear pattern emerged: they didn't need more dashboards, they needed to know one thing — <em><strong>"am I showing up when buyers ask AI about my category?"</strong></em> That insight shaped every feature decision. The AI Visibility Score became a single, scannable number. Prompt tracking was scoped to buyer-intent queries specific to their product category and market. The dashboard was designed so a seller could understand their position in under 60 seconds, without reading a guide.</>,
+        <>Competitive research showed most AEO tools were built for data-fluent marketers. Interviews with cross-border sellers surfaced one core need: <em><strong>"am I showing up when buyers ask AI about my category?"</strong></em> That question shaped every decision — the AI Visibility Score became a single scannable number, prompt tracking was scoped to buyer-intent queries, and the dashboard was designed for a 60-second read without a guide.</>,
         <>기존 AEO 및 SEO 분석 도구들을 경쟁 조사했습니다. 대부분 데이터에 익숙한 마케터를 위해 만들어진 도구들이었습니다. 크로스보더 셀러들과의 인터뷰를 통해 명확한 패턴이 드러났습니다. 그들에게 필요한 건 더 많은 대시보드가 아니었습니다. 딱 하나였습니다 — <em><strong>"내 카테고리에서 AI가 나를 언급하고 있는가?"</strong></em> 이 인사이트가 모든 기능 결정을 이끌었습니다. AI Visibility Score는 한눈에 파악할 수 있는 단일 수치로 설계했습니다. 프롬프트 추적은 각 제품 카테고리와 시장에 특화된 구매 의도 쿼리로 범위를 좁혔습니다. 가이드를 읽지 않아도 60초 안에 자신의 현황을 파악할 수 있는 대시보드를 목표로 했습니다.</>,
       ),
       tags: ['Competitive Research', 'User Interviews', 'Feature Scoping', 'Dashboard Design', 'Activation Loop'],
