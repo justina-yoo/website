@@ -1462,7 +1462,7 @@ export function AekoCaseStudy({
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('PROCESS', '프로세스')} title={t('What I\'m building', '내가 만들고 있는 것')} />
+          <SectionLabel eyebrow={t('PROCESS', '프로세스')} title={t('Strategy & execution', '전략과 실행')} />
           <TimelineList steps={timeline} />
         </div>
       </section>
