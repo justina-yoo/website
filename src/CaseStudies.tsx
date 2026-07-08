@@ -1904,7 +1904,6 @@ export function AttnCaseStudy({
     <CaseStudyShell accentClass="acc-sky" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="ATTN Case Study — Justina Yoo" pageDescription="US market intelligence for Korean investors.">
       <CaseStudyHero
         brandLabel="ATTN"
-        logoSrc="/attn-logo.svg"
         title="ATTN"
         tagline={t('US Market Intelligence · AI Translation · Korean Investors', '미국 시장 인텔리전스 · AI 번역 · 한국 투자자')}
         subtitle={t(
