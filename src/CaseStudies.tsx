@@ -1354,8 +1354,8 @@ export function AekoCaseStudy({
     {
       phase: '01 — ' + t('Dashboard & Feature Design', '대시보드 & 기능 설계'),
       title: t(
-        'Built for e-commerce owners, not data analysts',
-        '데이터 분석가가 아닌 이커머스 사업자를 위해 설계',
+        'Designing for e-commerce owners, not data analysts',
+        '데이터 분석가가 아닌 이커머스 사업자를 위한 설계',
       ),
       content: t(
         <>Started with competitive research across existing AEO and SEO analytics tools — most were built for marketers fluent in data. Through interviews with cross-border sellers, a clear pattern emerged: they didn't need more dashboards, they needed to know one thing — <em><strong>"am I showing up when buyers ask AI about my category?"</strong></em> That insight shaped every feature decision. The AI Visibility Score became a single, scannable number. Prompt tracking was scoped to buyer-intent queries specific to their product category and market. The dashboard was designed so a seller could understand their position in under 60 seconds, without reading a guide.</>,
@@ -1462,7 +1462,7 @@ export function AekoCaseStudy({
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('PROCESS', '프로세스')} title={t('How we built it', '어떻게 만들었는가')} />
+          <SectionLabel eyebrow={t('PROCESS', '프로세스')} title={t('What I\'m building', '내가 만들고 있는 것')} />
           <TimelineList steps={timeline} />
         </div>
       </section>
