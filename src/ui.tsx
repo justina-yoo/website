@@ -330,7 +330,7 @@ export function TimelineList({
                       {s.content}
                     </p>
                   </div>
-                  <div className="lg:w-[540px] flex-shrink-0">
+                  <div className="lg:w-[638px] flex-shrink-0">
                     {s.visual}
                   </div>
                 </div>

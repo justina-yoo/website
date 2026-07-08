@@ -501,7 +501,7 @@ function AekoVisibilityDashboard({ lang }: { lang: 'en' | 'kr' }) {
   return (
     <>
       <style>{`@keyframes chipIn{0%{opacity:0;transform:translateY(10px) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}`}</style>
-      <div style={{ zoom: 0.55, transformOrigin: 'top left', width: 980 }}>
+      <div style={{ zoom: 0.65, transformOrigin: 'top left', width: 980 }}>
         {/* Single card matching original design */}
         <div style={{ ...cardStyle, padding: '34px 56px', display: 'flex', flexDirection: 'column', gap: 30 }}>
 
