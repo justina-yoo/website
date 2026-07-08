@@ -1905,23 +1905,18 @@ export function AttnCaseStudy({
       <CaseStudyHero
         brandLabel="ATTN"
         logoSrc="/attn-logo.svg"
-        subLabels={['Financial Media · AI · Korea']}
-        title={
-          <>
-            {t("Korea's ", '한국의 ')}
-            <span className="italic" style={{ color: 'var(--acc)' } as React.CSSProperties}>
-              {t('#1 US Market', '1위 미국 주식')}
-            </span>{' '}
-            {t('Intelligence Platform', '인텔리전스 플랫폼')}
-          </>
-        }
+        title="ATTN"
+        tagline={t('US Market Intelligence · AI Translation · Korean Investors', '미국 시장 인텔리전스 · AI 번역 · 한국 투자자')}
         subtitle={t(
           'Closing the information gap between Korean investors and US markets — real-time SEC filings, government signals, and market news, translated and delivered at the speed of trading.',
           '한국 투자자와 미국 시장 간 정보 격차 해소 — SEC 공시, 정부 시그널, 시장 뉴스를 실시간으로 번역해 트레이딩 속도로 전달.',
         )}
-        meta={[
-          { label: t('Stack', '스택'), value: 'Multi-Model AI, MCP Server, AI Orchestration' },
-          { label: t('Market', '시장'), value: t('Korean Retail Investors', '한국 개인 투자자') },
+        productColor="#5ACE81"
+        metrics={[
+          { v: 'Real-time', l: t('Delivery', '실시간 전달') },
+          { v: '3', l: t('AI Models', 'AI 모델') },
+          { v: 'SEC + Gov', l: t('Signal Sources', '시그널 소스') },
+          { v: '0→1', l: t('Build', '빌드') },
         ]}
         t={t}
       />
