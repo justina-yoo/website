@@ -336,7 +336,7 @@ export function TimelineList({
                     </p>
                   </div>
                   {!s.visualLeft && (
-                    <div className="lg:w-[638px] flex-shrink-0">
+                    <div className="lg:w-[569px] flex-shrink-0">
                       {s.visual}
                     </div>
                   )}
