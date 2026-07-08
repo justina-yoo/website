@@ -473,192 +473,146 @@ function AekoVisibilityDashboard({ lang }: { lang: 'en' | 'kr' }) {
   const cardStyle: React.CSSProperties = {
     background: '#fff',
     border: '1px solid #edeef2',
-    borderRadius: 20,
-    boxShadow: '0 30px 60px -30px rgba(15,23,42,.28)',
-    padding: '24px 28px',
+    borderRadius: 24,
+    boxShadow: '0 40px 80px -44px rgba(15,23,42,.32)',
   };
+
+  // SVG icons
+  const iconMention = (
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  );
+  const iconCitation = (
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <path d="M10 11H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6c0 2-1 3.5-3 4" />
+      <path d="M19 11h-4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6c0 2-1 3.5-3 4" />
+    </svg>
+  );
+  const iconSource = (
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6" />
+      <line x1="8" y1="13" x2="16" y2="13" />
+      <line x1="8" y1="17" x2="14" y2="17" />
+    </svg>
+  );
 
   return (
     <>
-      <style>{`@keyframes chipIn{0%{opacity:0;transform:translateY(10px) scale(.9)}60%{opacity:1;transform:translateY(-2px) scale(1.04)}100%{opacity:1;transform:translateY(0) scale(1)}}`}</style>
+      <style>{`@keyframes chipIn{0%{opacity:0;transform:translateY(10px) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}`}</style>
       <div style={{ zoom: 0.48, transformOrigin: 'top left', width: 980, WebkitMaskImage: 'linear-gradient(180deg,#000 65%,transparent 100%)', maskImage: 'linear-gradient(180deg,#000 65%,transparent 100%)' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {/* Score card */}
-        <div style={{ ...cardStyle }}>
-          <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b', marginBottom: 28 }}>
-            {s.scoreTitle}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
-            {/* Gauge */}
-            <div style={{ position: 'relative' }}>
-              <svg width="200" height="200" viewBox="0 0 200 200">
-                {/* Track */}
-                <circle
-                  cx="100" cy="100" r="82"
-                  fill="none"
-                  stroke="#f0f1f4"
-                  strokeWidth="14"
-                  strokeDasharray={CIRCUMFERENCE}
-                  strokeDashoffset={0}
-                  strokeLinecap="round"
-                  style={{ transform: 'rotate(-90deg)', transformOrigin: '100px 100px' }}
-                />
-                {/* Progress */}
-                <circle
-                  cx="100" cy="100" r="82"
-                  fill="none"
-                  stroke={gaugeColor}
-                  strokeWidth="14"
-                  strokeDasharray={CIRCUMFERENCE}
-                  strokeDashoffset={dashOffset}
-                  strokeLinecap="round"
-                  style={{ transform: 'rotate(-90deg)', transformOrigin: '100px 100px', transition: 'stroke .3s ease' }}
-                />
-                <text x="100" y="93" textAnchor="middle" style={{ fontSize: 42, fontWeight: 800, fill: '#111629', fontFamily: 'system-ui,sans-serif' }}>
-                  {SCORE}
-                </text>
-                <text x="100" y="120" textAnchor="middle" style={{ fontSize: 15, fill: '#8a97a6', fontFamily: 'system-ui,sans-serif' }}>
-                  /100
-                </text>
-              </svg>
-            </div>
-            {/* Metric cards */}
-            <div style={{ display: 'flex', gap: 14, width: '100%' }}>
-              {/* Mentions */}
-              <div style={{ flex: 1, padding: '14px 16px', borderRadius: 12, background: 'rgba(124,108,246,.06)', border: '1.5px solid rgba(124,108,246,.18)' }}>
-                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#7c6cf6' }}>{s.mMention}</span>
-                <div style={{ fontSize: 26, fontWeight: 800, color: '#7c6cf6', fontFamily: 'system-ui,sans-serif', letterSpacing: '-0.5px', marginTop: 6 }}>{fmt(mentions)}</div>
-              </div>
-              <div style={{ flex: 1, padding: '14px 16px', borderRadius: 12, background: 'rgba(239,64,98,.06)', border: '1.5px solid rgba(239,64,98,.18)' }}>
-                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#ef4062' }}>{s.mCitation}</span>
-                <div style={{ fontSize: 26, fontWeight: 800, color: '#ef4062', fontFamily: 'system-ui,sans-serif', letterSpacing: '-0.5px', marginTop: 6 }}>{fmt(citations)}</div>
-              </div>
-              <div style={{ flex: 1, padding: '14px 16px', borderRadius: 12, background: 'rgba(22,163,74,.06)', border: '1.5px solid rgba(22,163,74,.18)' }}>
-                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#16a34a' }}>{s.mSource}</span>
-                <div style={{ fontSize: 26, fontWeight: 800, color: '#16a34a', fontFamily: 'system-ui,sans-serif', letterSpacing: '-0.5px', marginTop: 6 }}>{fmt(sources)}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Single card matching original design */}
+        <div style={{ ...cardStyle, padding: '34px 56px', display: 'flex', flexDirection: 'column', gap: 30 }}>
 
-        {/* Persona card */}
-        <div style={{ ...cardStyle }}>
-          <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b', marginBottom: 16 }}>
-            {s.personaTitle}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {/* Radar */}
-            <div style={{ position: 'relative' }}>
-                <svg width="340" height="340" viewBox="0 0 420 420">
-                  {/* Rings */}
-                  {[0.25, 0.5, 0.75, 1].map((frac, ri) => (
-                    <polygon
-                      key={ri}
-                      points={radarPolygon(CX, CY, R, Array(N).fill(frac))}
+          {/* ROW 1: Score — gauge left + 3 metric cards right */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+            <h3 style={{ margin: 0, fontSize: 24, fontWeight: 800, letterSpacing: '-0.01em', color: '#1e293b' }}>{s.scoreTitle}</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,250px) repeat(3,minmax(0,1fr))', gap: 20, alignItems: 'stretch' }}>
+              {/* Gauge */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px 0' }}>
+                <div style={{ position: 'relative', width: 214, height: 214 }}>
+                  <svg width="214" height="214" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="#eef1f5" strokeWidth="20" />
+                    <circle
+                      cx="100" cy="100" r="82"
                       fill="none"
-                      stroke="#e8eaef"
-                      strokeWidth="1"
+                      stroke={gaugeColor}
+                      strokeWidth="20"
+                      strokeLinecap="round"
+                      strokeDasharray={CIRCUMFERENCE}
+                      strokeDashoffset={dashOffset}
+                      style={{ transformOrigin: '100px 100px', transform: 'rotate(-90deg)', transition: 'stroke .3s ease' }}
                     />
-                  ))}
-                  {/* Axis spokes */}
-                  {Array.from({ length: N }, (_, i) => {
-                    const angle = -90 + i * (360 / N);
-                    const pt = radarPoint(CX, CY, R, angle, 1);
-                    return <line key={i} x1={CX} y1={CY} x2={pt.x} y2={pt.y} stroke="#e8eaef" strokeWidth="1" />;
-                  })}
-                  {/* comp2 */}
-                  <polygon
-                    points={radarPolygon(CX, CY, R, comp2Vals)}
-                    fill="rgba(148,163,184,.10)"
-                    stroke="#cbd5e1"
-                    strokeWidth="1.5"
-                    strokeDasharray="5 4"
-                  />
-                  {/* comp1 */}
-                  <polygon
-                    points={radarPolygon(CX, CY, R, comp1Vals)}
-                    fill="rgba(244,63,116,.08)"
-                    stroke="#f43f74"
-                    strokeWidth="1.5"
-                    strokeDasharray="5 4"
-                  />
-                  {/* mine */}
-                  <polygon
-                    points={radarPolygon(CX, CY, R, mineVals)}
-                    fill="rgba(99,102,241,.14)"
-                    stroke="#6366f1"
-                    strokeWidth="2"
-                  />
-                  {/* Axis labels */}
-                  {s.axes.map((label, i) => {
-                    const angle = -90 + i * (360 / N);
-                    const pt = radarPoint(CX, CY, R + 30, angle, 1);
-                    const anchors: React.SVGAttributes<SVGTextElement>['textAnchor'][] = ['middle', 'start', 'start', 'end', 'end'];
-                    const baselines = ['auto', 'middle', 'hanging', 'hanging', 'middle'];
-                    return (
-                      <text
-                        key={i}
-                        x={pt.x}
-                        y={pt.y}
-                        textAnchor={anchors[i]}
-                        dominantBaseline={baselines[i]}
-                        style={{ fontSize: 13, fontWeight: 600, fill: '#64748b', fontFamily: 'system-ui,sans-serif' }}
-                      >
-                        {label}
-                      </text>
-                    );
-                  })}
-                </svg>
-                {/* Legend */}
-                <div style={{ display: 'flex', gap: 20, marginTop: 12 }}>
+                  </svg>
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ fontSize: 68, fontWeight: 800, lineHeight: 1, color: gaugeColor, letterSpacing: '-0.03em', fontFamily: 'system-ui,sans-serif' }}>{SCORE}</div>
+                    <div style={{ fontSize: 18, color: '#94a3b8', fontWeight: 700, marginTop: 4, fontFamily: 'system-ui,sans-serif' }}>/100</div>
+                  </div>
+                </div>
+              </div>
+              {/* Metric cards */}
+              {[
+                { icon: iconMention, value: fmt(mentions), label: s.mMention, color: '#7c6cf6' },
+                { icon: iconCitation, value: fmt(citations), label: s.mCitation, color: '#ef4062' },
+                { icon: iconSource, value: fmt(sources), label: s.mSource, color: '#16a34a' },
+              ].map((m, i) => (
+                <div key={i} style={{ minWidth: 0, background: '#f8f9fb', border: '1px solid #eef0f4', borderRadius: 18, padding: '24px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+                  <div style={{ color: m.color }}>{m.icon}</div>
+                  <div style={{ fontSize: 30, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.02em', color: m.color, whiteSpace: 'nowrap', fontFamily: 'system-ui,sans-serif' }}>{m.value}</div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: '#94a3b8', fontFamily: 'system-ui,sans-serif' }}>{m.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ROW 2: Persona — radar left + keywords right */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <h3 style={{ margin: 0, fontSize: 24, fontWeight: 800, letterSpacing: '-0.01em', color: '#1e293b' }}>{s.personaTitle}</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: 56, alignItems: 'center' }}>
+              {/* Radar + legend */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+                {/* Legend dots */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 22 }}>
                   {[
-                    { color: '#6366f1', dash: false, label: s.legend[0] },
-                    { color: '#f43f74', dash: true, label: s.legend[1] },
-                    { color: '#cbd5e1', dash: true, label: s.legend[2] },
-                  ].map((item, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                      <svg width="24" height="8">
-                        <line
-                          x1="0" y1="4" x2="24" y2="4"
-                          stroke={item.color}
-                          strokeWidth="2"
-                          strokeDasharray={item.dash ? '4 3' : undefined}
-                        />
-                      </svg>
-                      <span style={{ fontSize: 12, color: '#6b7280', fontFamily: 'system-ui,sans-serif' }}>{item.label}</span>
+                    { color: '#6366f1', label: s.legend[0] },
+                    { color: '#f43f74', label: s.legend[1] },
+                    { color: '#cbd5e1', label: s.legend[2] },
+                  ].map((l, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 600, color: '#475569', fontFamily: 'system-ui,sans-serif' }}>
+                      <span style={{ width: 11, height: 11, borderRadius: '50%', background: l.color, display: 'inline-block' }} />
+                      {l.label}
                     </div>
                   ))}
                 </div>
+                {/* Radar SVG */}
+                <div style={{ position: 'relative', width: '100%', maxWidth: 420, aspectRatio: '1', alignSelf: 'center' }}>
+                  <svg viewBox="0 0 420 420" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+                    {[0.25, 0.5, 0.75, 1].map((frac, ri) => (
+                      <polygon key={ri} points={radarPolygon(CX, CY, R, Array(N).fill(frac))} fill="none" stroke="#e7eaf0" strokeWidth="1.5" />
+                    ))}
+                    {Array.from({ length: N }, (_, i) => {
+                      const angle = -90 + i * (360 / N);
+                      const pt = radarPoint(CX, CY, R, angle, 1);
+                      return <line key={i} x1={CX} y1={CY} x2={pt.x} y2={pt.y} stroke="#e7eaf0" strokeWidth="1.5" />;
+                    })}
+                    <polygon points={radarPolygon(CX, CY, R, comp2Vals)} fill="rgba(148,163,184,.10)" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="5 4" />
+                    <polygon points={radarPolygon(CX, CY, R, comp1Vals)} fill="rgba(244,63,116,.08)" stroke="#f43f74" strokeWidth="2" strokeDasharray="5 4" />
+                    <polygon points={radarPolygon(CX, CY, R, mineVals)} fill="rgba(99,102,241,.14)" stroke="#6366f1" strokeWidth="2.5" />
+                    {s.axes.map((label, i) => {
+                      const angle = -90 + i * (360 / N);
+                      const pt = radarPoint(CX, CY, R + 30, angle, 1);
+                      const anchors: React.SVGAttributes<SVGTextElement>['textAnchor'][] = ['middle', 'start', 'start', 'end', 'end'];
+                      const baselines = ['auto', 'middle', 'hanging', 'hanging', 'middle'];
+                      return (
+                        <text key={i} x={pt.x} y={pt.y} textAnchor={anchors[i]} dominantBaseline={baselines[i]}
+                          style={{ fontSize: 14, fontWeight: 600, fill: '#94a3b8', fontFamily: 'system-ui,sans-serif' }}>
+                          {label}
+                        </text>
+                      );
+                    })}
+                  </svg>
+                </div>
               </div>
 
-            {/* Keywords */}
-            <div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: '#64748b', marginBottom: 12 }}>
-                {s.keywordsTitle}
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                {s.chips.map((chip, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      padding: '8px 16px',
-                      borderRadius: 999,
-                      background: CHIP_STYLES[i].bg,
-                      color: CHIP_STYLES[i].fg,
-                      fontSize: 13,
-                      fontWeight: 700,
+              {/* Keywords */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 18, alignSelf: 'flex-start' }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#64748b', fontFamily: 'system-ui,sans-serif' }}>{s.keywordsTitle}</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                  {s.chips.map((chip, i) => (
+                    <span key={i} style={{
+                      fontSize: 15, fontWeight: 700, padding: '12px 20px', borderRadius: 14,
+                      background: CHIP_STYLES[i].bg, color: CHIP_STYLES[i].fg,
                       fontFamily: 'system-ui,sans-serif',
-                      animation: `chipIn 0.45s cubic-bezier(.2,.8,.2,1) ${i * 80}ms both`,
-                    }}
-                  >
-                    {chip}
-                  </span>
-                ))}
+                      animation: `chipIn .5s ease ${(0.15 + i * 0.14).toFixed(2)}s both`,
+                    }}>{chip}</span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
+
         </div>
-        </div>{/* end side-by-side grid */}
       </div>
     </>
   );
