@@ -759,7 +759,7 @@ export default function App() {
     if (!authed) return <PasswordGate onUnlock={() => setAuthed(true)} />;
 
     if (page === 'newschat')
-      return <NewsChatCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+      return <NewsChatCaseStudy onBack={backHome} onNavigate={openCase} lang={lang} onToggleLang={toggleLang} t={t} />;
     if (page === 'aeko')
       return <AekoCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
     if (page === 'attn')

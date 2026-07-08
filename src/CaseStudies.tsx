@@ -7,7 +7,7 @@
  * with the password gate + EN/KR toggle preserved.
  */
 
-import { useEffect, type ReactNode } from 'react';
+import React, { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   Reveal,
   Icon,
@@ -58,55 +58,51 @@ function CaseStudyHero({
   brandLabel,
   subLabels = [],
   title,
+  tagline,
   subtitle,
   meta,
+  metrics,
   logoSrc,
+  heroRight,
+  productColor,
   t,
 }: {
   brandLabel: string;
   subLabels?: string[];
   title: ReactNode;
+  tagline?: string;
   subtitle: string;
   meta?: { label: string; value: string }[];
+  metrics?: { v: string; l: string }[];
   logoSrc?: string;
+  heroRight?: ReactNode;
+  productColor?: string;
   t: T;
 }) {
   return (
     <section className="border-b hairline">
       <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-20 pb-16 md:pt-28 md:pb-24">
-        <Reveal>
-          <div className="flex flex-wrap items-center gap-2 mb-8">
-            <span className="chip chip-acc">{t('Featured Project', '주요 프로젝트')}</span>
-            {subLabels.map((s, i) => (
-              <span key={i} className="chip">
-                {s}
-              </span>
-            ))}
-          </div>
-        </Reveal>
+        <div style={heroRight ? { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) auto', gap: 48, alignItems: 'center' } : {}}>
+        <div>
         <Reveal delay={120}>
-          <div className="flex items-center gap-3 mb-6">
-            {logoSrc ? (
-              <img src={logoSrc} alt={brandLabel} className="h-8" />
-            ) : (
-              <span
-                className="font-serif-display text-[24px]"
-                style={{ color: 'var(--acc)' } as React.CSSProperties}
-              >
-                {brandLabel}
-              </span>
-            )}
+          <div className="flex items-center gap-4 mb-5">
+            {logoSrc && <img src={logoSrc} alt={brandLabel} className="h-10 md:h-16 lg:h-20 w-auto" />}
+            <h1
+              className="font-serif-display text-[40px] md:text-[64px] lg:text-[80px] leading-[0.92] tracking-tight"
+              style={{ color: 'var(--ink)' }}
+            >
+              {title}
+              <span style={{ color: 'var(--acc)' } as React.CSSProperties}>.</span>
+            </h1>
           </div>
         </Reveal>
-        <Reveal delay={200}>
-          <h1
-            className="font-serif-display text-[40px] md:text-[64px] lg:text-[80px] leading-[0.92] tracking-tight mb-8"
-            style={{ color: 'var(--ink)' }}
-          >
-            {title}
-            <span style={{ color: 'var(--acc)' } as React.CSSProperties}>.</span>
-          </h1>
-        </Reveal>
+        {tagline && (
+          <Reveal delay={240}>
+            <p className="font-mono-tech text-[13px] tracking-widest uppercase mb-8" style={{ color: productColor ?? 'var(--acc)' }}>
+              {tagline}
+            </p>
+          </Reveal>
+        )}
         <Reveal delay={280}>
           <p
             className="font-serif-display text-[18px] md:text-[24px] leading-snug max-w-[40ch] mb-10"
@@ -115,6 +111,21 @@ function CaseStudyHero({
             {subtitle}
           </p>
         </Reveal>
+        {metrics && (
+          <Reveal delay={340}>
+            <div
+              className="grid grid-cols-2 md:grid-cols-4 gap-[1px] rounded-sm overflow-hidden border hairline mb-8"
+              style={{ background: 'var(--rule)' }}
+            >
+              {metrics.map((m, i) => (
+                <div key={i} className="metric" style={{ border: 'none' }}>
+                  <span className="n" style={{ color: '#F8CD48' }}>{m.v}</span>
+                  <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: '#F8CD48' }}>{m.l}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        )}
         {meta && (
           <Reveal delay={360}>
             <div className="flex flex-wrap gap-8 border-t hairline pt-6">
@@ -129,19 +140,479 @@ function CaseStudyHero({
             </div>
           </Reveal>
         )}
+        </div>
+        {heroRight && <Reveal delay={200}>{heroRight}</Reveal>}
+        </div>
       </div>
     </section>
+  );
+}
+
+/* ─── NewsChat Hero Phone ───────────────────────────────── */
+function NewsChatHeroPhone() {
+  return (
+    <>
+      <style>{`
+        @keyframes ncBubbleIn{0%,11%{opacity:0;transform:translateY(10px) scale(.97)}17%{opacity:1;transform:translateY(0) scale(1)}74%{opacity:1;transform:translateY(0) scale(1)}82%,100%{opacity:0;transform:translateY(0) scale(1)}}
+        @keyframes ncTyping{0%,16%{opacity:0}21%{opacity:1}28%{opacity:1}32%,100%{opacity:0}}
+        @keyframes ncDot{0%,75%,100%{transform:translateY(0);opacity:.45}38%{transform:translateY(-4px);opacity:1}}
+        @keyframes ncReveal{0%,24%{clip-path:inset(0 0 100% 0);opacity:0}28%{opacity:1}58%{clip-path:inset(0 0 0 0)}74%{clip-path:inset(0 0 0 0);opacity:1}82%,100%{clip-path:inset(0 0 100% 0);opacity:0}}
+        @keyframes ncGlow{0%,100%{filter:drop-shadow(0 0 0 rgba(248,205,72,0))}50%{filter:drop-shadow(0 8px 26px rgba(248,205,72,.5))}}
+        @keyframes ncIntro{0%,2%{transform:translate(0,-214px) scale(1);opacity:1;filter:blur(0)}9%{transform:translate(0,-214px) scale(1.07);opacity:0;filter:blur(7px)}82%{transform:translate(0,-214px) scale(1.07);opacity:0;filter:blur(7px)}82.5%{transform:translate(0,-214px) scale(1);opacity:1;filter:blur(0)}100%{transform:translate(0,-214px) scale(1);opacity:1;filter:blur(0)}}
+        @keyframes ncAnchorIn{0%,11%{opacity:0;transform:translateY(6px)}18%{opacity:1;transform:translateY(0)}74%{opacity:1;transform:translateY(0)}82%,100%{opacity:0;transform:translateY(0)}}
+      `}</style>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {/* glow */}
+        <div style={{ position: 'absolute', width: 480, height: 480, borderRadius: '50%', background: 'radial-gradient(circle,rgba(248,205,72,.13) 0%,rgba(248,205,72,0) 68%)', filter: 'blur(8px)', zIndex: 0 }} />
+        {/* phone shell */}
+        <div style={{ position: 'relative', zIndex: 1, width: 400, padding: 12, background: 'linear-gradient(155deg,#2a2d33 0%,#141519 60%)', borderRadius: 56, boxShadow: '0 50px 100px -28px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.04),inset 0 1px 1px rgba(255,255,255,.14)', WebkitMaskImage: 'linear-gradient(180deg,#000 60%,rgba(0,0,0,0) 96%)', maskImage: 'linear-gradient(180deg,#000 60%,rgba(0,0,0,0) 96%)' }}>
+          <div style={{ position: 'relative', width: '100%', height: 520, background: '#0a0a0c', borderRadius: 46, overflow: 'hidden' }}>
+            {/* dynamic island */}
+            <div style={{ position: 'absolute', top: 11, left: '50%', transform: 'translateX(-50%)', width: 80, height: 22, background: '#000', borderRadius: 14, zIndex: 12, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 8 }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10233a', boxShadow: 'inset 0 0 3px rgba(80,140,220,.7)' }} />
+            </div>
+            {/* chat content */}
+            <div style={{ padding: '52px 18px 0', fontFamily: "Pretendard,'Apple SD Gothic Neo',sans-serif" }}>
+              {/* user question */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 18 }}>
+                <div style={{ maxWidth: '83%', background: '#F8CD48', color: '#2b2400', padding: '12px 16px', borderRadius: '16px 16px 5px 16px', fontSize: 15.5, fontWeight: 600, lineHeight: 1.42, boxShadow: '0 8px 18px -8px rgba(248,205,72,.55)', animation: 'ncBubbleIn 8s ease-in-out infinite' }}>아이돌과 소속사 간 갈등 사례에 대해 알려줘</div>
+              </div>
+              {/* anchor */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, animation: 'ncAnchorIn 8s ease-in-out infinite' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#141519', border: '1px solid rgba(248,205,72,.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="11" height="11" viewBox="0 0 114.097 114.097"><path d="M111.013 107.334C112.538 110.358 110.342 113.938 106.939 113.949L71.5736 114.097C69.8326 114.097 68.251 113.131 67.4658 111.574L15.5209 8.16032C14.7471 6.60327 13.1541 5.63722 11.4245 5.63722H2.82198C1.26306 5.63722 0 4.37566 0 2.81861C0 1.26155 1.26306 0 2.82198 0H54.3231C56.0641 0 57.6344 0.97742 58.4196 2.52311L111.013 107.323V107.334ZM53.8111 107.471L8.65938 17.2867C6.49738 12.9792 0 14.5136 0 19.3325V109.528C0 112.051 2.04821 114.097 4.57434 114.097H49.726C53.1283 114.097 55.3359 110.528 53.8225 107.482L53.8111 107.471ZM109.545 0.113654H84.5115C81.9967 0.113654 79.9599 2.14805 79.9599 4.65979V24.3673C79.9599 26.8791 81.9967 28.9135 84.5115 28.9135H99.0993C101.409 28.9135 103.355 30.641 103.617 32.9368L104.288 38.7331C104.345 39.2218 104.959 39.415 105.278 39.04C110.956 32.5049 114.085 24.1514 114.085 15.5023V4.65979C114.085 2.14805 112.049 0.113654 109.534 0.113654H109.545Z" fill="#F8CD48"/></svg>
+                </div>
+                <span style={{ fontSize: 15, fontWeight: 600, color: '#e6e8ec' }}>뉴스챗</span>
+              </div>
+              {/* typing + answer */}
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', top: 2, left: 0, display: 'flex', animation: 'ncTyping 8s ease-in-out infinite' }}>
+                  <div style={{ display: 'flex', gap: 4, alignItems: 'center', background: '#17181c', padding: '7px 10px', borderRadius: 11 }}>
+                    {[0, 0.18, 0.36].map((delay, i) => (
+                      <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: '#9aa0aa', animation: `ncDot 1.1s ease-in-out ${delay}s infinite` }} />
+                    ))}
+                  </div>
+                </div>
+                <div style={{ maxHeight: 160, overflow: 'hidden', WebkitMaskImage: 'linear-gradient(180deg,#000 50%,transparent 100%)', maskImage: 'linear-gradient(180deg,#000 50%,transparent 100%)', animation: 'ncReveal 8s ease-in-out infinite' }}>
+                  <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.72, color: '#dfe2e7' }}>아이돌과 소속사 간의 갈등은 <b style={{ color: '#fff' }}>K-pop</b> 업계에서 꽤 자주 있는 일인데요, 최근 주목할 만한 사례 몇 가지를 정리해 드리겠습니다.</p>
+                  <p style={{ margin: '12px 0 6px', fontSize: 15, fontWeight: 800, color: '#ffffff' }}>뉴진스와 어도어 간의 전속계약 분쟁</p>
+                  <div style={{ display: 'flex', gap: 7, fontSize: 13.5, lineHeight: 1.7, color: '#cfd3d9' }}>
+                    <span style={{ color: '#7b8089' }}>•</span>
+                    <span><b style={{ color: '#eef0f3', fontWeight: 700 }}>사건 개요:</b> 4세대 대표 아이돌 그룹 뉴진스와 소속사 어도어 사이의 전속계약 분쟁이 법정까지 가게 됐습니다.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* brand lockup */}
+            <div style={{ position: 'absolute', left: 0, right: 0, bottom: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'ncIntro 8s ease-in-out infinite' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+                <svg width="36" height="36" viewBox="0 0 114.097 114.097" style={{ flexShrink: 0, animation: 'ncGlow 3.6s ease-in-out infinite' }}>
+                  <path d="M111.013 107.334C112.538 110.358 110.342 113.938 106.939 113.949L71.5736 114.097C69.8326 114.097 68.251 113.131 67.4658 111.574L15.5209 8.16032C14.7471 6.60327 13.1541 5.63722 11.4245 5.63722H2.82198C1.26306 5.63722 0 4.37566 0 2.81861C0 1.26155 1.26306 0 2.82198 0H54.3231C56.0641 0 57.6344 0.97742 58.4196 2.52311L111.013 107.323V107.334ZM53.8111 107.471L8.65938 17.2867C6.49738 12.9792 0 14.5136 0 19.3325V109.528C0 112.051 2.04821 114.097 4.57434 114.097H49.726C53.1283 114.097 55.3359 110.528 53.8225 107.482L53.8111 107.471ZM109.545 0.113654H84.5115C81.9967 0.113654 79.9599 2.14805 79.9599 4.65979V24.3673C79.9599 26.8791 81.9967 28.9135 84.5115 28.9135H99.0993C101.409 28.9135 103.355 30.641 103.617 32.9368L104.288 38.7331C104.345 39.2218 104.959 39.415 105.278 39.04C110.956 32.5049 114.085 24.1514 114.085 15.5023V4.65979C114.085 2.14805 112.049 0.113654 109.534 0.113654H109.545Z" fill="#F8CD48"/>
+                </svg>
+                <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: -1, color: '#ffffff', lineHeight: 1, fontFamily: "Pretendard,'Apple SD Gothic Neo',sans-serif" }}>NewsChat</div>
+              </div>
+              <div style={{ fontSize: 12, fontWeight: 500, color: '#8b9199', fontFamily: "Pretendard,'Apple SD Gothic Neo',sans-serif" }}>뉴스를 읽고도 궁금해? 뉴스챗에게 물어봐!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─── Contextual Ad Explainer animation ────────────────── */
+function AdExplainerPhone({
+  question,
+  workLine,
+  workLineDone,
+  answer,
+  answerHeading,
+}: {
+  question: string;
+  workLine: string;
+  workLineDone: string;
+  answer: string;
+  answerHeading: string;
+}) {
+  const STEP = 40;
+  const MS = 26;
+  const TYPE_START = 3400;
+
+  const [t, setT] = useState(0);
+  const ivRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const cycleEnd = TYPE_START + answer.length * MS + 2000;
+    ivRef.current = setInterval(() => {
+      setT((prev) => {
+        const next = prev + STEP;
+        return next > cycleEnd ? 0 : next;
+      });
+    }, STEP);
+    return () => { if (ivRef.current) clearInterval(ivRef.current); };
+  }, [answer]);
+
+  const ease = 'opacity .55s cubic-bezier(.22,.8,.24,1), transform .55s cubic-bezier(.22,.8,.24,1)';
+  const appear = (on: boolean, dy = 12): React.CSSProperties => ({
+    opacity: on ? 1 : 0,
+    transform: on ? 'translateY(0) scale(1)' : `translateY(${dy}px) scale(.97)`,
+    transition: ease,
+  });
+
+  const qOn = t >= 300;
+  const workOn = t >= 1500;
+  const adOn = t >= 2500;
+  const typeEnd = TYPE_START + answer.length * MS;
+  const typing = t >= TYPE_START && t < typeEnd;
+  const answerDone = t >= typeEnd;
+  const chars = t < TYPE_START ? 0 : Math.min(answer.length, Math.floor((t - TYPE_START) / MS));
+
+  const displayWorkLine = answerDone ? workLineDone : workLine;
+
+  return (
+    <div style={{
+      width: 320,
+      boxSizing: 'border-box',
+      background: '#ffffff',
+      borderRadius: 24,
+      boxShadow: '0 30px 70px -24px rgba(28,38,52,.32), 0 4px 16px rgba(28,38,52,.07)',
+      padding: '24px 18px 28px',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 14,
+      height: 480,
+      overflow: 'hidden',
+      fontFamily: "Pretendard, 'Apple SD Gothic Neo', sans-serif",
+      position: 'relative',
+    }}>
+      {/* Question bubble */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{
+          maxWidth: '80%',
+          background: '#F8CD48',
+          color: '#26303B',
+          padding: '12px 16px',
+          borderRadius: '18px 18px 5px 18px',
+          fontSize: 14,
+          fontWeight: 600,
+          lineHeight: 1.45,
+          boxShadow: '0 8px 20px -8px rgba(196,158,20,.55)',
+          ...appear(qOn, 14),
+        }}>
+          {question}
+        </div>
+      </div>
+
+      {/* Status line */}
+      <div style={{
+        color: '#3B4650',
+        fontSize: 13,
+        paddingLeft: 4,
+        lineHeight: 1.4,
+        ...appear(workOn, 8),
+      }}>
+        {displayWorkLine}
+      </div>
+
+      {/* Ad placeholder */}
+      <div style={{ marginTop: 2, ...appear(adOn, 20) }}>
+        <div style={{
+          height: 160,
+          background: '#d9e0e5',
+          backgroundImage: 'repeating-linear-gradient(45deg, rgba(92,110,122,.16) 0, rgba(92,110,122,.16) 2px, transparent 2px, transparent 13px)',
+          borderRadius: 10,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <span style={{
+            fontFamily: "'SF Mono', ui-monospace, Menlo, monospace",
+            fontSize: 11,
+            letterSpacing: 3,
+            textTransform: 'uppercase',
+            color: 'rgba(70,85,96,.72)',
+          }}>advertisement</span>
+        </div>
+      </div>
+
+      {/* Answer */}
+      <div style={{
+        paddingLeft: 4,
+        opacity: t >= TYPE_START - 150 ? 1 : 0,
+        transition: 'opacity .4s ease',
+      }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: '#242c34', lineHeight: 1.3, marginBottom: 6 }}>
+          {answerHeading}
+        </div>
+        <p style={{ margin: 0, color: '#2A323B', fontSize: 13, lineHeight: 1.65 }}>
+          <span>{answer.slice(0, chars)}</span>
+          <span style={{
+            display: typing ? 'inline-block' : 'none',
+            color: '#1AA1C6',
+            marginLeft: 2,
+            fontWeight: 400,
+            animation: 'acBlink 1s steps(1) infinite',
+          }}>▌</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ContextualAdDemo({ t, lang }: { t: T; lang: 'en' | 'kr' }) {
+  return (
+    <section className="border-b hairline">
+      <style>{`@keyframes acBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }`}</style>
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 64, alignItems: 'center' }}>
+          {/* Left: text */}
+          <Reveal>
+            <div>
+              <SectionLabel
+                eyebrow={t('MONETIZATION', '수익화')}
+                title={t('Contextual ads that earn without breaking UX', '경험을 해치지 않는 맥락 광고 모델')}
+              />
+              <p style={{ color: 'var(--fg-2)', fontSize: 15, marginTop: -8, lineHeight: 1.7 }}>
+                {t(
+                  'The AI thinking pause is dead time — we filled it with a contextually matched ad, then let it fade as the answer streamed in. Users never felt interrupted. The result: 10% CTR and a monetization model that protected UX instead of fighting it.',
+                  'AI가 답변을 생성하는 2~3초의 공백을 맥락 광고로 채우고, 응답이 시작되면 자연스럽게 사라지게 설계했습니다. 유저는 방해받지 않았고, 결과는 CTR 10% — UX와 수익이 공존하는 모델이었습니다.',
+                )}
+              </p>
+            </div>
+          </Reveal>
+          {/* Right: phone UI */}
+          <Reveal delay={80}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+              {lang === 'kr' ? (
+                <AdExplainerPhone
+                  question="한동훈 의원이 검사 시절 맡았던 주요 사건들은 뭐였을까?"
+                  workLine="AI가 답변을 준비하는 동안 잠시만 기다려주세요.."
+                  workLineDone="AI 답변 불러오기 완료!"
+                  answerHeading="부동산 재무 기록 조회"
+                  answer="한동훈 의원은 검사 시절 '대기업 저승사자'로 불렸어요. 현대차 비자금 사건으로 정몽구 회장을 구속했고, 2016년 국정농단 특검에서 삼성을 수사해 이재용 부회장을 구속 기소했습니다."
+                />
+              ) : (
+                <AdExplainerPhone
+                  question="What were the major cases Rep. Han Dong-hoon handled during his prosecutor years?"
+                  workLine="Ad showing while AI is working…"
+                  workLineDone="AI answer is ready!"
+                  answerHeading="Estate Financial Records"
+                  answer="Known as a 'grim reaper of big business,' he jailed Hyundai's Chung Mong-koo in the 2006 slush-fund case and led the 2016 Samsung probe that indicted Lee Jae-yong."
+                />
+              )}
+              <span style={{ fontFamily: 'Pretendard, sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: '#8592a0' }}>
+                {t('Contextual Ad', '맥락 광고')}
+              </span>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── NewsChat contextual card UIs ─────────────────────── */
+
+// Shared news article chrome used by all 3 cards
+function NewsArticleChrome({ children }: { children: ReactNode }) {
+  return (
+    <div style={{
+      width: 300,
+      background: '#ffffff',
+      borderRadius: 22,
+      boxShadow: '0 34px 80px -28px rgba(24,32,45,.34), 0 4px 16px rgba(24,32,45,.06)',
+      overflow: 'hidden',
+      position: 'relative',
+      fontFamily: "Pretendard, 'Apple SD Gothic Neo', sans-serif",
+    }}>
+      {/* Nav bar */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 15px', borderBottom: '1px solid #eef0f3' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            {[0,1,2].map(i => <span key={i} style={{ width: 15, height: 2, background: '#20242b', borderRadius: 2, display: 'block' }} />)}
+          </div>
+          <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-.5px', color: '#16181d' }}>WIKITREE</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#6b727c' }}>사회</span>
+        </div>
+        <span style={{ fontSize: 11, color: '#6b727c' }}>🇰🇷 Korean ▼</span>
+      </div>
+
+      {/* Article body */}
+      <div style={{ padding: '14px 18px 18px' }}>
+        <div style={{ fontSize: 10.5, color: '#9aa0aa', marginBottom: 10 }}>홈 › 사회 › 일반</div>
+        <h1 style={{ margin: 0, fontSize: 17, fontWeight: 800, lineHeight: 1.36, letterSpacing: '-.4px', color: '#15171c' }}>
+          수감 중인 최순실, 10년 만의 첫 언론 인터뷰서 한동훈 정면 겨냥
+        </h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 10, fontSize: 11.5 }}>
+          <span style={{ fontWeight: 700, color: '#2a2e35' }}>김민재 기자</span>
+          <span style={{ color: '#c3c8cf' }}>·</span>
+          <span style={{ color: '#8a909a' }}>reporter@dailybrief.co.kr</span>
+        </div>
+        <div style={{ marginTop: 4, fontSize: 10.5, color: '#a6acb5' }}>작성일 2026-07-07 10:10</div>
+        {children}
+      </div>
+      {/* Scrim overlay */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(28,32,38,0.52)', pointerEvents: 'none', zIndex: 4, borderRadius: 22 }} />
+    </div>
+  );
+}
+
+// Skeleton text lines
+function SkeletonLines({ widths }: { widths: string[] }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+      {widths.map((w, i) => <span key={i} style={{ height: 11, borderRadius: 6, background: '#e6e9ee', width: w, display: 'block' }} />)}
+    </div>
+  );
+}
+
+// 1. AI question card — slides in from right
+function NewsContextualCard() {
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const t1 = setTimeout(() => {
+      setShown(true);
+      const t2 = setTimeout(() => setShown(false), 4200);
+      const iv = setInterval(() => {
+        setShown(true);
+        setTimeout(() => setShown(false), 4200);
+      }, 6000);
+      return () => { clearTimeout(t2); clearInterval(iv); };
+    }, 1100);
+    return () => clearTimeout(t1);
+  }, []);
+
+  return (
+    <NewsArticleChrome>
+      <img src="/nc-interview-photo.png" alt="" style={{ marginTop: 12, width: '100%', height: 132, objectFit: 'cover', objectPosition: 'center 20%', display: 'block', borderRadius: 11 }} />
+      <div style={{ margin: '16px 0 4px' }}><SkeletonLines widths={['100%', '64%']} /></div>
+      {/* Animated card slot */}
+      <div style={{ overflow: 'hidden', height: 148, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 5 }}>
+        <div style={{
+          margin: '10px 0',
+          padding: '13px 15px',
+          background: '#ffffff',
+          border: '1px solid #e7eaef',
+          borderRadius: 13,
+          boxShadow: '0 14px 30px -14px rgba(30,40,60,.22)',
+          transform: shown ? 'translateX(0)' : 'translateX(80px)',
+          opacity: shown ? 1 : 0,
+          transition: 'transform .42s cubic-bezier(.2,.85,.25,1) .04s, opacity .32s ease .04s',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 9 }}>
+            <span style={{ color: '#F1B300', fontSize: 12, lineHeight: 1 }}>✦</span>
+            <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: '#8a909a' }}>WIKITREE × AI</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
+            <span style={{ flex: 1, fontSize: 13.5, fontWeight: 600, lineHeight: 1.45, color: '#20242b' }}>한동훈 의원이 검사 시절 맡았던 주요 사건들은 뭐였을까?</span>
+            <span style={{ flexShrink: 0, width: 38, height: 38, borderRadius: '50%', background: '#F8CD48', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 14px -4px rgba(228,182,20,.7)' }}>
+              <span style={{ fontSize: 18, fontWeight: 700, color: '#3a2f00', lineHeight: 1 }}>→</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <SkeletonLines widths={['100%', '78%']} />
+    </NewsArticleChrome>
+  );
+}
+
+// 2. Poll card — toggles active state between agree/oppose
+function NewsContextualPoll() {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const iv = setInterval(() => setActive(a => a === 0 ? 1 : 0), 850);
+    return () => clearInterval(iv);
+  }, []);
+
+  const btnBase: React.CSSProperties = { flex: 1, textAlign: 'center', padding: '11px 0', borderRadius: 10, fontSize: 13, fontWeight: 800, transition: 'transform .4s ease, box-shadow .4s ease, opacity .4s ease' };
+  const agreeStyle: React.CSSProperties = { ...btnBase, background: '#F8CD48', border: '2px solid #E4B400', color: '#1a1500', ...(active === 0 ? { boxShadow: '0 8px 22px -6px rgba(228,182,20,.85)', transform: 'scale(1.05)', opacity: 1 } : { boxShadow: 'none', transform: 'scale(1)', opacity: 0.42 }) };
+  const opposeStyle: React.CSSProperties = { ...btnBase, background: '#16181d', border: '2px solid #F8CD48', color: '#F8CD48', ...(active === 1 ? { boxShadow: '0 8px 22px -6px rgba(20,24,30,.75)', transform: 'scale(1.05)', opacity: 1 } : { boxShadow: 'none', transform: 'scale(1)', opacity: 0.42 }) };
+
+  return (
+    <NewsArticleChrome>
+      <img src="/nc-interview-photo.png" alt="" style={{ marginTop: 12, width: '100%', height: 132, objectFit: 'cover', objectPosition: 'center 20%', display: 'block', borderRadius: 11 }} />
+      <div style={{ margin: '16px 0 4px' }}><SkeletonLines widths={['100%', '64%']} /></div>
+      {/* Poll slot */}
+      <div style={{ overflow: 'hidden', height: 148, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 5 }}>
+        <div style={{ margin: '10px 0', padding: '13px 15px', background: '#ffffff', border: '1px solid #e7eaef', borderRadius: 13, boxShadow: '0 14px 30px -14px rgba(30,40,60,.22)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ color: '#F1B300', fontSize: 12 }}>✦</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: '#8a909a' }}>WIKITREE × AI</span>
+            </span>
+            <span style={{ fontSize: 9.5, fontWeight: 700, color: '#8a909a' }}>투표 | 의견을 알려주세요!</span>
+          </div>
+          <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#1a1d23', letterSpacing: '-.3px', marginBottom: 13 }}>국정농단 사건 피고인 중 유일하게 수감 중인 최순실, 사면에 동의하나?</div>
+          <div style={{ display: 'flex', gap: 9 }}>
+            <span style={agreeStyle}>동의</span>
+            <span style={opposeStyle}>반대</span>
+          </div>
+        </div>
+      </div>
+      <SkeletonLines widths={['100%', '78%']} />
+    </NewsArticleChrome>
+  );
+}
+
+// 3. Search bar — typewriter cycling through phrases
+function NewsContextualSearch() {
+  const phrases = ['최신 스포츠 소식 알려줘', '오늘의 뉴스 요약해줘', '역사 속 오늘의 뉴스 알려줘'];
+  const [text, setText] = useState('');
+  const stateRef = useRef({ pi: 0, ci: 0, deleting: false });
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const step = () => {
+      const s = stateRef.current;
+      const full = phrases[s.pi];
+      if (!s.deleting) {
+        s.ci++;
+        setText(full.slice(0, s.ci));
+        if (s.ci >= full.length) { s.deleting = true; timer = setTimeout(step, 900); return; }
+        timer = setTimeout(step, 52);
+      } else {
+        s.ci--;
+        setText(full.slice(0, s.ci));
+        if (s.ci <= 0) { s.deleting = false; s.pi = (s.pi + 1) % phrases.length; timer = setTimeout(step, 200); return; }
+        timer = setTimeout(step, 26);
+      }
+    };
+    timer = setTimeout(step, 400);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <NewsArticleChrome>
+      <img src="/nc-interview-photo.png" alt="" style={{ marginTop: 12, width: '100%', height: 132, objectFit: 'cover', objectPosition: 'center 20%', display: 'block', borderRadius: 11 }} />
+      <div style={{ margin: '16px 0 4px' }}><SkeletonLines widths={['100%', '64%']} /></div>
+      {/* Search slot */}
+      <div style={{ height: 148, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 5 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 8px 7px 16px', background: '#ffffff', border: '1px solid #e3e6eb', borderRadius: 999, boxShadow: '0 12px 28px -14px rgba(30,40,60,.28)' }}>
+          <span style={{ flex: 1, fontSize: 13.5, fontWeight: 500, color: '#20242b', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+            {text}<span style={{ color: '#2b7fff', fontWeight: 300, marginLeft: 1, animation: 'caretBlink 1s steps(1) infinite' }}>|</span>
+          </span>
+          <span style={{ flexShrink: 0, width: 36, height: 36, borderRadius: '50%', background: '#F8CD48', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 14px -4px rgba(228,182,20,.65)' }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#3a2f00', lineHeight: 1 }}>→</span>
+          </span>
+        </div>
+      </div>
+      <SkeletonLines widths={['100%', '78%']} />
+    </NewsArticleChrome>
   );
 }
 
 /* ─── NewsChat ─────────────────────────────────────────── */
 export function NewsChatCaseStudy({
   onBack,
+  onNavigate,
   lang,
   onToggleLang,
   t,
 }: {
   onBack: () => void;
+  onNavigate?: (slug: string) => void;
   lang: 'en' | 'kr';
   onToggleLang: () => void;
   t: T;
@@ -154,21 +625,11 @@ export function NewsChatCaseStudy({
     { v: '1M', l: t('MAU in 5 months', '5개월 내 MAU') },
     { v: '250%', l: t('Increase in dwell time', '체류 시간 증가') },
     { v: '10%', l: t('Contextual ad CTR', '맥락 광고 CTR') },
-    { v: '100M+', l: t('Article views accumulated', '누적 기사 조회수') },
   ];
 
   const timeline = [
     {
-      phase: '01 — ' + t('Research & Problem', '리서치 & 문제 정의'),
-      title: t('Why are readers bouncing?', '독자들은 왜 이탈하는가?'),
-      content: t(
-        "Analyzed 3M monthly sessions via user interviews, session replays, and heatmapping. Readers wanted to go deeper but had no path forward — they'd skim the article and leave. The core problem: news was broadcast-only, with no way to ask questions.",
-        '월 300만 세션을 사용자 인터뷰, 세션 리플레이, 히트맵으로 분석했습니다. 독자는 더 깊이 알고 싶어했지만 방법이 없었고, 훑고 이탈했습니다. 뉴스는 일방향이었고, 질문할 수단이 없었습니다.',
-      ),
-      tags: ['User Interviews', 'Session Analytics', 'Heatmapping', 'Problem Statement'],
-    },
-    {
-      phase: '02 — ' + t('Solution Design', '솔루션 설계'),
+      phase: t('Solution Design', '솔루션 설계'),
       title: t('NewsChat: Ask anything about the story', 'NewsChat: 기사에 대해 무엇이든 물어보세요'),
       content: t(
         'Built a conversational layer embedded in news articles, grounded via RAG pipelines. Analyzed user groups, journeys, and behavior data to design the experience — then worked with ML and infra to hit <800ms latency with hallucination guardrails.',
@@ -176,24 +637,15 @@ export function NewsChatCaseStudy({
       ),
       tags: ['GenAI / LLM', 'RAG Architecture', 'UX Design', 'Latency Optimization'],
     },
-    {
-      phase: '03 — ' + t('Monetization Strategy', '수익화 전략'),
-      title: t('Contextual ads that feel native', '자연스럽게 녹아드는 맥락 광고'),
-      content: t(
-        'Built an ad injection system matched to conversation intent — not page keywords. Sponsored content surfaces at natural breakpoints, never intrusively. Achieved 10% CTR.',
-        '페이지 키워드가 아닌 대화 의도에 매칭되는 광고 시스템을 구축했습니다. 스폰서 콘텐츠는 대화의 자연스러운 흐름에 배치되며, 10% CTR을 달성했습니다.',
-      ),
-      tags: ['Ad Strategy', 'Intent Targeting', 'Revenue Modeling', 'A/B Testing'],
-    },
   ];
 
   const product: { icon: IconName; title: string; body: string }[] = [
     {
       icon: 'Msg',
-      title: t('Ask anything', '무엇이든 질문'),
+      title: t('Interact mid-article', '기사 읽는 중 인터랙션'),
       body: t(
-        'Readers ask follow-up questions mid-article. NewsChat responds with context drawn from the story, related reporting, and verified source material — grounded via RAG.',
-        '독자는 기사를 읽는 도중 후속 질문을 할 수 있습니다. NewsChat은 기사, 관련 보도, 검증 소스를 바탕으로 RAG 기반 응답을 제공합니다.',
+        'Readers engage mid-article through polls, suggested questions, comments, or by typing their own — each interaction triggers a contextual AI response grounded via RAG.',
+        '독자는 기사를 읽는 도중 투표, 제안된 질문 클릭, 댓글, 또는 직접 질문 입력 등 다양한 방식으로 참여합니다. 각 인터랙션은 RAG 기반의 맥락 있는 AI 응답으로 이어집니다.',
       ),
     },
     {
@@ -216,30 +668,27 @@ export function NewsChatCaseStudy({
 
   const learnings: { icon: IconName; title: string; body: string }[] = [
     {
-      icon: 'Bulb',
-      title: t('Trust is the foundation of AI products', 'AI 제품의 근본은 신뢰'),
+      icon: 'Target',
+      title: t('Users don\'t hate ads — they hate interruptions', '유저는 광고가 싫은 게 아니라, 흐름이 끊기는 게 싫다'),
       body: t(
-        'Hallucination wasn\'t just a technical problem — it was a product trust problem. We invested heavily in source attribution UI and escalation flows ("I\'m not sure — read the original article") before we got engagement to lift. Users forgave slow answers; they didn\'t forgive wrong ones.',
-        '환각은 단순한 기술 문제가 아닌 제품 신뢰 문제였습니다. 인게이지먼트가 상승하기 전에 출처 표기 UI와 에스컬레이션 흐름("확실하지 않습니다 — 원문을 확인해주세요")에 집중 투자했습니다. 사용자는 느린 답변은 용서해도 틀린 답변은 용서하지 않았습니다.',
+        'As long as the ad feels justified — surfacing at a natural pause, not mid-thought — users tolerate it. The moment the AI starts generating an answer is the worst time to show an ad. The moment before it starts is the best.',
+        '광고가 맥락에 맞게, 자연스러운 흐름 속에 등장하면 유저는 기꺼이 받아들입니다. AI가 답변을 생성하는 중에 광고를 끼워 넣는 건 최악의 타이밍이고, 생성이 시작되기 직전이 가장 자연스럽습니다.',
       ),
     },
     {
-      icon: 'Target',
-      title: t('Monetization must be designed in, not bolted on', '수익화는 나중에 붙이지 말고 처음부터 설계'),
+      icon: 'Bulb',
+      title: t('The "after" moment is an untapped product surface', '기사를 다 읽고 난 그 순간 — 아직 아무도 건드리지 않은 영역'),
       body: t(
-        'Starting with a clear monetization hypothesis from day one shaped every product decision — from data schemas to conversation UX. Teams that treat ads as a later problem ship products that are fundamentally incompatible with their business model.',
-        '첫날부터 명확한 수익화 가설을 세운 것이 데이터 스키마부터 대화 UX까지 모든 결정을 정렬시켰습니다. 광고를 나중 문제로 미루는 팀은 결국 비즈니스 모델과 근본적으로 맞지 않는 제품을 출시하게 됩니다.',
+        'After reading an article, users have questions they want answered, emotions they want to express, opinions they want to share. Polls, follow-up questions, and search prompts aren\'t just features — they\'re the product response to what readers were already feeling but had no outlet for.',
+        '기사를 다 읽고 나면, 독자에게는 묻고 싶은 것, 표현하고 싶은 감정, 나누고 싶은 의견이 남습니다. 투표, 후속 질문, 검색 프롬프트는 단순한 기능이 아니에요. 독자가 이미 느끼고 있었지만 쏟아낼 곳이 없었던 것들을 제품으로 풀어낸 겁니다.',
       ),
     },
     {
       icon: 'Bar',
-      title: t(
-        'Dwell time is a vanity metric without attribution',
-        '어트리뷰션 없는 체류 시간은 허영 지표',
-      ),
+      title: t('Multi-model AI is a cost and quality balancing act', '멀티 모델 AI는 비용과 품질 사이의 균형 게임이다'),
       body: t(
-        'Dwell time went up 250% — but the real win was that pages-per-session and return visit rate moved too. We learned to look for correlated behavior clusters, not single metrics, as signals of genuine engagement improvement.',
-        '체류 시간이 250% 상승했지만, 진짜 성과는 세션당 페이지 수와 재방문율도 함께 올랐다는 것입니다. 진정한 인게이지먼트 개선 신호는 단일 지표가 아닌 상관된 행동 클러스터에서 찾아야 한다는 것을 배웠습니다.',
+        'Not every model gives satisfying answers for every query type. We ran tests across models and learned to route differently by intent — balancing answer quality against per-query cost. A great user experience and a sustainable API bill don\'t have to be opposites, but you have to be deliberate about it.',
+        '모델마다 잘 답하는 질문 유형이 다릅니다. 여러 모델을 테스트하며 질문의 의도에 따라 다르게 라우팅하는 방식을 찾아갔어요. 좋은 사용자 경험과 합리적인 API 비용, 둘 다 잡을 수 있지만 — 처음부터 의도적으로 설계하지 않으면 금세 무너집니다.',
       ),
     },
   ];
@@ -248,129 +697,145 @@ export function NewsChatCaseStudy({
     <CaseStudyShell accentClass="acc-indigo" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="NewsChat Case Study — Justina Yoo" pageDescription="AI chat layer for news publishers. 1M MAU in 5 months.">
       <CaseStudyHero
         brandLabel="NewsChat"
-        logoSrc="/newschat-logo.svg"
+        logoSrc="/newschat-icon.svg"
         subLabels={['GenAI · Media · Monetization', 'Azure · FastAPI · Vector DB · Multi-Model AI · Redis']}
         title="NewsChat"
+        tagline={t("Korea's first conversational GenAI for news publishers", '뉴스챗 — 국내 언론사 최초의 대화형 생성형 AI')}
         subtitle={t(
-          'Turning passive news consumption into interactive conversation — and monetizing the engagement gap.',
-          '수동적인 뉴스 소비를 대화형 경험으로 전환하는 AI 뉴스 챗 플랫폼입니다. 사용자는 뉴스 주제에 대해 질문하고 실시간으로 맥락에 맞는 답변을 받으며, 미디어 파트너의 참여도, 체류 시간, 광고 수익을 향상시킵니다.',
+          'Not a chatbot — an immersive AI experience triggered by polls, contextual cards, and search prompts embedded in the news reading flow.',
+          '단순 챗봇이 아닙니다. 투표, 맥락 카드, 검색 프롬프트로 시작되는 몰입형 AI 뉴스 경험 — 뉴스 읽기 흐름 속에 자연스럽게 설계된 인터랙션입니다.',
         )}
-        meta={[{ label: t('Market', '시장'), value: t('Digital News Publishers', '디지털 뉴스 퍼블리셔') }]}
+        metrics={metrics}
+        heroRight={<NewsChatHeroPhone />}
+        productColor="#F8CD48"
         t={t}
       />
 
-      {/* Product UI showcase — mobile */}
-      <section className="border-b hairline" style={{ background: 'rgba(255,255,255,0.04)' }}>
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
+      {/* 1. Problem */}
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
           <Reveal>
-            <div className="flex items-center gap-4 mb-10">
-              <img src="/newschat-logo.svg" alt="NewsChat" className="h-7" />
-              <a
-                href="https://newschat.wikitree.co.kr/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono-tech text-[11px] tracking-widest uppercase"
-                style={{ color: 'var(--acc)' } as React.CSSProperties}
-              >
-                newschat.wikitree.co.kr ↗
-              </a>
+            <div className="eyebrow mb-4">{t('THE PROBLEM', '문제')}</div>
+            <h2 className="font-serif-display text-[28px] md:text-[40px] leading-tight tracking-tight mb-10" style={{ color: 'var(--ink)' }}>
+              {t('From market problem to PM scope', '매체사가 직면한 위기, PM의 과제 도출')}
+            </h2>
+
+            {/* Header zone: tight context block */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 12, marginBottom: 40 }}>
+              <div style={{ padding: '18px 20px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--rule)' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.4, textTransform: 'uppercase' as const, color: 'var(--acc)', marginBottom: 8 }}>
+                  {t('Client Problem', '클라이언트 문제')}
+                </div>
+                <p style={{ margin: 0, fontSize: 14, color: 'var(--fg-2)', lineHeight: 1.7 }}>
+                  {t(
+                    'Fast-paced social feeds cause high reader churn on traditional news sites — trapping publishers in a vicious cycle of low engagement and declining ad revenue.',
+                    '숏폼 중심의 미디어 환경으로 인해 독자의 단발성 체류 및 이탈이 가속화되며 매체사의 인게이지먼트와 광고 수익이 하락하는 악순환 발생',
+                  )}
+                </p>
+              </div>
+              <div style={{ padding: '18px 20px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--rule)', borderLeft: '3px solid var(--acc)' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.4, textTransform: 'uppercase' as const, color: 'var(--acc)', marginBottom: 8 }}>
+                  {t('Our Team\'s Key Goal', '우리 팀의 핵심 목표')}
+                </div>
+                <p style={{ margin: 0, fontSize: 14, color: 'var(--fg-2)', lineHeight: 1.7 }}>
+                  {t(
+                    'Pivot passive reading into interactive conversations to lock users into the platform and unlock next-gen monetization.',
+                    '단방향 뉴스 소비를 대화형 인터랙션으로 전환하여 독자를 플랫폼 내에 락인(Lock-in)시키고 새로운 비즈니스 가치 창출',
+                  )}
+                </p>
+              </div>
+            </div>
+
+            {/* Main focus zone: 2 core PM challenges */}
+            <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.3px', marginBottom: 16 }}>
+              {t('2 Core Pillars I Owned as PM', 'PM으로서 주도한 2가지 핵심 과제')}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 16 }}>
+              {[
+                {
+                  icon: <Icon.Click width={20} height={20} />,
+                  num: '01',
+                  title: t('Retaining Users via Contextual AI Interactions', '체류 시간(Dwell Time) 극대화를 위한 유저 여정 설계'),
+                  action: t(
+                    'Designed non-intrusive UI triggers and seamless conversational user flows within the article view to maximize user dwell time and engagement.',
+                    '기사 읽기 흐름을 해치지 않는 맥락 기반의 AI 인터랙션 레이어 및 진입 트리거 최적화로 단방향 독자를 인게이지드 유저로 전환',
+                  ),
+                },
+                {
+                  icon: <Icon.Trend width={20} height={20} />,
+                  num: '02',
+                  title: t('Engineering Next-Gen Media Monetization Models', '지속 가능한 매체사 비즈니스 모델(BM) 구축'),
+                  action: t(
+                    'Moved away from traditional page-view reliant ads by architecting a high-margin advertising model tied to real-time conversational context and proprietary data.',
+                    'PV(조회수) 중심의 단발성 광고 한계를 극복하기 위해, AI 대화 맥락과 매체사 고유 데이터를 결합한 고부가가치 대화형 광고 모델 기획',
+                  ),
+                },
+              ].map((item, i) => (
+                <div key={i} style={{ padding: '28px 26px', borderRadius: 16, background: 'rgba(248,205,72,0.04)', border: '1px solid rgba(248,205,72,0.18)', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', top: 20, right: 22, fontSize: 64, fontWeight: 900, color: 'rgba(248,205,72,0.07)', lineHeight: 1, userSelect: 'none' as const }}>{item.num}</div>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(248,205,72,0.1)', border: '1px solid rgba(248,205,72,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F8CD48', marginBottom: 16 } as React.CSSProperties}>
+                    {item.icon}
+                  </div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#F8CD48', lineHeight: 1.35, marginBottom: 14 }}>{item.title}</div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                    <span style={{ flexShrink: 0, fontSize: 10, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase' as const, color: '#F8CD48', paddingTop: 3 }}>Action</span>
+                    <p style={{ margin: 0, fontSize: 13.5, color: 'var(--fg-2)', lineHeight: 1.65 }}>{item.action}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </Reveal>
-          <div className="grid grid-cols-3 gap-4 md:gap-6 max-w-[720px] mx-auto">
-            {['/newschat-mobile-1.png', '/newschat-mobile-2.png', '/newschat-mobile-3.png'].map((src, i) => (
-              <Reveal key={i} delay={i * 80}>
-                <div className="rounded-sm overflow-hidden border hairline shadow-sm">
-                  <img src={src} alt={`NewsChat mobile UI ${i + 1}`} className="w-full" />
-                </div>
-              </Reveal>
-            ))}
+        </div>
+      </section>
+
+      {/* 3. Solution — UX Design */}
+      <section className="border-b hairline" style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
+        <style>{`@keyframes caretBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }`}</style>
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
+          <Reveal>
+            <div className="mb-6">
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: 'var(--acc)', marginBottom: 8 }}>Strategy &amp; Execution 1</div>
+              <div style={{ fontSize: 36, fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.5px', lineHeight: 1.15, marginBottom: 6 }}>
+                {t('UX Strategy', 'UX 전략')}
+              </div>
+              <div style={{ fontSize: 16, color: 'var(--fg-2)' }}>
+                {t('Bringing interaction into a static reading experience', '정적인 뉴스 읽기 경험에 상호작용을 심다')}
+              </div>
+            </div>
+            <p style={{ color: 'var(--fg-2)', fontSize: 15, marginTop: -8, marginBottom: 40, maxWidth: '60ch' }}>
+              {t(
+                'Rather than asking readers to seek out a new product, we embedded contextual entry points directly inside the article — AI questions, polls, and search prompts that feel native to the page. Each card is designed to pull readers naturally into conversation, without breaking the flow of what they were already reading.',
+                '독자에게 새로운 제품을 찾아오라고 요구하는 대신, 기사 내부에 맥락형 진입점을 직접 심었습니다. AI 질문 카드, 투표, 검색 프롬프트 — 모두 페이지에 자연스럽게 녹아드는 형태로 설계되어, 독자가 읽던 흐름을 끊지 않고 대화로 자연스럽게 유입될 수 있도록 했습니다.',
+              )}
+            </p>
+          </Reveal>
+          <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-start' }}>
+            <Reveal delay={0}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+                <NewsContextualCard />
+                <span style={{ fontFamily: 'Pretendard, sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: '#8592a0' }}>{t('Follow-up Question', '후속 질문')}</span>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+                <NewsContextualPoll />
+                <span style={{ fontFamily: 'Pretendard, sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: '#8592a0' }}>{t('Poll', '투표')}</span>
+              </div>
+            </Reveal>
+            <Reveal delay={160}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+                <NewsContextualSearch />
+                <span style={{ fontFamily: 'Pretendard, sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: '#8592a0' }}>{t('General Search', '일반 검색')}</span>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* metrics + results */}
-      <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-20">
-          <div className="eyebrow mb-8">{t('Results', '주요 성과')}</div>
-          <div
-            className="grid grid-cols-2 md:grid-cols-4 gap-[1px] rounded-sm overflow-hidden border hairline mb-10"
-            style={{ background: 'var(--rule)' }}
-          >
-            {metrics.map((m, i) => (
-              <Reveal key={i} delay={i * 60}>
-                <div className="metric h-full" style={{ border: 'none' }}>
-                  <span className="n" style={{ color: 'var(--acc)' } as React.CSSProperties}>
-                    {m.v}
-                  </span>
-                  <span
-                    className="font-mono-tech text-[11px] tracking-widest uppercase"
-                    style={{ color: 'var(--ink-3)' }}
-                  >
-                    {m.l}
-                  </span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-          <p className="text-sm mb-8 max-w-[640px]" style={{ color: 'var(--ink-2)' }}>
-            {t(
-              'Ran a soft launch with 3 publisher partners, iterating on response quality, UI placement, and chat trigger UX based on real engagement data. After hitting PMF signals (>30% of readers who saw the chat prompt engaged with it), scaled to additional publishers. Hit 1M MAU 5 months post-launch with minimal paid acquisition — driven primarily through publisher distribution.',
-              '3개 퍼블리셔 파트너와 소프트 론칭을 진행했습니다. 실제 인게이지먼트 데이터를 바탕으로 응답 품질, UI 배치, 채팅 트리거 UX를 반복적으로 개선했습니다. PMF 신호(노출 독자 30% 이상 참여)를 확인한 후 추가 퍼블리셔로 확장했습니다. 최소한의 유료 마케팅으로, 주로 퍼블리셔 배포를 통해 론칭 5개월 만에 100만 MAU를 달성했습니다.',
-            )}
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-[800px]">
-            {[
-              t('MAU 1M reached within 5 months of launch', 'MAU 100만 명 돌파 (출시 5개월)'),
-              t('Articles per session & ad revenue growth (CTR 10%)', '세션당 기사 조회 수 & 광고 수익 증가 (CTR 10%)'),
-              t('250% increase in dwell time for NewsChat users', '뉴스챗 유저 한정 체류시간 250% 증가'),
-              t('Improved UX and user satisfaction through AI-driven innovation', 'AI를 통한 새로운 시도로 유저 경험과 만족도 상승'),
-              t('Established a self-reinforcing traffic flywheel', '트래픽 선순환 구조 확보'),
-              t('Continued growth through ongoing updates and content quality improvements', '지속적인 업데이트와 콘텐츠 품질 향상으로 성장 중'),
-            ].map((item, i) => (
-              <Reveal key={i} delay={i * 50}>
-                <div className="flex items-start gap-3">
-                  <span style={{ color: 'var(--acc)' } as React.CSSProperties} className="mt-0.5 text-sm font-semibold shrink-0">✓</span>
-                  <span className="text-sm" style={{ color: 'var(--ink-2)' }}>{item}</span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 4. Solution — Monetization */}
+      <ContextualAdDemo t={t} lang={lang} />
 
-      {/* context */}
-      <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <ContextBlock
-            eyebrow={t('THE CONTEXT', '배경')}
-            headline={t(
-              'News media is an engagement crisis dressed as a content problem.',
-              '뉴스 미디어의 위기는 콘텐츠 문제처럼 보이지만, 실제로는 인게이지먼트 문제입니다.',
-            )}
-            body={t(
-              "Publishers invested in AI-powered content generation — and saw article output double. But session duration kept falling. More content didn't mean more engagement. The real problem was structural: readers had no reason to stay.",
-              '뉴스 소비 흐름이 SNS, 유튜브, 커뮤니티 등으로 다변화되면서 기존 뉴스 사이트만으로는 새로운 트래픽 유입과 사용자 만족도 향상이 어려운 상황이었습니다. 독자들은 기사를 일방향적으로 소비할 뿐, 읽는 도중 떠오른 궁금증을 즉시 해결할 수단이 없었고, 이탈률이 높고 광고 수익이 하락하는 문제가 있었습니다.',
-            )}
-            rows={[
-              { label: t('Average article read time', '평균 기사 읽는 시간'), value: '48 sec' },
-              { label: t('Reader return rate (7-day)', '7일 재방문율'), value: '12%' },
-              { label: t('Ad CTR (contextual)', '맥락 광고 CTR'), value: '10%' },
-              { label: t('AI content investment ROI', 'AI 콘텐츠 투자 ROI'), value: t('Unmeasured', '측정 불가') },
-            ]}
-            rowAccent="#B91C1C"
-          />
-        </div>
-      </section>
-
-      {/* process */}
-      <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('PROCESS', '프로세스')} title={t('How we built it', '어떻게 만들었는가')} />
-          <TimelineList steps={timeline} />
-        </div>
-      </section>
-
-      {/* product */}
+      {/* 5. Product */}
       <section
         className="border-b hairline"
         style={{
@@ -390,22 +855,83 @@ export function NewsChatCaseStudy({
         </div>
       </section>
 
-      {/* learnings */}
+      {/* 6. Reflections */}
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('REFLECTIONS', '회고')} title={t('What I learned', '제가 배운 것')} />
+          <SectionLabel eyebrow={t('REFLECTIONS', '회고')} title={t('Key takeaways', '핵심 인사이트')} />
           <CardGrid items={learnings} />
         </div>
       </section>
 
-      <CTASection
-        title={t('Want to talk through this?', '이 프로젝트 더 이야기 나누고 싶다면')}
-        body={t(
-          "I'm always happy to go deeper on product strategy, AI monetization, or 0→1 builds.",
-          '프로덕트 전략, AI 수익화, 0→1 제품 구축에 대해 언제든 이야기 나눌 수 있습니다.',
-        )}
-        ctaLabel={t('Get in touch', '연락하기')}
-      />
+      {/* Also executed */}
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-10 pb-10">
+          <Reveal>
+            <div className="eyebrow mb-6">{t('ALSO EXECUTED', '그 외 실행한 것들')}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              {[
+                { en: 'Prompt testing & iteration', kr: '프롬프트 테스팅 및 반복 개선' },
+                { en: 'Explore page design', kr: '익스플로어 페이지 설계' },
+                { en: 'A/B testing on UI placements', kr: 'UI 배치 A/B 테스트' },
+                { en: 'User feedback loops & product iteration', kr: '유저 피드백 수집 및 제품 반복 개선' },
+              ].map((item, i) => (
+                <Reveal key={i} delay={i * 40}>
+                  <span style={{
+                    display: 'inline-block',
+                    padding: '8px 16px',
+                    border: '1px solid var(--rule)',
+                    borderRadius: 999,
+                    fontSize: 13,
+                    color: 'var(--fg-2)',
+                    background: 'rgba(255,255,255,0.03)',
+                  }}>
+                    {t(item.en, item.kr)}
+                  </span>
+                </Reveal>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Next project + CTA */}
+      <section className="border-t hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
+          <Reveal>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 40 }}>
+              {/* Left: CTA */}
+              <div style={{ maxWidth: '52ch' }}>
+                <h2 className="font-serif-display text-[24px] md:text-[36px] leading-tight tracking-tight mb-8" style={{ color: 'var(--ink)' }}>
+                  {t(
+                    'Want to talk product strategy, AI monetization, or 0→1 builds? Reach out anytime.',
+                    '해당 프로젝트와 같은 프로덕트 전략, AI 수익화, 0→1 제품 구축에 대해 언제든 연락주세요.',
+                  )}
+                </h2>
+                <a href="mailto:justina.yoo@gmail.com" className="btn-primary">
+                  {t('Get in touch', '연락하기')} <Icon.Mail />
+                </a>
+              </div>
+              {/* Right: next project */}
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: 'var(--ink-3)', marginBottom: 8 }}>
+                  {t('Next Project', '다음 프로젝트')}
+                </div>
+                <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.3px', marginBottom: 4 }}>AEKO</div>
+                <div style={{ fontSize: 14, color: 'var(--fg-2)', marginBottom: 16 }}>
+                  {t('AEO platform for cross-border e-commerce brands', '이커머스 브랜드를 위한 AEO 플랫폼')}
+                </div>
+                <button
+                  onClick={() => onNavigate ? onNavigate('aeko') : onBack()}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 24px', borderRadius: 999, background: 'var(--acc)', border: 'none', cursor: 'pointer', color: '#fff', fontWeight: 700, fontSize: 15 }}
+                >
+                  {t('View case study', '케이스 스터디 보기')}
+                  <span style={{ fontSize: 18, lineHeight: 1 }}>→</span>
+                </button>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </CaseStudyShell>
   );
 }
@@ -511,7 +1037,7 @@ export function AekoCaseStudy({
     <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="AEKO Case Study — Justina Yoo" pageDescription="AEO platform for cross-border e-commerce brands.">
       <CaseStudyHero
         brandLabel="AEKO"
-        logoSrc="/aeko-logo.svg"
+        logoSrc="/aeko-icon.svg"
         subLabels={[t('MVP in Testing', 'MVP 테스트 중'), 'AEO · SaaS · Cross-Border E-commerce']}
         title="AEKO"
         subtitle={t(
@@ -530,7 +1056,7 @@ export function AekoCaseStudy({
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
           <Reveal>
             <div className="flex items-center gap-4 mb-10">
-              <img src="/aeko-logo.svg" alt="AEKO" className="h-8" />
+              <img src="/aeko-icon.svg" alt="AEKO" className="h-8" />
               <a
                 href="https://aeko-intelligence.com"
                 target="_blank"
@@ -567,18 +1093,18 @@ export function AekoCaseStudy({
           <ContextBlock
             eyebrow={t('THE SHIFT', '변화')}
             headline={t(
-              'AI engines are the new search bar. Nobody built analytics for them.',
-              'AI 엔진이 새로운 검색창이 되었습니다. 하지만 아무도 이를 위한 분석 도구를 만들지 않았습니다.',
+              'Search has already moved to AI. The tools haven\'t caught up.',
+              '검색은 이미 AI로 넘어갔습니다. 도구들은 아직 따라오지 못했습니다.',
             )}
             body={t(
-              'A growing share of product discovery now happens through conversational AI — not traditional search. Brands spent years optimizing for keywords, backlinks, and page speed. None of that moves the needle when a shopper asks ChatGPT "best Korean skincare for dry skin." AEKO was built to close that data gap.',
-              '제품 발견의 점점 더 큰 부분이 전통 검색이 아닌 대화형 AI를 통해 이뤄지고 있습니다. 브랜드들은 수년간 키워드, 백링크, 페이지 속도를 최적화해 왔습니다. 하지만 쇼퍼가 ChatGPT에 "건조 피부에 좋은 한국 스킨케어"를 물을 때 이 중 어느 것도 소용이 없습니다. AEKO는 바로 그 데이터 격차를 메우기 위해 만들어졌습니다.',
+              'Product discovery has shifted — shoppers no longer start on Google. They ask ChatGPT, Claude, and Perplexity. A handful of AEO analytics tools exist globally, but none with meaningful traction in Korea, and none built specifically for e-commerce brands selling cross-border. AEKO fills that gap.',
+              '제품 탐색의 무게중심이 바뀌었습니다. 소비자들은 더 이상 구글에서 시작하지 않습니다. ChatGPT, Claude, Perplexity에 묻습니다. AEO 분석 도구들이 글로벌하게 등장하고 있지만, 한국에서 유의미한 점유율을 가진 곳은 없고, 크로스보더 이커머스 브랜드를 위해 특화된 도구는 더더욱 없습니다. AEKO는 그 공백을 채웁니다.',
             )}
             rows={[
               { label: t('ChatGPT monthly active users', 'ChatGPT 월간 활성 사용자'), value: '400M+' },
-              { label: t('Product queries via AI search', 'AI 검색을 통한 제품 탐색'), value: t('Rising fast', '급증 중') },
+              { label: t('Dominant AEO tool in Korea', '한국 내 지배적 AEO 도구'), value: t('None', '없음') },
+              { label: t('AEO tools for e-commerce', '이커머스 특화 AEO 도구'), value: t('None', '없음') },
               { label: t('Brands with AI visibility data', 'AI 가시성 데이터를 보유한 브랜드'), value: t('Near zero', '거의 0') },
-              { label: t('Cross-border sellers at risk', '위험에 노출된 크로스보더 셀러'), value: t('Millions', '수백만') },
             ]}
           />
         </div>
@@ -1024,7 +1550,7 @@ export function StrategyCaseStudy({
   const examples: { icon: IconName; logo?: string; title: string; body: string }[] = [
     {
       icon: 'Zap',
-      logo: '/aeko-logo.svg',
+      logo: '/aeko-icon.svg',
       title: 'AEKO',
       body: t(
         'Owned end-to-end from concept to MVP as sole PM — vision, feature scoping, prototype, engineering/design leadership.',
