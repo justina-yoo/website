@@ -86,7 +86,7 @@ function CaseStudyHero({
         <div>
         <Reveal delay={120}>
           <div className="flex items-center gap-4 mb-5">
-            {logoSrc && <img src={logoSrc} alt={brandLabel} className="h-10 md:h-16 lg:h-20 w-auto" />}
+            {logoSrc && <img src={logoSrc} alt={brandLabel} className="h-14 md:h-20 lg:h-28 w-auto" />}
             <h1
               className="font-serif-display text-[40px] md:text-[64px] lg:text-[80px] leading-[0.92] tracking-tight"
               style={{ color: 'var(--ink)' }}
@@ -106,7 +106,7 @@ function CaseStudyHero({
         <Reveal delay={280}>
           <p
             className="font-serif-display text-[18px] md:text-[24px] leading-snug max-w-[40ch] mb-10"
-            style={{ color: 'var(--ink-3)' }}
+            style={{ color: 'var(--ink-3)', whiteSpace: 'pre-line' }}
           >
             {subtitle}
           </p>
@@ -119,8 +119,8 @@ function CaseStudyHero({
             >
               {metrics.map((m, i) => (
                 <div key={i} className="metric" style={{ border: 'none' }}>
-                  <span className="n" style={{ color: '#F8CD48' }}>{m.v}</span>
-                  <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: '#F8CD48' }}>{m.l}</span>
+                  <span className="n" style={{ color: productColor ?? '#F8CD48' }}>{m.v}</span>
+                  <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: productColor ?? '#F8CD48' }}>{m.l}</span>
                 </div>
               ))}
             </div>
@@ -215,6 +215,450 @@ function NewsChatHeroPhone() {
             </div>
           </div>
         </div>
+      </div>
+    </>
+  );
+}
+
+function AekoBannerHero({ lang }: { lang: 'en' | 'kr' }) {
+  const [i, setI] = useState(0);
+  const brands = [
+    { name: 'Gemini', color: '#4285f4' },
+    { name: 'ChatGPT', color: '#0d0d0d' },
+    { name: 'Claude', color: '#d97757' },
+    { name: 'Grok', color: '#111111' },
+    { name: 'Perplexity', color: '#20808d' },
+  ];
+  useEffect(() => {
+    const t = setInterval(() => setI(v => (v + 1) % brands.length), 2200);
+    return () => clearInterval(t);
+  }, []);
+  const b = brands[i];
+  const swapAnim = `akSwap 0.55s cubic-bezier(.2,.7,.2,1)`;
+
+  const productCards = lang === 'kr'
+    ? [
+        { name: '다슈', desc: '그루밍 헤어 토닉', fill: '#e0b06a', shape: 'bottle1' },
+        { name: '그라펜', desc: '루트 부스터 스칼프 토닉', fill: '#cf9089', shape: 'bottle2' },
+        { name: '아로마티카', desc: '퓨리파잉 스칼프 토닉', fill: '#93a0e2', shape: 'bottle3' },
+        { name: 'TS', desc: '헤어 토닉 볼륨 케어', fill: '#9dc283', shape: 'bottle4' },
+      ]
+    : [
+        { name: 'Dashu', desc: 'Grooming Hair Tonic', fill: '#e0b06a', shape: 'bottle1' },
+        { name: 'Grafen', desc: 'Root Booster Scalp Tonic', fill: '#cf9089', shape: 'bottle2' },
+        { name: 'Aromatica', desc: 'Purifying Scalp Tonic', fill: '#93a0e2', shape: 'bottle3' },
+        { name: 'TS', desc: 'Hair Tonic Volume Care', fill: '#9dc283', shape: 'bottle4' },
+      ];
+  const allCards = [...productCards, ...productCards];
+
+  const bottleSvg = (shape: string, fill: string) => {
+    if (shape === 'bottle1') return <svg width="52" height="118" viewBox="0 0 60 130" fill={fill}><rect x="22" y="2" width="16" height="14" rx="3"/><rect x="14" y="16" width="32" height="112" rx="12"/></svg>;
+    if (shape === 'bottle2') return <svg width="52" height="120" viewBox="0 0 60 130" fill={fill}><rect x="8" y="2" width="26" height="9" rx="3"/><rect x="26" y="9" width="8" height="14"/><rect x="12" y="22" width="34" height="106" rx="10"/></svg>;
+    if (shape === 'bottle3') return <svg width="50" height="122" viewBox="0 0 60 130" fill={fill}><rect x="27" y="0" width="6" height="16"/><rect x="20" y="4" width="10" height="6" rx="2"/><path d="M12 42 Q12 22 30 22 Q48 22 48 42 L48 128 L12 128 Z"/></svg>;
+    return <svg width="56" height="104" viewBox="0 0 60 120" fill={fill}><rect x="16" y="6" width="28" height="14" rx="4"/><rect x="8" y="20" width="44" height="98" rx="16"/></svg>;
+  };
+
+  const starSvg = <svg width="48" height="48" viewBox="0 0 40 40" style={{ flex: 'none' }}><path d="M20 1 C21.5 11 29 18.5 39 20 C29 21.5 21.5 29 20 39 C18.5 29 11 21.5 1 20 C11 18.5 18.5 11 20 1 Z" fill={b.color}/></svg>;
+
+  return (
+    <>
+      <style>{`
+        @keyframes akWaveA{0%,100%{d:path("M-160,470 C 260,430 520,320 800,280 C 1060,243 1240,210 1780,150")}50%{d:path("M-160,500 C 260,470 520,360 800,320 C 1060,285 1240,250 1780,192")}}
+        @keyframes akWaveB{0%,100%{d:path("M-160,440 C 260,405 520,300 800,258 C 1060,220 1240,188 1780,128")}50%{d:path("M-160,475 C 260,445 520,340 800,300 C 1060,262 1240,228 1780,170")}}
+        @keyframes akMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+        @keyframes akSwap{0%{opacity:0;transform:translateY(9px) scale(.9)}55%{opacity:1;transform:translateY(0) scale(1.05)}100%{opacity:1;transform:translateY(0) scale(1)}}
+        @keyframes akCardIn{from{opacity:0;transform:translateX(-50%) translateY(26px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+      `}</style>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zoom: 0.5, WebkitMaskImage: 'linear-gradient(180deg,#000 60%,rgba(0,0,0,0) 98%)', maskImage: 'linear-gradient(180deg,#000 60%,rgba(0,0,0,0) 98%)' }}>
+        {/* MacBook screen */}
+        <div style={{ width: 980, background: 'linear-gradient(160deg,#2e3038 0%,#17181c 60%,#0b0c0e 100%)', borderRadius: 24, padding: '24px 15px 15px', boxShadow: '0 60px 120px -30px rgba(20,24,45,.8), 0 0 0 2px rgba(255,255,255,.13), inset 0 1px 0 rgba(255,255,255,.18)', position: 'relative' }}>
+          <span style={{ position: 'absolute', top: 9, left: '50%', transform: 'translateX(-50%)', width: 7, height: 7, borderRadius: '50%', background: '#26282d', boxShadow: 'inset 0 0 2px rgba(120,150,200,.5)' }} />
+          {/* Display */}
+          <div style={{ borderRadius: 8, overflow: 'hidden', background: '#fff', position: 'relative', height: 860 }}>
+            <img src="/aeko-ribbon-bg.png" alt="" style={{ position: 'absolute', left: '-5%', top: '2%', width: '110%', opacity: 0.42, zIndex: 0, pointerEvents: 'none' }} />
+            {/* Logo */}
+            <div style={{ position: 'absolute', top: 24, left: 30, zIndex: 4, display: 'flex', alignItems: 'center', gap: 9 }}>
+              <img src="/aeko-icon.png" alt="AEKO" style={{ width: 50, height: 50, objectFit: 'contain' }} />
+              <span style={{ fontSize: 26, fontWeight: 800, color: '#5b4be0', letterSpacing: '-.5px' }}>AEKO</span>
+            </div>
+            {/* Headline */}
+            <div style={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: lang === 'kr' ? '64px 36px 0' : '64px 60px 0' }}>
+              {lang === 'kr' ? (
+                <h1 style={{ margin: 0, textAlign: 'center', fontSize: 46, fontWeight: 800, lineHeight: 1.34, letterSpacing: '-1.4px', color: '#111629', whiteSpace: 'nowrap' }}>
+                  국내·해외 어디서든,<br />
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, verticalAlign: 'middle', animation: swapAnim }}>
+                    {starSvg}{b.name}
+                  </span>가 나의 상품을 추천할 수 있도록.
+                </h1>
+              ) : (
+                <h1 style={{ margin: 0, textAlign: 'center', fontSize: 50, fontWeight: 800, lineHeight: 1.36, letterSpacing: '-1.4px', color: '#111629', whiteSpace: 'nowrap' }}>
+                  Echo your brand into{' '}
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 13, verticalAlign: 'middle', animation: swapAnim }}>
+                    {starSvg}{b.name}
+                  </span>
+                </h1>
+              )}
+            </div>
+            {/* Chat card */}
+            <div style={{ position: 'absolute', left: '50%', top: 296, transform: 'translateX(-50%)', width: 900, zIndex: 3, animation: 'akCardIn 0.8s cubic-bezier(.2,.7,.2,1) 0.15s both' }}>
+              <div style={{ position: 'absolute', top: -92, right: 26, background: '#e6ecfb', color: '#404b6e', fontSize: 25, fontWeight: 600, padding: '16px 28px', borderRadius: 22, boxShadow: '0 10px 26px -14px rgba(60,74,140,.24)' }}>
+                {lang === 'kr' ? '국내 그루밍 토닉 제품 추천해줘' : 'Recommend a Korean grooming tonic'}
+              </div>
+              <div style={{ background: '#f3f4f7', borderRadius: 30, padding: 30, boxShadow: '0 34px 70px -26px rgba(30,36,60,.35)' }}>
+                <p style={{ margin: '0 0 24px', fontSize: 26, lineHeight: 1.62, color: '#474d5c' }}>
+                  {lang === 'kr'
+                    ? '데일리 스타일링부터 두피 케어까지, 평이 좋은 한국 그루밍 토닉과 헤어 토닉을 몇 가지 추천해 드립니다. 원하시는 마무리감과 모발 타입을 알려주시면 더 맞춤형으로 골라드릴 수 있어요.'
+                    : 'From daily styling to scalp care, here are a few well-reviewed Korean grooming and hair tonics. Tell me your preferred finish and hair type, and I can tailor the picks for you.'}
+                </p>
+                <div style={{ overflow: 'hidden' }}>
+                  <div style={{ display: 'flex', width: 'max-content', animation: 'akMarquee 34s linear infinite' }}>
+                    {allCards.map((card, idx) => (
+                      <div key={idx} style={{ flex: '0 0 250px', marginRight: 20, background: '#fff', borderRadius: 18, padding: 16, boxShadow: '0 8px 18px -10px rgba(30,36,60,.18)' }}>
+                        <div style={{ fontSize: 23, fontWeight: 800, color: '#1a1c22' }}>{card.name}</div>
+                        <div style={{ fontSize: 19, color: '#8a90a0', marginTop: 4 }}>{card.desc}</div>
+                        <div style={{ height: 150, borderRadius: 12, background: '#f1f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 14 }}>
+                          {bottleSvg(card.shape, card.fill)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* MacBook base */}
+        <div style={{ width: 1046, height: 24, background: 'linear-gradient(180deg,#d0d4db 0%,#b0b5be 46%,#8e949e 100%)', borderRadius: '0 0 18px 18px', boxShadow: '0 26px 44px -14px rgba(20,24,45,.6), inset 0 1px 0 rgba(255,255,255,.6)', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 158, height: 13, background: '#a9adb6', borderRadius: '0 0 13px 13px', boxShadow: 'inset 0 -1px 2px rgba(0,0,0,.12)' }} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─── AEKO Visibility Dashboard ────────────────────────── */
+const AEKO_STRINGS = {
+  en: {
+    scoreTitle: 'How visible is my brand to AI?',
+    personaTitle: 'Who is looking for my brand?',
+    keywordsTitle: 'Key persona keywords',
+    mMention: 'Mentions',
+    mCitation: 'Citations',
+    mSource: 'Sources',
+    axes: ['Price-sensitive', 'Brand', 'Quality', 'Ingredients', 'Usage'],
+    legend: ['My Brand', 'Competitor 1', 'Competitor 2'],
+    chips: ['20s-30s', 'female', 'sensitive-skin', 'budget-conscious', 'K-beauty-aware'],
+  },
+  kr: {
+    scoreTitle: '내 브랜드의 AI 가시성 점수는?',
+    personaTitle: '내 브랜드를 찾는 페르소나는?',
+    keywordsTitle: '주요 페르소나 키워드',
+    mMention: '멘션',
+    mCitation: '인용',
+    mSource: '소스',
+    axes: ['가격 민감형', '브랜드', '품질 중시', '성분 관심', '소비형'],
+    legend: ['내 브랜드', '경쟁사 1', '경쟁사 2'],
+    chips: ['20-30대', '여성', '민감성 피부', '가성비 중시', 'K-뷰티 관심'],
+  },
+} as const;
+
+const CHIP_STYLES = [
+  { bg: '#eaf7e7', fg: '#4d9e3a' },
+  { bg: '#e4f0fb', fg: '#2b7fd4' },
+  { bg: '#f1f3f6', fg: '#8a97a6' },
+  { bg: '#fdf4e0', fg: '#c98a13' },
+  { bg: '#fbe8f1', fg: '#d13b8a' },
+];
+
+function easeOut(t: number) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function radarPoint(cx: number, cy: number, R: number, angleDeg: number, fraction: number) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: cx + R * fraction * Math.cos(rad), y: cy + R * fraction * Math.sin(rad) };
+}
+
+function radarPolygon(cx: number, cy: number, R: number, values: number[]) {
+  const n = values.length;
+  return values
+    .map((v, i) => {
+      const angle = -90 + i * (360 / n);
+      const pt = radarPoint(cx, cy, R, angle, v);
+      return `${pt.x},${pt.y}`;
+    })
+    .join(' ');
+}
+
+function AekoVisibilityDashboard({ lang }: { lang: 'en' | 'kr' }) {
+  const s = AEKO_STRINGS[lang];
+  const fmt = (n: number) => n.toLocaleString('en-US');
+
+  // Animation state: p goes 0→1 in intro, then oscillates through waypoints
+  const [p, setP] = useState(0);
+  const t0Ref = useRef<number>(0);
+  const tidRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const phaseRef = useRef<'intro' | 'tween'>('intro');
+  const waypointRef = useRef(0);
+
+  const INTRO = 1600;
+  const TWEEN = 2600;
+  const HOLD = 1100;
+  const WAYPOINTS = [1, 0.62, 0.88, 0.34, 0.72, 1];
+
+  useEffect(() => {
+    t0Ref.current = performance.now();
+    phaseRef.current = 'intro';
+    waypointRef.current = 0;
+
+    const frame = () => {
+      const now = performance.now();
+      const elapsed = now - t0Ref.current;
+
+      if (phaseRef.current === 'intro') {
+        const raw = Math.min(elapsed / INTRO, 1);
+        setP(easeOut(raw));
+        if (raw >= 1) {
+          phaseRef.current = 'tween';
+          waypointRef.current = 0;
+          t0Ref.current = performance.now() + HOLD;
+        }
+        tidRef.current = setTimeout(frame, 16);
+      } else {
+        // tween phase
+        if (now < t0Ref.current) {
+          // still in hold
+          tidRef.current = setTimeout(frame, 16);
+          return;
+        }
+        const tweenElapsed = now - t0Ref.current;
+        const raw = Math.min(tweenElapsed / TWEEN, 1);
+        const wi = waypointRef.current;
+        const from = WAYPOINTS[(wi - 1 + WAYPOINTS.length) % WAYPOINTS.length];
+        const to = WAYPOINTS[wi];
+        setP(from + (to - from) * easeOut(raw));
+
+        if (raw >= 1) {
+          waypointRef.current = (wi + 1) % WAYPOINTS.length;
+          t0Ref.current = performance.now() + HOLD;
+        }
+        tidRef.current = setTimeout(frame, 16);
+      }
+    };
+
+    tidRef.current = setTimeout(frame, 16);
+    return () => {
+      if (tidRef.current !== null) clearTimeout(tidRef.current);
+    };
+  }, []);
+
+  // Gauge
+  const SCORE = Math.round(87 * p);
+  const CIRCUMFERENCE = 515;
+  const dashOffset = CIRCUMFERENCE * (1 - SCORE / 100);
+  const gaugeColor = SCORE >= 70 ? '#16b981' : SCORE >= 40 ? '#f59e0b' : '#ef4444';
+
+  // Metrics
+  const mentions = Math.round(1284 * p);
+  const citations = Math.round(847 * p);
+  const sources = Math.round(156 * p);
+
+  // Radar
+  const CX = 210, CY = 210, R = 130;
+  const N = 5;
+  const mineVals = [0.88, 0.82, 0.7, 0.6, 0.78].map(v => v * p);
+  const comp1Vals = [0.6, 0.55, 0.72, 0.5, 0.45].map(v => v * p);
+  const comp2Vals = [0.45, 0.4, 0.5, 0.42, 0.55].map(v => v * p);
+
+  const cardStyle: React.CSSProperties = {
+    background: '#fff',
+    border: '1px solid #edeef2',
+    borderRadius: 20,
+    boxShadow: '0 30px 60px -30px rgba(15,23,42,.28)',
+    padding: '24px 28px',
+  };
+
+  return (
+    <>
+      <style>{`@keyframes chipIn{0%{opacity:0;transform:translateY(10px) scale(.9)}60%{opacity:1;transform:translateY(-2px) scale(1.04)}100%{opacity:1;transform:translateY(0) scale(1)}}`}</style>
+      <div style={{ zoom: 0.48, transformOrigin: 'top left', width: 980, WebkitMaskImage: 'linear-gradient(180deg,#000 65%,transparent 100%)', maskImage: 'linear-gradient(180deg,#000 65%,transparent 100%)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {/* Score card */}
+        <div style={{ ...cardStyle }}>
+          <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b', marginBottom: 28 }}>
+            {s.scoreTitle}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+            {/* Gauge */}
+            <div style={{ position: 'relative' }}>
+              <svg width="200" height="200" viewBox="0 0 200 200">
+                {/* Track */}
+                <circle
+                  cx="100" cy="100" r="82"
+                  fill="none"
+                  stroke="#f0f1f4"
+                  strokeWidth="14"
+                  strokeDasharray={CIRCUMFERENCE}
+                  strokeDashoffset={0}
+                  strokeLinecap="round"
+                  style={{ transform: 'rotate(-90deg)', transformOrigin: '100px 100px' }}
+                />
+                {/* Progress */}
+                <circle
+                  cx="100" cy="100" r="82"
+                  fill="none"
+                  stroke={gaugeColor}
+                  strokeWidth="14"
+                  strokeDasharray={CIRCUMFERENCE}
+                  strokeDashoffset={dashOffset}
+                  strokeLinecap="round"
+                  style={{ transform: 'rotate(-90deg)', transformOrigin: '100px 100px', transition: 'stroke .3s ease' }}
+                />
+                <text x="100" y="93" textAnchor="middle" style={{ fontSize: 42, fontWeight: 800, fill: '#111629', fontFamily: 'system-ui,sans-serif' }}>
+                  {SCORE}
+                </text>
+                <text x="100" y="120" textAnchor="middle" style={{ fontSize: 15, fill: '#8a97a6', fontFamily: 'system-ui,sans-serif' }}>
+                  /100
+                </text>
+              </svg>
+            </div>
+            {/* Metric cards */}
+            <div style={{ display: 'flex', gap: 14, width: '100%' }}>
+              {/* Mentions */}
+              <div style={{ flex: 1, padding: '14px 16px', borderRadius: 12, background: 'rgba(124,108,246,.06)', border: '1.5px solid rgba(124,108,246,.18)' }}>
+                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#7c6cf6' }}>{s.mMention}</span>
+                <div style={{ fontSize: 26, fontWeight: 800, color: '#7c6cf6', fontFamily: 'system-ui,sans-serif', letterSpacing: '-0.5px', marginTop: 6 }}>{fmt(mentions)}</div>
+              </div>
+              <div style={{ flex: 1, padding: '14px 16px', borderRadius: 12, background: 'rgba(239,64,98,.06)', border: '1.5px solid rgba(239,64,98,.18)' }}>
+                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#ef4062' }}>{s.mCitation}</span>
+                <div style={{ fontSize: 26, fontWeight: 800, color: '#ef4062', fontFamily: 'system-ui,sans-serif', letterSpacing: '-0.5px', marginTop: 6 }}>{fmt(citations)}</div>
+              </div>
+              <div style={{ flex: 1, padding: '14px 16px', borderRadius: 12, background: 'rgba(22,163,74,.06)', border: '1.5px solid rgba(22,163,74,.18)' }}>
+                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#16a34a' }}>{s.mSource}</span>
+                <div style={{ fontSize: 26, fontWeight: 800, color: '#16a34a', fontFamily: 'system-ui,sans-serif', letterSpacing: '-0.5px', marginTop: 6 }}>{fmt(sources)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Persona card */}
+        <div style={{ ...cardStyle }}>
+          <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b', marginBottom: 16 }}>
+            {s.personaTitle}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Radar */}
+            <div style={{ position: 'relative' }}>
+                <svg width="340" height="340" viewBox="0 0 420 420">
+                  {/* Rings */}
+                  {[0.25, 0.5, 0.75, 1].map((frac, ri) => (
+                    <polygon
+                      key={ri}
+                      points={radarPolygon(CX, CY, R, Array(N).fill(frac))}
+                      fill="none"
+                      stroke="#e8eaef"
+                      strokeWidth="1"
+                    />
+                  ))}
+                  {/* Axis spokes */}
+                  {Array.from({ length: N }, (_, i) => {
+                    const angle = -90 + i * (360 / N);
+                    const pt = radarPoint(CX, CY, R, angle, 1);
+                    return <line key={i} x1={CX} y1={CY} x2={pt.x} y2={pt.y} stroke="#e8eaef" strokeWidth="1" />;
+                  })}
+                  {/* comp2 */}
+                  <polygon
+                    points={radarPolygon(CX, CY, R, comp2Vals)}
+                    fill="rgba(148,163,184,.10)"
+                    stroke="#cbd5e1"
+                    strokeWidth="1.5"
+                    strokeDasharray="5 4"
+                  />
+                  {/* comp1 */}
+                  <polygon
+                    points={radarPolygon(CX, CY, R, comp1Vals)}
+                    fill="rgba(244,63,116,.08)"
+                    stroke="#f43f74"
+                    strokeWidth="1.5"
+                    strokeDasharray="5 4"
+                  />
+                  {/* mine */}
+                  <polygon
+                    points={radarPolygon(CX, CY, R, mineVals)}
+                    fill="rgba(99,102,241,.14)"
+                    stroke="#6366f1"
+                    strokeWidth="2"
+                  />
+                  {/* Axis labels */}
+                  {s.axes.map((label, i) => {
+                    const angle = -90 + i * (360 / N);
+                    const pt = radarPoint(CX, CY, R + 30, angle, 1);
+                    const anchors: React.SVGAttributes<SVGTextElement>['textAnchor'][] = ['middle', 'start', 'start', 'end', 'end'];
+                    const baselines = ['auto', 'middle', 'hanging', 'hanging', 'middle'];
+                    return (
+                      <text
+                        key={i}
+                        x={pt.x}
+                        y={pt.y}
+                        textAnchor={anchors[i]}
+                        dominantBaseline={baselines[i]}
+                        style={{ fontSize: 13, fontWeight: 600, fill: '#64748b', fontFamily: 'system-ui,sans-serif' }}
+                      >
+                        {label}
+                      </text>
+                    );
+                  })}
+                </svg>
+                {/* Legend */}
+                <div style={{ display: 'flex', gap: 20, marginTop: 12 }}>
+                  {[
+                    { color: '#6366f1', dash: false, label: s.legend[0] },
+                    { color: '#f43f74', dash: true, label: s.legend[1] },
+                    { color: '#cbd5e1', dash: true, label: s.legend[2] },
+                  ].map((item, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                      <svg width="24" height="8">
+                        <line
+                          x1="0" y1="4" x2="24" y2="4"
+                          stroke={item.color}
+                          strokeWidth="2"
+                          strokeDasharray={item.dash ? '4 3' : undefined}
+                        />
+                      </svg>
+                      <span style={{ fontSize: 12, color: '#6b7280', fontFamily: 'system-ui,sans-serif' }}>{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            {/* Keywords */}
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#64748b', marginBottom: 12 }}>
+                {s.keywordsTitle}
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {s.chips.map((chip, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: 999,
+                      background: CHIP_STYLES[i].bg,
+                      color: CHIP_STYLES[i].fg,
+                      fontSize: 13,
+                      fontWeight: 700,
+                      fontFamily: 'system-ui,sans-serif',
+                      animation: `chipIn 0.45s cubic-bezier(.2,.8,.2,1) ${i * 80}ms both`,
+                    }}
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>{/* end side-by-side grid */}
       </div>
     </>
   );
@@ -954,55 +1398,29 @@ export function AekoCaseStudy({
 
   const timeline = [
     {
-      phase: '01 — ' + t('Discovery', '리서치'),
+      phase: '01 — ' + t('Dashboard & Feature Design', '대시보드 & 기능 설계'),
       title: t(
-        "The SEO playbook doesn't work for AI search",
-        'SEO 플레이북은 AI 검색에서 더 이상 통하지 않는다',
+        'Built for e-commerce owners, not data analysts',
+        '데이터 분석가가 아닌 이커머스 사업자를 위해 설계',
       ),
       content: t(
-        'Interviewed cross-border e-commerce sellers who noticed their AI-era traffic was unpredictable and unattributable. The core finding: sellers had zero visibility into how ChatGPT, Claude, and Perplexity were recommending (or not recommending) their products. The same brand got completely different AI treatment depending on the market and language — and nobody knew why.',
-        'AI 시대 트래픽이 예측 불가능하고 추적이 안 된다는 점을 인지한 크로스보더 이커머스 셀러들과 인터뷰를 진행했습니다. 핵심 발견은 이것이었습니다. 셀러들은 ChatGPT, Claude, Perplexity가 자사 제품을 어떻게 추천하거나 추천하지 않는지 전혀 파악하지 못하고 있었습니다. 같은 브랜드가 시장과 언어에 따라 완전히 다른 AI 응답을 받았지만, 아무도 그 이유를 몰랐습니다.',
+        <>Started with competitive research across existing AEO and SEO analytics tools — most were built for marketers fluent in data. Through interviews with cross-border sellers, a clear pattern emerged: they didn't need more dashboards, they needed to know one thing — <em><strong>"am I showing up when buyers ask AI about my category?"</strong></em> That insight shaped every feature decision. The AI Visibility Score became a single, scannable number. Prompt tracking was scoped to buyer-intent queries specific to their product category and market. The dashboard was designed so a seller could understand their position in under 60 seconds, without reading a guide.</>,
+        <>기존 AEO 및 SEO 분석 도구들을 경쟁 조사했습니다. 대부분 데이터에 익숙한 마케터를 위해 만들어진 도구들이었습니다. 크로스보더 셀러들과의 인터뷰를 통해 명확한 패턴이 드러났습니다. 그들에게 필요한 건 더 많은 대시보드가 아니었습니다. 딱 하나였습니다 — <em><strong>"내 카테고리에서 AI가 나를 언급하고 있는가?"</strong></em> 이 인사이트가 모든 기능 결정을 이끌었습니다. AI Visibility Score는 한눈에 파악할 수 있는 단일 수치로 설계했습니다. 프롬프트 추적은 각 제품 카테고리와 시장에 특화된 구매 의도 쿼리로 범위를 좁혔습니다. 가이드를 읽지 않아도 60초 안에 자신의 현황을 파악할 수 있는 대시보드를 목표로 했습니다.</>,
       ),
-      tags: ['User Interviews', 'Market Research', 'Competitive Analysis', 'Opportunity Sizing'],
+      tags: ['Competitive Research', 'User Interviews', 'Feature Scoping', 'Dashboard Design', 'Activation Loop'],
+      visual: <AekoVisibilityDashboard lang={lang} />,
     },
     {
-      phase: '02 — ' + t('Problem Framing', '문제 정의'),
-      title: t('Brands are flying blind in AI-driven search', '브랜드들은 AI 검색 환경에서 깜깜이로 운영 중'),
-      content: t(
-        "Defined the core problem: AI engines have taken over top-of-funnel discovery for millions of shoppers, but there are no analytics tools built for it. Search Console exists for traditional SEO. There is no equivalent for AEO — Answer Engine Optimization. This gap is sharpest for cross-border sellers, where language and market context dramatically change AI outputs.",
-        '핵심 문제를 정의했습니다. AI 엔진이 수백만 쇼퍼의 초기 제품 탐색을 장악했지만, 이를 위한 분석 도구는 존재하지 않았습니다. 전통 SEO에는 Search Console이 있지만 AEO(답변 엔진 최적화)에는 동등한 도구가 없습니다. 언어와 시장 맥락에 따라 AI 결과가 크게 달라지는 크로스보더 셀러에게 이 격차가 가장 심각합니다.',
-      ),
-      tags: ['Jobs-to-be-Done', 'Problem Statement', 'TAM Sizing', 'AEO Category Definition'],
-    },
-    {
-      phase: '03 — ' + t('Product Strategy', '프로덕트 전략'),
-      title: t('Monitor first, optimize second', '모니터링 먼저, 최적화는 그 다음'),
-      content: t(
-        "Made the key strategic call to lead with monitoring — not optimization recommendations. Sellers need to see the problem before they'll invest in fixing it. Designed AEKO's core activation loop: connect domain → define tracked prompts → see your AI Visibility Score → receive optimization guidance. This sequencing is our hypothesis for driving both activation and paid conversion.",
-        '핵심 전략적 결정을 내렸습니다. 최적화 제안이 아닌 모니터링을 먼저 제공하는 것입니다. 셀러들은 문제를 직접 봐야 해결에 투자합니다. AEKO의 핵심 활성화 루프를 설계했습니다: 도메인 연결 → 추적 프롬프트 정의 → AI Visibility Score 확인 → 최적화 가이던스 수신. 이 순서가 활성화와 유료 전환을 모두 이끌 것이라는 가설입니다.',
-      ),
-      tags: ['Product Strategy', 'Activation Design', 'Pricing Architecture', 'Freemium Model'],
-    },
-    {
-      phase: '04 — ' + t('MVP Build', 'MVP 빌드'),
+      phase: '02 — ' + t('AEKO Agents (MCP)', 'AEKO 에이전트 (MCP)'),
       title: t(
-        'Real-time AI visibility across multiple engines and markets',
-        '여러 엔진과 시장에서 실시간으로 추적하는 AI 가시성',
+        'Making AI execution accessible to non-technical sellers',
+        '비기술 셀러도 AI를 실행할 수 있도록',
       ),
       content: t(
-        'Built an MVP that polls ChatGPT, Claude, and Perplexity with real buyer prompts, segmented by market and language (US, UK, JP, KR). Introduced the AI Visibility Score — a composite of mentions, citations, and share of voice — as the north star metric. Also scoped AEKO Agents (MCP integration) to let power users run optimization tools directly in Claude Desktop and Cursor without leaving their workflow.',
-        '실제 구매자 프롬프트로 ChatGPT, Claude, Perplexity를 시장·언어별(US, UK, JP, KR)로 세분화해 폴링하는 MVP를 구축했습니다. 멘션·인용·점유율을 종합한 AI Visibility Score를 핵심 지표로 도입했습니다. 파워 유저가 Claude Desktop과 Cursor 안에서 워크플로우를 벗어나지 않고 최적화 도구를 실행할 수 있도록 AEKO Agents(MCP 통합)도 함께 설계했습니다.',
+        'The hardest product problem wasn\'t building the MCP integration — it was making it usable for e-commerce business owners who have never heard of MCP. The insight from interviews: sellers trust AI tools, but they won\'t set them up if it feels like a developer task. AEKO Agents was designed so that optimization actions — rewriting product descriptions, adjusting content to improve AI citation rates — could be triggered directly from the dashboard with one click, running via Claude Desktop or Cursor in the background. The seller sees the outcome, not the infrastructure. The technical complexity is entirely abstracted away.',
+        '가장 어려운 프로덕트 문제는 MCP 통합을 구축하는 것이 아니었습니다. MCP가 뭔지 모르는 이커머스 사업자도 쓸 수 있게 만드는 것이었습니다. 인터뷰에서 얻은 인사이트: 셀러들은 AI 도구를 신뢰하지만, 개발자 작업처럼 느껴지면 설정하지 않습니다. AEKO Agents는 최적화 액션 — 제품 설명 재작성, AI 인용률 향상을 위한 콘텐츠 조정 — 을 대시보드에서 클릭 한 번으로 실행할 수 있도록 설계했습니다. Claude Desktop이나 Cursor가 백그라운드에서 실행되지만, 셀러가 보는 건 결과뿐입니다. 기술적 복잡성은 완전히 추상화했습니다.',
       ),
-      tags: ['GenAI', 'MCP Integration', 'Multi-Region Data', 'Visibility Score Metric'],
-    },
-    {
-      phase: '05 — ' + t("What's Next", '다음 단계'),
-      title: t('Testing the MVP with early users', '얼리 유저와 함께 MVP 테스트 중'),
-      content: t(
-        'Currently running closed MVP testing with a small cohort of cross-border sellers. Focused on validating three things: do sellers understand their score, does seeing the score motivate action, and does the optimization guidance produce measurable AI visibility changes. Results pending — watching closely.',
-        '소규모 크로스보더 셀러 코호트와 비공개 MVP 테스트를 진행하고 있습니다. 세 가지를 검증하는 데 집중하고 있습니다: 셀러가 점수를 이해하는가, 점수 확인이 행동을 유도하는가, 최적화 가이던스가 측정 가능한 AI 가시성 변화를 만드는가. 현재 결과를 면밀히 관찰하고 있습니다.',
-      ),
-      tags: ['MVP Testing', 'User Validation', 'Activation Metrics', 'Iteration'],
+      tags: ['MCP Integration', 'Agent Design', 'Accessibility', 'Claude Desktop', 'Zero-Config UX'],
     },
   ];
 
@@ -1038,55 +1456,23 @@ export function AekoCaseStudy({
       <CaseStudyHero
         brandLabel="AEKO"
         logoSrc="/aeko-icon.svg"
-        subLabels={[t('MVP in Testing', 'MVP 테스트 중'), 'AEO · SaaS · Cross-Border E-commerce']}
         title="AEKO"
+        tagline={t('AEO Intelligence · AI Visibility · Cross-Border E-commerce', 'AEO 인텔리전스 · AI 가시성 · 크로스보더 이커머스')}
         subtitle={t(
-          'Building the analytics layer for the AI search era — so brands stop flying blind when AI engines recommend their competitors.',
-          'AI 검색 시대를 위한 분석 레이어를 구축합니다 — AI 엔진이 경쟁사를 추천하는 동안 브랜드가 더 이상 맹목적으로 운영되지 않도록.',
+          'The analytics to execution layer for e-commerce businesses in the AI search era.',
+          'AI 검색 시대,\n이커머스 비즈니스를 위한 분석에서 실행까지의 레이어.',
         )}
-        meta={[
-          { label: t('Stage', '단계'), value: t('Closed MVP Testing', '비공개 MVP 테스트') },
-          { label: t('Market', '시장'), value: t('Cross-Border E-commerce', '크로스보더 이커머스') },
+        productColor="#6b9fff"
+        metrics={[
+          { v: '5', l: t('AI Engines', 'AI 엔진') },
+          { v: '4', l: t('Global Markets', '글로벌 시장') },
+          { v: 'MCP', l: t('Integration', '통합') },
+          { v: '0→1', l: t('Build', '빌드') },
         ]}
+        heroRight={<AekoBannerHero lang={lang} />}
         t={t}
       />
 
-      {/* Product UI showcase */}
-      <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
-          <Reveal>
-            <div className="flex items-center gap-4 mb-10">
-              <img src="/aeko-icon.svg" alt="AEKO" className="h-8" />
-              <a
-                href="https://aeko-intelligence.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono-tech text-[11px] tracking-widest uppercase"
-                style={{ color: 'var(--acc)' } as React.CSSProperties}
-              >
-                aeko-intelligence.com ↗
-              </a>
-            </div>
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="rounded-sm overflow-hidden border hairline mb-8">
-              <img src="/aeko-hero.png" alt="AEKO landing page" className="w-full" />
-            </div>
-          </Reveal>
-          <div className="grid md:grid-cols-2 gap-6">
-            <Reveal delay={160}>
-              <div className="rounded-sm overflow-hidden border hairline">
-                <img src="/aeko-score-ui.png" alt="AI Visibility Score dashboard" className="w-full" />
-              </div>
-            </Reveal>
-            <Reveal delay={240}>
-              <div className="rounded-sm overflow-hidden border hairline">
-                <img src="/aeko-dashboard.png" alt="AEKO prompt tracking and optimization" className="w-full" />
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
@@ -1100,13 +1486,23 @@ export function AekoCaseStudy({
               'Product discovery has shifted — shoppers no longer start on Google. They ask ChatGPT, Claude, and Perplexity. A handful of AEO analytics tools exist globally, but none with meaningful traction in Korea, and none built specifically for e-commerce brands selling cross-border. AEKO fills that gap.',
               '제품 탐색의 무게중심이 바뀌었습니다. 소비자들은 더 이상 구글에서 시작하지 않습니다. ChatGPT, Claude, Perplexity에 묻습니다. AEO 분석 도구들이 글로벌하게 등장하고 있지만, 한국에서 유의미한 점유율을 가진 곳은 없고, 크로스보더 이커머스 브랜드를 위해 특화된 도구는 더더욱 없습니다. AEKO는 그 공백을 채웁니다.',
             )}
-            rows={[
-              { label: t('ChatGPT monthly active users', 'ChatGPT 월간 활성 사용자'), value: '400M+' },
-              { label: t('Dominant AEO tool in Korea', '한국 내 지배적 AEO 도구'), value: t('None', '없음') },
-              { label: t('AEO tools for e-commerce', '이커머스 특화 AEO 도구'), value: t('None', '없음') },
-              { label: t('Brands with AI visibility data', 'AI 가시성 데이터를 보유한 브랜드'), value: t('Near zero', '거의 0') },
-            ]}
           />
+          <div className="grid md:grid-cols-2 gap-6 mt-14">
+            <Reveal>
+              <div style={{ padding: '28px', borderRadius: 16, background: 'var(--surface)', border: '1px solid var(--hairline)' }}>
+                <div className="eyebrow mb-3">{t('Discovery', '리서치')}</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--ink)', marginBottom: 12, lineHeight: 1.3 }}>{t("The SEO playbook doesn't work for AI search", 'SEO 플레이북은 AI 검색에서 더 이상 통하지 않는다')}</div>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--ink-2)', margin: 0 }}>{t('Interviewed cross-border e-commerce sellers who noticed their AI-era traffic was unpredictable and unattributable. The core finding: sellers had zero visibility into how ChatGPT, Claude, and Perplexity were recommending (or not recommending) their products. The same brand got completely different AI treatment depending on the market and language — and nobody knew why.', 'AI 시대 트래픽이 예측 불가능하고 추적이 안 된다는 점을 인지한 크로스보더 이커머스 셀러들과 인터뷰를 진행했습니다. 핵심 발견: 셀러들은 ChatGPT, Claude, Perplexity가 자사 제품을 어떻게 추천하는지 전혀 파악하지 못하고 있었습니다. 같은 브랜드가 시장과 언어에 따라 완전히 다른 AI 응답을 받았지만, 아무도 그 이유를 몰랐습니다.')}</p>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <div style={{ padding: '28px', borderRadius: 16, background: 'var(--surface)', border: '1px solid var(--hairline)' }}>
+                <div className="eyebrow mb-3">{t('Problem Framing', '문제 정의')}</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--ink)', marginBottom: 12, lineHeight: 1.3 }}>{t('Brands are flying blind in AI-driven search', '브랜드들은 AI 검색 환경에서 깜깜이로 운영 중')}</div>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--ink-2)', margin: 0 }}>{t('AI engines have taken over top-of-funnel discovery for millions of shoppers, but there are no analytics tools built for it. Search Console exists for traditional SEO. There is no equivalent for AEO — Answer Engine Optimization. This gap is sharpest for cross-border sellers, where language and market context dramatically change AI outputs.', 'AI 엔진이 수백만 쇼퍼의 초기 제품 탐색을 장악했지만, 이를 위한 분석 도구는 존재하지 않습니다. 전통 SEO에는 Search Console이 있지만 AEO(답변 엔진 최적화)에는 동등한 도구가 없습니다. 언어와 시장 맥락에 따라 AI 결과가 크게 달라지는 크로스보더 셀러에게 이 격차가 가장 심각합니다.')}</p>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 

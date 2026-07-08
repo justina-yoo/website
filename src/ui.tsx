@@ -290,13 +290,14 @@ export function SectionLabel({
 export function TimelineList({
   steps,
 }: {
-  steps: { phase: string; title: string; content: string; tags: string[] }[];
+  steps: { phase: string; title: string; content: React.ReactNode; tags: string[]; visual?: React.ReactNode }[];
 }) {
   return (
     <div>
       {steps.map((s, i) => (
         <Reveal key={i} delay={i * 60}>
           <div className="border-t hairline py-6 md:py-8 lg:py-10 grid grid-cols-12 gap-4 md:gap-6">
+            {!s.visual && (
             <div className="col-span-12 md:col-span-3">
               <div
                 className="font-mono-tech text-[11px] tracking-widest uppercase"
@@ -305,24 +306,55 @@ export function TimelineList({
                 {s.phase}
               </div>
             </div>
-            <div className="col-span-12 md:col-span-9">
-              <h3 className="font-serif-display text-[18px] sm:text-[22px] md:text-[28px] leading-tight tracking-tight mb-3">
-                {s.title}
-              </h3>
-              <p className="text-[15px] leading-relaxed max-w-[68ch]" style={{ color: 'var(--ink-2)' }}>
-                {s.content}
-              </p>
-              <div className="flex flex-wrap gap-1.5 mt-5">
-                {s.tags.map((t, j) => (
-                  <span
-                    key={j}
-                    className="font-mono-tech text-[10px] tracking-wider uppercase px-2 py-1 border hairline"
-                    style={{ color: 'var(--ink-3)' }}
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
+            )}
+            <div className={`col-span-12 ${s.visual ? '' : 'md:col-span-9'}`}>
+              {s.visual ? (
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: 'var(--acc)' }}>{s.phase}</div>
+                    <h3 className="font-serif-display text-[18px] sm:text-[22px] md:text-[28px] leading-tight tracking-tight mb-3">
+                      {s.title}
+                    </h3>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {s.tags.map((t, j) => (
+                        <span
+                          key={j}
+                          className="font-mono-tech text-[10px] tracking-wider uppercase px-2 py-1 border hairline"
+                          style={{ color: 'var(--ink-3)' }}
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-[15px] leading-relaxed max-w-[68ch]" style={{ color: 'var(--ink-2)' }}>
+                      {s.content}
+                    </p>
+                  </div>
+                  <div className="lg:w-[480px] flex-shrink-0">
+                    {s.visual}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h3 className="font-serif-display text-[18px] sm:text-[22px] md:text-[28px] leading-tight tracking-tight mb-3">
+                    {s.title}
+                  </h3>
+                  <p className="text-[15px] leading-relaxed max-w-[68ch]" style={{ color: 'var(--ink-2)' }}>
+                    {s.content}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 mt-5">
+                    {s.tags.map((t, j) => (
+                      <span
+                        key={j}
+                        className="font-mono-tech text-[10px] tracking-wider uppercase px-2 py-1 border hairline"
+                        style={{ color: 'var(--ink-3)' }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </Reveal>
@@ -391,12 +423,12 @@ export function ContextBlock({
   eyebrow: string;
   headline: string;
   body: string;
-  rows: { label: string; value: string }[];
+  rows?: { label: string; value: string }[];
   rowAccent?: string;
 }) {
   return (
     <div className="grid md:grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-start">
-      <div className="md:col-span-6">
+      <div className={rows && rows.length ? 'md:col-span-6' : 'md:col-span-10'}>
         <div className="eyebrow mb-3">{eyebrow}</div>
         <h2 className="font-serif-display text-[24px] sm:text-[30px] md:text-[36px] lg:text-[44px] leading-[1.03] tracking-tight mb-6">
           {headline}
@@ -405,6 +437,7 @@ export function ContextBlock({
           {body}
         </p>
       </div>
+      {rows && rows.length > 0 && (
       <div className="md:col-span-6">
         <div className="border hairline glass rounded-sm">
           {rows.map((r, i) => (
@@ -425,6 +458,7 @@ export function ContextBlock({
           ))}
         </div>
       </div>
+      )}
     </div>
   );
 }
