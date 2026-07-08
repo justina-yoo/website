@@ -290,7 +290,7 @@ export function SectionLabel({
 export function TimelineList({
   steps,
 }: {
-  steps: { phase: string; title: string; content: React.ReactNode; tags: string[]; visual?: React.ReactNode }[];
+  steps: { phase: string; title: string; content: React.ReactNode; tags: string[]; visual?: React.ReactNode; visualLeft?: boolean }[];
 }) {
   return (
     <div>
@@ -310,6 +310,11 @@ export function TimelineList({
             <div className={`col-span-12 ${s.visual ? '' : 'md:col-span-9'}`}>
               {s.visual ? (
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+                  {s.visualLeft && (
+                    <div className="lg:w-[600px] flex-shrink-0">
+                      {s.visual}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: 'var(--acc)' }}>{s.phase}</div>
                     <h3 className="font-serif-display text-[18px] sm:text-[22px] md:text-[28px] leading-tight tracking-tight mb-3">
@@ -326,13 +331,15 @@ export function TimelineList({
                         </span>
                       ))}
                     </div>
-                    <p className="text-[15px] leading-relaxed max-w-[68ch]" style={{ color: 'var(--ink-2)' }}>
+                    <p className="text-[15px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
                       {s.content}
                     </p>
                   </div>
-                  <div className="lg:w-[638px] flex-shrink-0">
-                    {s.visual}
-                  </div>
+                  {!s.visualLeft && (
+                    <div className="lg:w-[638px] flex-shrink-0">
+                      {s.visual}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>

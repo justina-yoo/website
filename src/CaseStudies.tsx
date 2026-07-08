@@ -618,6 +618,249 @@ function AekoVisibilityDashboard({ lang }: { lang: 'en' | 'kr' }) {
   );
 }
 
+function AekoOptimizeFlow({ lang }: { lang: 'en' | 'kr' }) {
+  const [tick, setTick] = useState(0);
+  const t0Ref = useRef<number>(0);
+  const tidRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const LOOP = 12500;
+
+  useEffect(() => {
+    t0Ref.current = performance.now();
+    const frame = () => {
+      setTick((performance.now() - t0Ref.current) % LOOP);
+      tidRef.current = setTimeout(frame, 16);
+    };
+    tidRef.current = setTimeout(frame, 16);
+    return () => { if (tidRef.current) clearTimeout(tidRef.current); };
+  }, []);
+
+  const easeInOut = (u: number) => u < 0.5 ? 4*u*u*u : 1 - Math.pow(-2*u+2,3)/2;
+  const lerpKF = (kf: [number,number,number][], tv: number): [number,number] => {
+    if (tv <= kf[0][0]) return [kf[0][1], kf[0][2]];
+    for (let i = 0; i < kf.length - 1; i++) {
+      const [at,ax,ay] = kf[i], [bt,bx,by] = kf[i+1];
+      if (tv <= bt) { const u = easeInOut((tv-at)/(bt-at)); return [ax+(bx-ax)*u, ay+(by-ay)*u]; }
+    }
+    const l = kf[kf.length-1]; return [l[1],l[2]];
+  };
+
+  const isKo = lang === 'kr';
+  const tv = tick;
+
+  const clicks = [1900, 3050, 4200];
+  const applied = clicks.map(c => tv >= c);
+  const nApplied = applied.filter(Boolean).length;
+  const score = 65 + nApplied * 9;
+  const scoreColor = score >= 85 ? '#16b981' : score >= 75 ? '#22c55e' : '#8577f8';
+
+  const defs = isKo
+    ? [
+        { title: '상품 설명 보강', sub: '성분/효능 키워드 추가 권장' },
+        { title: 'FAQ 페이지 생성', sub: '자주 묻는 질문 AI 답변 소스' },
+        { title: '비교 컨텐츠 제작', sub: '경쟁사 대비 장점 컨텐츠' },
+      ]
+    : [
+        { title: 'Enrich product copy', sub: 'Add ingredient & benefit keywords' },
+        { title: 'Generate FAQ page', sub: 'AI answer source for common questions' },
+        { title: 'Create comparison content', sub: 'Advantages vs. competitors' },
+      ];
+
+  const suggestions = defs.map((d, i) => {
+    const on = applied[i];
+    const pulsing = tv >= clicks[i] - 80 && tv < clicks[i] + 160;
+    return {
+      ...d, applied: on,
+      btnText: on ? (isKo ? '적용됨' : 'Applied') : (isKo ? '적용' : 'Apply'),
+      btnBg: on ? '#16b981' : '#e9f6ef',
+      btnFg: on ? '#ffffff' : '#3fa06a',
+      btnScale: pulsing ? 'scale(0.9)' : 'scale(1)',
+    };
+  });
+
+  const bx = 512;
+  const kf: [number,number,number][] = [
+    [0, 545, 540],
+    [clicks[0]-350, bx, 232], [clicks[0], bx, 232],
+    [clicks[1]-350, bx, 350], [clicks[1], bx, 350],
+    [clicks[2]-350, bx, 468], [clicks[2], bx, 468],
+    [clicks[2]+700, 580, 545],
+  ];
+  const [cx, cy] = lerpKF(kf, tv);
+  const clicking = clicks.some(c => tv >= c-80 && tv < c+160);
+  const cursorTf = `translate(${cx.toFixed(1)}px,${cy.toFixed(1)}px) scale(${clicking ? 0.82 : 1})`;
+
+  const termStart = 4700;
+  const termOn = tv >= termStart;
+  const term = {
+    l1: tv >= termStart + 200,
+    l2: tv >= termStart + 800,
+    l3: tv >= termStart + 2100,
+    progress: tv >= termStart+1700 ? '(1/3, 2/3, 3/3)' : tv >= termStart+1300 ? '(1/3, 2/3)' : '(1/3)',
+  };
+
+  const done = tv >= termStart + 2500;
+  const siteFilter = done ? 'none' : 'grayscale(0.55) brightness(0.9) sepia(0.35)';
+  const siteOverlay = done ? 'rgba(120,80,55,0)' : 'rgba(120,80,55,0.34)';
+  const tagDefs = ['JSON-LD', 'llms.txt', 'Schema', 'robots.txt'];
+  const tagStart = termStart + 2800;
+  const tags = tagDefs.map((text, i) => {
+    const vis = tv >= tagStart + i*200;
+    return { text, opacity: vis?1:0, tf: vis?'translateY(0)':'translateY(6px)' };
+  });
+  const badge = Math.max(0, 3 - nApplied);
+
+  const panelShadow = '0 34px 70px -40px rgba(15,23,42,.35)';
+  const PANEL: React.CSSProperties = { position:'relative', width:620, height:600, background:'#fff', borderRadius:22, boxShadow:panelShadow, overflow:'hidden', display:'flex', flexDirection:'column' };
+  const HEADER: React.CSSProperties = { height:66, flexShrink:0, background:'#6b9fff', display:'flex', alignItems:'center', gap:14, padding:'0 26px' };
+
+  return (
+    <>
+      <style>{`@keyframes termBlink{0%,49%{opacity:1}50%,100%{opacity:0}}`}</style>
+      <div style={{ zoom: 0.47, transformOrigin: 'top left' }}>
+        <div style={{ display:'flex', gap:30, alignItems:'stretch' }}>
+
+          {/* LEFT: AEKO plan panel */}
+          <div style={PANEL}>
+            <div style={HEADER}>
+              <div style={{ display:'flex', alignItems:'center', gap:9, color:'#fff', fontWeight:800, fontSize:19, letterSpacing:'.01em' }}>
+                <span style={{ width:22, height:22, borderRadius:'50%', background:'radial-gradient(circle at 32% 30%,#fff 0 30%,transparent 32%),#b7aef9', display:'inline-block' }} />
+                AEKO
+              </div>
+              <div style={{ color:'rgba(255,255,255,.9)', fontWeight:700, fontSize:16 }}>
+                {isKo ? '최적화 플랜' : 'Optimization Plan'}
+              </div>
+            </div>
+            <div style={{ flex:1, padding:'22px 24px', display:'flex', flexDirection:'column', gap:18, minHeight:0 }}>
+              {/* Notification row */}
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:12 }}>
+                <div style={{ position:'relative' }}>
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4b5563" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+                  </svg>
+                  {badge > 0 && (
+                    <span style={{ position:'absolute', top:-4, right:-6, minWidth:18, height:18, padding:'0 4px', borderRadius:9, background:'#ef4444', color:'#fff', fontSize:11, fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center' }}>{badge}</span>
+                  )}
+                </div>
+                <div style={{ fontSize:18, fontWeight:800, color:'#1e293b' }}>
+                  {isKo ? '새로운 상품 최적화 제안이 있습니다.' : 'New product optimization suggestions available.'}
+                </div>
+              </div>
+              {/* Grid: product card + suggestions */}
+              <div style={{ flex:1, display:'grid', gridTemplateColumns:'172px 1fr', gap:20, minHeight:0 }}>
+                {/* Product card */}
+                <div style={{ border:'1px solid #eceef3', borderRadius:16, padding:'20px 14px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:14 }}>
+                  <div style={{ width:104, height:128, borderRadius:12, background:'#f1f2f6', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <svg width="40" height="60" viewBox="0 0 40 60" fill="none" stroke="#b9c0cc" strokeWidth="2">
+                      <rect x="12" y="2" width="16" height="8" rx="2" />
+                      <path d="M10 12h20v44a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4z" />
+                      <line x1="15" y1="26" x2="25" y2="26" />
+                      <line x1="15" y1="33" x2="25" y2="33" />
+                    </svg>
+                  </div>
+                  <div style={{ textAlign:'center', fontSize:15, fontWeight:700, color:'#334155', lineHeight:1.4 }}>
+                    {isKo ? <>아쿠아 토너<br/>250ml</> : <>Aqua Toner<br/>250ml</>}
+                  </div>
+                  <div style={{ width:'100%', display:'flex', flexDirection:'column', gap:8, alignItems:'center' }}>
+                    <div style={{ width:'100%', height:7, borderRadius:4, background:'#eef0f4', overflow:'hidden' }}>
+                      <div style={{ height:'100%', borderRadius:4, background:scoreColor, width:`${score}%`, transition:'width .5s ease,background .5s ease' }} />
+                    </div>
+                    <div style={{ fontSize:13.5, fontWeight:700, color:'#64748b' }}>AEO {score}{isKo ? '점' : ''}</div>
+                  </div>
+                </div>
+                {/* Suggestions */}
+                <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+                  {suggestions.map((s, i) => (
+                    <div key={i} style={{ flex:1, background:'#f8f9fb', border:'1px solid #eef0f4', borderRadius:14, padding:'14px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:12 }}>
+                      <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
+                        <div style={{ fontSize:16, fontWeight:800, color:'#1e293b' }}>{s.title}</div>
+                        <div style={{ fontSize:13, color:'#94a3b8' }}>{s.sub}</div>
+                      </div>
+                      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:6, minWidth:74, height:38, borderRadius:10, fontSize:14, fontWeight:800, background:s.btnBg, color:s.btnFg, transition:'all .3s ease', transform:s.btnScale }}>
+                        {s.applied && <span>✓</span>}{s.btnText}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Cursor */}
+            <div style={{ position:'absolute', left:0, top:0, transform:cursorTf, pointerEvents:'none', filter:'drop-shadow(0 2px 3px rgba(0,0,0,.3))', zIndex:20 }}>
+              <svg width="30" height="30" viewBox="0 0 24 24">
+                <path d="M4 2 L4 20 L9 15 L12.5 22 L15.5 20.5 L12 14 L19 14 Z" fill="#1e293b" stroke="#fff" strokeWidth="1.4" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </div>
+
+          {/* RIGHT: My website panel */}
+          <div style={PANEL}>
+            <div style={{ ...HEADER, gap:0 }}>
+              <div style={{ color:'#fff', fontWeight:800, fontSize:18 }}>{isKo ? '내 웹사이트' : 'My Website'}</div>
+            </div>
+            <div style={{ position:'relative', flex:1, minHeight:0, overflow:'hidden' }}>
+              {/* Site mock */}
+              <div style={{ position:'absolute', inset:0, filter:siteFilter, transition:'filter .9s ease', display:'flex', flexDirection:'column' }}>
+                <div style={{ height:64, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 30px', background:'#f4efe9' }}>
+                  <div style={{ fontSize:22, fontWeight:800, color:'#3f3a45', letterSpacing:'-.01em' }}>Aeko Beauty</div>
+                  <div style={{ display:'flex', gap:26, fontSize:12, fontWeight:700, letterSpacing:'.14em', color:'#8b8590' }}><span>SHOP</span><span>ABOUT</span><span>REVIEWS</span></div>
+                </div>
+                <div style={{ flex:1, display:'grid', gridTemplateColumns:'1fr 1.1fr', gap:26, padding:'28px 30px', background:'#efe9e2' }}>
+                  <div style={{ borderRadius:14, background:'repeating-linear-gradient(135deg,#e2d9cf,#e2d9cf 11px,#dacfc2 11px,#dacfc2 22px)' }} />
+                  <div style={{ display:'flex', flexDirection:'column', justifyContent:'center', gap:16 }}>
+                    <div style={{ fontSize:22, fontWeight:800, color:'#4a4550', lineHeight:1.35 }}>
+                      {isKo ? <>신규 세라믹 리뉴얼<br/>컴플렉스 0.05%</> : <>New Ceramide Renewal<br/>Complex 0.05%</>}
+                    </div>
+                    <div style={{ display:'flex', flexDirection:'column', gap:9 }}>
+                      {[90,78,84].map((w,i)=><span key={i} style={{ height:9, width:`${w}%`, borderRadius:5, background:'#ded5ca' }} />)}
+                    </div>
+                    <div style={{ marginTop:6, width:180, height:44, borderRadius:10, background:'#3a3330' }} />
+                  </div>
+                </div>
+              </div>
+              {/* Tint overlay */}
+              <div style={{ position:'absolute', inset:0, background:siteOverlay, transition:'background .9s ease', pointerEvents:'none' }} />
+              {/* Modal */}
+              <div style={{ position:'absolute', left:'50%', top:'46%', transform:'translate(-50%,-50%)', width:340, background:'#fff', borderRadius:18, boxShadow:'0 30px 60px -22px rgba(15,23,42,.4)', padding:'26px 24px', textAlign:'center', zIndex:10 }}>
+                {/* Warning */}
+                <div style={{ opacity:done?0:1, transition:'opacity .4s ease', ...(done?{position:'absolute',inset:'26px 24px'}:{}) }}>
+                  <div style={{ width:52, height:52, borderRadius:'50%', margin:'0 auto 14px', background:'#fef3e2', color:'#f59e0b', display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, fontWeight:900 }}>!</div>
+                  <div style={{ fontSize:19, fontWeight:800, color:'#1e293b', marginBottom:8 }}>{isKo ? 'AEO 최적화 필요' : 'AEO Needed'}</div>
+                  <div style={{ fontSize:14, color:'#64748b' }}>
+                    {isKo ? <>해당 웹사이트는 <b style={{color:'#334155'}}>AEO 최적화</b>가 필요합니다</> : <>This website isn&apos;t <b style={{color:'#334155'}}>optimized for AI answer engines</b> yet</>}
+                  </div>
+                </div>
+                {/* Success */}
+                <div style={{ opacity:done?1:0, transition:'opacity .4s ease', ...(!done?{position:'absolute',inset:'26px 24px'}:{}) }}>
+                  <div style={{ width:52, height:52, borderRadius:'50%', margin:'0 auto 14px', background:'#e7f7ee', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16b981" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                  </div>
+                  <div style={{ fontSize:19, fontWeight:800, color:'#1e293b', marginBottom:8 }}>{isKo ? '최적화 완료' : 'AEO Complete'}</div>
+                  <div style={{ fontSize:14, color:'#64748b', marginBottom:16 }}>
+                    {isKo ? <><b style={{color:'#334155'}}>AEO 최적화</b>가 적용되었습니다</> : <><b style={{color:'#334155'}}>AEO</b> has been applied to this website</>}
+                  </div>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:8, justifyContent:'center' }}>
+                    {tags.map((tg,i)=>(
+                      <span key={i} style={{ fontSize:12.5, fontWeight:700, color:'#3fa06a', background:'#e7f7ee', padding:'6px 12px', borderRadius:8, opacity:tg.opacity, transform:tg.tf, transition:'all .35s ease' }}>{tg.text}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* Terminal */}
+              <div style={{ position:'absolute', left:0, right:0, bottom:0, height:150, background:'#1f2430', color:'#cbd5e1', fontFamily:"ui-monospace,'SF Mono',Menlo,monospace", fontSize:13.5, lineHeight:1.7, padding:'16px 22px', transform:termOn?'translateY(0)':'translateY(100%)', opacity:termOn?1:0, transition:'transform .5s ease,opacity .5s ease', zIndex:15 }}>
+                {term.l1 && <div><span style={{color:'#fbbf24'}}>&gt; </span><span style={{color:'#e2e8f0'}}>/aeko optimize-page https://brand.com</span></div>}
+                {term.l2 && <div style={{color:'#94a3b8'}}>Applying optimizations {term.progress}...</div>}
+                {term.l3 && <div style={{color:'#34d399'}}>✓ Optimization complete!</div>}
+                <span style={{ display:'inline-block', width:8, height:15, background:'#cbd5e1', verticalAlign:-2, animation:'termBlink 1s step-end infinite' }} />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </>
+  );
+}
+
 /* ─── Contextual Ad Explainer animation ────────────────── */
 function AdExplainerPhone({
   question,
@@ -1375,6 +1618,8 @@ export function AekoCaseStudy({
         '가장 어려운 프로덕트 문제는 MCP 통합을 구축하는 것이 아니었습니다. MCP가 뭔지 모르는 이커머스 사업자도 쓸 수 있게 만드는 것이었습니다. 인터뷰에서 얻은 인사이트: 셀러들은 AI 도구를 신뢰하지만, 개발자 작업처럼 느껴지면 설정하지 않습니다. AEKO Agents는 최적화 액션 — 제품 설명 재작성, AI 인용률 향상을 위한 콘텐츠 조정 — 을 대시보드에서 클릭 한 번으로 실행할 수 있도록 설계했습니다. Claude Desktop이나 Cursor가 백그라운드에서 실행되지만, 셀러가 보는 건 결과뿐입니다. 기술적 복잡성은 완전히 추상화했습니다.',
       ),
       tags: ['MCP Integration', 'Agent Design', 'Accessibility', 'Claude Desktop', 'Zero-Config UX'],
+      visual: <AekoOptimizeFlow lang={lang} />,
+      visualLeft: true,
     },
   ];
 
