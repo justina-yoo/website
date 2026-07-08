@@ -1617,7 +1617,7 @@ export function AekoCaseStudy({
         'The hardest product problem wasn\'t building the MCP integration — it was making it usable for e-commerce business owners who have never heard of MCP. The insight from interviews: sellers trust AI tools, but they won\'t set them up if it feels like a developer task. AEKO Agents was designed so that optimization actions — rewriting product descriptions, adjusting content to improve AI citation rates — could be triggered directly from the dashboard with one click, running via Claude Desktop or Cursor in the background. The seller sees the outcome, not the infrastructure. The technical complexity is entirely abstracted away.',
         '가장 어려운 프로덕트 문제는 MCP 통합을 구축하는 것이 아니었습니다. MCP가 뭔지 모르는 이커머스 사업자도 쓸 수 있게 만드는 것이었습니다. 인터뷰에서 얻은 인사이트: 셀러들은 AI 도구를 신뢰하지만, 개발자 작업처럼 느껴지면 설정하지 않습니다. AEKO Agents는 최적화 액션 — 제품 설명 재작성, AI 인용률 향상을 위한 콘텐츠 조정 — 을 대시보드에서 클릭 한 번으로 실행할 수 있도록 설계했습니다. Claude Desktop이나 Cursor가 백그라운드에서 실행되지만, 셀러가 보는 건 결과뿐입니다. 기술적 복잡성은 완전히 추상화했습니다.',
       ),
-      tags: ['MCP Integration', 'Agent Design', 'Accessibility', 'Claude Desktop', 'Zero-Config UX'],
+      tags: ['MCP Integration', 'Agent Design', 'Accessibility'],
       visual: <AekoOptimizeFlow lang={lang} />,
       visualLeft: true,
     },
