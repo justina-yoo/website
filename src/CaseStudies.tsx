@@ -1913,7 +1913,6 @@ export function AttnCaseStudy({
         productColor="#5ACE81"
         metrics={[
           { v: 'Real-time', l: t('Delivery', '실시간 전달') },
-          { v: '3', l: t('AI Models', 'AI 모델') },
           { v: 'SEC + Gov', l: t('Signal Sources', '시그널 소스') },
           { v: '0→1', l: t('Build', '빌드') },
         ]}
