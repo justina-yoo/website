@@ -311,7 +311,7 @@ export function TimelineList({
               {s.visual ? (
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
                   {s.visualLeft && (
-                    <div className="lg:w-[600px] flex-shrink-0">
+                    <div className="w-full overflow-hidden lg:w-[600px] flex-shrink-0">
                       {s.visual}
                     </div>
                   )}
@@ -336,7 +336,7 @@ export function TimelineList({
                     </p>
                   </div>
                   {!s.visualLeft && (
-                    <div className="lg:w-[569px] flex-shrink-0">
+                    <div className="w-full overflow-hidden lg:w-[569px] flex-shrink-0">
                       {s.visual}
                     </div>
                   )}

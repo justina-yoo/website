@@ -82,13 +82,13 @@ function CaseStudyHero({
   return (
     <section className="border-b hairline">
       <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-20 pb-16 md:pt-28 md:pb-24">
-        <div style={heroRight ? { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) auto', gap: 48, alignItems: 'center' } : {}}>
+        <div className={heroRight ? 'lg:grid lg:items-center' : ''} style={heroRight ? { gridTemplateColumns: 'minmax(0,1fr) auto', gap: 48 } : {}}>
         <div>
         <Reveal delay={120}>
           <div className="flex items-center gap-4 mb-5">
             {logoSrc && <img src={logoSrc} alt={brandLabel} className="h-14 md:h-20 lg:h-28 w-auto" />}
             <h1
-              className="font-serif-display text-[40px] md:text-[64px] lg:text-[80px] leading-[0.92] tracking-tight"
+              className="font-serif-display text-[34px] md:text-[64px] lg:text-[80px] leading-[0.92] tracking-tight"
               style={{ color: 'var(--ink)' }}
             >
               {title}
@@ -141,7 +141,11 @@ function CaseStudyHero({
           </Reveal>
         )}
         </div>
-        {heroRight && <Reveal delay={200}>{heroRight}</Reveal>}
+        {heroRight && (
+          <div className="hidden lg:block flex-shrink-0">
+            <Reveal delay={200}>{heroRight}</Reveal>
+          </div>
+        )}
         </div>
       </div>
     </section>
@@ -1005,7 +1009,7 @@ function ContextualAdDemo({ t, lang }: { t: T; lang: 'en' | 'kr' }) {
     <section className="border-b hairline">
       <style>{`@keyframes acBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }`}</style>
       <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 64, alignItems: 'center' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16" style={{ alignItems: 'center' }}>
           {/* Left: text */}
           <Reveal>
             <div>
@@ -1058,7 +1062,8 @@ function ContextualAdDemo({ t, lang }: { t: T; lang: 'en' | 'kr' }) {
 function NewsArticleChrome({ children }: { children: ReactNode }) {
   return (
     <div style={{
-      width: 300,
+      width: '100%',
+      maxWidth: 300,
       background: '#ffffff',
       borderRadius: 22,
       boxShadow: '0 34px 80px -28px rgba(24,32,45,.34), 0 4px 16px rgba(24,32,45,.06)',
@@ -1362,7 +1367,7 @@ export function NewsChatCaseStudy({
             </h2>
 
             {/* Header zone: tight context block */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 12, marginBottom: 40 }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3" style={{ marginBottom: 40 }}>
               <div style={{ padding: '18px 20px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--rule)' }}>
                 <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.4, textTransform: 'uppercase' as const, color: 'var(--acc)', marginBottom: 8 }}>
                   {t('Client Problem', '클라이언트 문제')}
@@ -1391,7 +1396,7 @@ export function NewsChatCaseStudy({
             <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.3px', marginBottom: 16 }}>
               {t('2 Core Pillars I Owned as PM', 'PM으로서 주도한 2가지 핵심 과제')}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 16 }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 {
                   icon: <Icon.Click width={20} height={20} />,
@@ -1450,7 +1455,7 @@ export function NewsChatCaseStudy({
               )}
             </p>
           </Reveal>
-          <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-start', width: '100%' }}>
             <Reveal delay={0}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
                 <NewsContextualCard />
