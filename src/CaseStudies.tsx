@@ -1737,7 +1737,7 @@ export function AekoCaseStudy({
       <section className="border-t hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
           <Reveal>
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 40 }}>
+            <div className="flex flex-wrap items-end justify-between gap-10">
               {/* Left: CTA */}
               <div style={{ maxWidth: '52ch' }}>
                 <h2 className="font-serif-display text-[24px] md:text-[36px] leading-tight tracking-tight mb-8" style={{ color: 'var(--ink)' }}>
@@ -1751,7 +1751,7 @@ export function AekoCaseStudy({
                 </a>
               </div>
               {/* Right: next project */}
-              <div style={{ textAlign: 'right' }}>
+              <div className="text-left md:text-right">
                 <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' as const, color: 'var(--ink-3)', marginBottom: 8 }}>
                   {t('Next Project', '다음 프로젝트')}
                 </div>
