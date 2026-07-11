@@ -767,7 +767,7 @@ export default function App() {
     if (page === 'workflow')
       return <WorkflowCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
     if (page === 'strategy')
-      return <StrategyCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;
+      return <StrategyCaseStudy onBack={backHome} onNavigate={openCase} lang={lang} onToggleLang={toggleLang} t={t} />;
 
     if (page === 'monetization')
       return <MonetizationCaseStudy onBack={backHome} lang={lang} onToggleLang={toggleLang} t={t} />;

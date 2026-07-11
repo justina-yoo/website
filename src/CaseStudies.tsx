@@ -2159,11 +2159,13 @@ export function WorkflowCaseStudy({
 /* ─── Product Strategy & 0→1 ───────────────────────────── */
 export function StrategyCaseStudy({
   onBack,
+  onNavigate,
   lang,
   onToggleLang,
   t,
 }: {
   onBack: () => void;
+  onNavigate?: (page: string) => void;
   lang: 'en' | 'kr';
   onToggleLang: () => void;
   t: T;
@@ -2241,8 +2243,8 @@ export function StrategyCaseStudy({
     <CaseStudyShell accentClass="acc-indigo" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="Product Strategy & 0→1 — Justina Yoo" pageDescription="From zero to product-market fit. AEKO, NewsChat, and ATTN case studies.">
       <CaseStudyHero
         brandLabel={t('Product Strategy & 0→1', '프로덕트 전략 & 0→1')}
-        subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디')]}
         title={t('Product Strategy & 0→1', '프로덕트 전략 & 0→1')}
+        tagline={t('0→1 · Product-Market Fit · Cross-functional Leadership', '0→1 · 프로덕트-마켓 핏 · 크로스펑셔널 리더십')}
         subtitle={t(
           'From zero to product-market fit — defining what to build, for whom, and how to win.',
           '제로에서 프로덕트-마켓 핏까지 — 무엇을 만들고, 누구를 위해, 어떻게 이길지 정의합니다.',
@@ -2262,20 +2264,78 @@ export function StrategyCaseStudy({
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('VISUALS', '비주얼')} title={t('Visual Evidence', '시각적 근거')} />
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              { title: 'AEKO Activation Loop', desc: 'Diagram showing the user journey: connect domain → define prompts → see AI Visibility Score → optimization guidance' },
-              { title: 'NewsChat PMF Timeline', desc: 'Timeline graphic showing key milestones from hypothesis to 1M MAU in 5 months, with PMF signals marked' },
-            ].map((item, i) => (
-              <Reveal key={i} delay={i * 80}>
-                <div className="border-2 border-dashed rounded-sm p-8 md:p-12 flex flex-col items-center justify-center text-center gap-3 min-h-[200px]" style={{ borderColor: 'var(--rule)' }}>
-                  <div className="eyebrow">{item.title}</div>
-                  <p className="text-[13px] max-w-[36ch]" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
+          <SectionLabel eyebrow={t('CASE STUDY VISUALS', '케이스 스터디 비주얼')} title={t('In practice', '실제 제품에서')} />
+
+          {/* NewsChat spotlight */}
+          <Reveal>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-10 md:py-14">
+              <div>
+                <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-3" style={{ color: 'var(--acc)' }}>NewsChat · UX Strategy</div>
+                <h3 className="font-serif-display text-[22px] md:text-[30px] leading-tight tracking-tight mb-4" style={{ color: 'var(--ink)' }}>
+                  {t('Turning passive reading into interaction', '정적인 읽기를 상호작용으로')}
+                </h3>
+                <p className="text-[15px] leading-relaxed mb-6" style={{ color: 'var(--ink-2)' }}>
+                  {t(
+                    'Embedded AI follow-up questions, polls, and search prompts directly inside articles — contextual entry points that drove 250% dwell time and 10% CTR without interrupting the reading experience.',
+                    '기사 내부에 AI 후속 질문, 투표, 검색 프롬프트를 직접 심어 체류 시간 250%, CTR 10%를 달성했습니다. 독자의 흐름을 끊지 않는 맥락형 진입점 설계.',
+                  )}
+                </p>
+                <button
+                  onClick={() => onNavigate ? onNavigate('newschat') : onBack()}
+                  className="font-mono-tech text-[12px] tracking-widest uppercase"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--acc)', padding: 0 }}
+                >
+                  {t('View full case study →', '케이스 스터디 보기 →')}
+                </button>
+              </div>
+              <div className="w-full overflow-hidden">
+                <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                    <NewsContextualCard />
+                    <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: 'var(--ink-3)' }}>{t('Follow-up Question', '후속 질문')}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                    <NewsContextualPoll />
+                    <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: 'var(--ink-3)' }}>{t('Poll', '투표')}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                    <NewsContextualSearch />
+                    <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: 'var(--ink-3)' }}>{t('Search Prompt', '검색 프롬프트')}</span>
+                  </div>
                 </div>
-              </Reveal>
-            ))}
-          </div>
+              </div>
+            </div>
+          </Reveal>
+
+          <div className="border-t hairline" />
+
+          {/* AEKO spotlight */}
+          <Reveal delay={80}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-10 md:py-14">
+              <div>
+                <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-3" style={{ color: 'var(--acc)' }}>AEKO · Product Design</div>
+                <h3 className="font-serif-display text-[22px] md:text-[30px] leading-tight tracking-tight mb-4" style={{ color: 'var(--ink)' }}>
+                  {t('One number that answered the question sellers actually had', '셀러들이 진짜 궁금했던 것에 대한 하나의 숫자')}
+                </h3>
+                <p className="text-[15px] leading-relaxed mb-6" style={{ color: 'var(--ink-2)' }}>
+                  {t(
+                    'User interviews revealed sellers didn\'t need more dashboards — they needed to know one thing: am I showing up in AI? The AI Visibility Score distills that into a single, scannable number.',
+                    '셀러 인터뷰에서 드러난 핵심: 더 많은 대시보드가 아니라 "AI가 나를 언급하고 있는가?"라는 하나의 질문이었습니다. AI Visibility Score는 그 답을 한눈에 보이는 숫자로 만들었습니다.',
+                  )}
+                </p>
+                <button
+                  onClick={() => onNavigate ? onNavigate('aeko') : onBack()}
+                  className="font-mono-tech text-[12px] tracking-widest uppercase"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--acc)', padding: 0 }}
+                >
+                  {t('View full case study →', '케이스 스터디 보기 →')}
+                </button>
+              </div>
+              <div className="w-full overflow-hidden">
+                <AekoVisibilityDashboard lang={lang} />
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
