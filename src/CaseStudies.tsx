@@ -1450,8 +1450,8 @@ export function NewsChatCaseStudy({
             </div>
             <p style={{ color: 'var(--fg-2)', fontSize: 15, marginTop: -8, marginBottom: 40, maxWidth: '60ch' }}>
               {t(
-                'Rather than asking readers to seek out a new product, we embedded contextual entry points directly inside the article — AI questions, polls, and search prompts that feel native to the page. Each card is designed to pull readers naturally into conversation, without breaking the flow of what they were already reading.',
-                '독자에게 새로운 제품을 찾아오라고 요구하는 대신, 기사 내부에 맥락형 진입점을 직접 심었습니다. AI 질문 카드, 투표, 검색 프롬프트 — 모두 페이지에 자연스럽게 녹아드는 형태로 설계되어, 독자가 읽던 흐름을 끊지 않고 대화로 자연스럽게 유입될 수 있도록 했습니다.',
+                'Rather than asking readers to seek out a new product, we embedded contextual entry points directly inside the article — AI questions, polls, and search prompts that feel native to the page. Each card is designed to pull readers naturally into conversation, without breaking the flow of what they were already reading. The content itself is fully automated: the moment an article is published, the system determines which format is most likely to drive engagement for that piece — and generates the question, poll options, or search prompt to match.',
+                '독자에게 새로운 제품을 찾아오라고 요구하는 대신, 기사 내부에 맥락형 진입점을 직접 심었습니다. AI 질문 카드, 투표, 검색 프롬프트 — 모두 페이지에 자연스럽게 녹아드는 형태로 설계되어, 독자가 읽던 흐름을 끊지 않고 대화로 자연스럽게 유입될 수 있도록 했습니다. 콘텐츠 생성은 완전히 자동화되어 있습니다. 기사가 발행되는 순간, 시스템이 해당 기사에 가장 적합한 포맷(질문·투표·검색 프롬프트)을 판단하고 내용까지 자동으로 생성해 함께 삽입합니다.',
               )}
             </p>
           </Reveal>
