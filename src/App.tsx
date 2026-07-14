@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  *
- * Editorial blue-paper portfolio — home + password gate + EN/KR toggle.
+ * Editorial blue-paper portfolio — home + EN/KR toggle.
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -19,84 +19,6 @@ import { NewsChatCaseStudy, AekoCaseStudy, AttnCaseStudy, WorkflowCaseStudy, Str
 type Lang = 'en' | 'kr';
 type Page = 'home' | 'newschat' | 'aeko' | 'attn' | 'workflow' | 'strategy' | 'monetization' | 'agents';
 
-const PASSWORD_HASH = '12cd5b45cdaafd02e3bfd278a1b5b1723fcaa0c9a291f50acd125297f513ec23';
-const AUTH_KEY = 'justina_portfolio_auth_v2';
-
-async function sha256(message: string): Promise<string> {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-/* ─── Password Gate ─────────────────────────────── */
-function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
-  const [value, setValue] = useState('');
-  const [error, setError] = useState(false);
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const hash = await sha256(value);
-    if (hash === PASSWORD_HASH) {
-      sessionStorage.setItem(AUTH_KEY, '1');
-      onUnlock();
-    } else {
-      setError(true);
-      setTimeout(() => setError(false), 1600);
-    }
-  };
-
-  return (
-    <div
-      className="canvas-tint grain min-h-screen flex items-center justify-center px-6"
-      style={{ position: 'relative' }}
-    >
-      <div className="relative z-10 w-full max-w-md">
-        <div className="glass-strong rounded-sm p-10 md:p-12 border hairline">
-          <div className="eyebrow mb-3">Access required</div>
-          <h1 className="font-serif-display text-[28px] sm:text-[36px] leading-[1.05] tracking-tight mb-3">
-            Justina Yoo
-          </h1>
-          <p className="text-[14px] mb-8" style={{ color: 'var(--ink-3)' }}>
-            This portfolio is private. Enter the password to continue.
-          </p>
-          <form onSubmit={submit} className="flex flex-col gap-3">
-            <input
-              type="password"
-              autoFocus
-              value={value}
-              onChange={e => setValue(e.target.value)}
-              placeholder="Password"
-              className="px-4 py-3 border hairline rounded-sm bg-white/5 text-[14px] outline-none focus:border-[var(--accent)]"
-              style={{
-                animation: error ? 'shake 0.4s' : 'none',
-                borderColor: error ? '#FF6B6B' : undefined,
-              }}
-            />
-            <button type="submit" className="btn-primary justify-center">
-              Enter <Icon.Arrow />
-            </button>
-            {error && (
-              <p
-                className="text-[12px] font-mono-tech tracking-widest uppercase"
-                style={{ color: '#FF6B6B' }}
-              >
-                Incorrect password
-              </p>
-            )}
-          </form>
-        </div>
-        <p
-          className="mt-6 text-center font-mono-tech text-[10px] tracking-widest uppercase"
-          style={{ color: 'var(--ink-3)' }}
-        >
-          If you need access, email justina.yoo@gmail.com
-        </p>
-      </div>
-      <style>{`@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }`}</style>
-    </div>
-  );
-}
 
 /* ─── Home sections ─────────────────────────────── */
 function Hero({ t }: { t: (en: string, kr: string) => string }) {
@@ -132,7 +54,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
               </div>
             </Reveal>
             <Reveal delay={120}>
-              <h1 className={`title-glow font-serif-display leading-[1.5] md:leading-[1.1] tracking-tight ${isKr ? 'text-[32px] sm:text-[38px] md:text-[40px] lg:text-[54px] xl:text-[66px]' : 'text-[36px] sm:text-[44px] md:text-[48px] lg:text-[64px] xl:text-[80px]'}`} style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
+              <h1 className={`title-glow font-serif-display leading-[1.5] md:leading-[1.1] tracking-tight ${isKr ? 'text-[28px] sm:text-[34px] md:text-[36px] lg:text-[48px] xl:text-[58px]' : 'text-[30px] sm:text-[38px] md:text-[42px] lg:text-[56px] xl:text-[70px]'}`} style={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
                 {t('Strategy to', 'AX')}
                 {isKr ? <br /> : <br className="md:hidden" />}
                 {' '}<span className="accent-glow">{t('shipped', '전략부터')}</span>
@@ -172,7 +94,7 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
           {/* Context row — full width */}
           <div className="col-span-12 md:order-3">
             <Reveal delay={360}>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mt-4 md:-mt-6" style={{}}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-4 md:-mt-6">
                 <div>
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Based across', '거점')}</div>
                   <div className="flex items-center gap-3 text-[14px] flex-wrap" style={{ color: '#F5F2EA', fontWeight: 500 }}>
@@ -198,6 +120,13 @@ function Hero({ t }: { t: (en: string, kr: string) => string }) {
                   <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Focus', '관심 분야')}</div>
                   <div className="text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
                     {t('AX Consulting · AI Strategist · UX · End-to-End Build', 'AX 컨설팅 · AI 전략가 · UX · 풀사이클 구축')}
+                  </div>
+                </div>
+                <div>
+                  <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-2" style={{ color: '#7C7A74', fontWeight: 500 }}>{t('Eligibility', '비자 / 국적')}</div>
+                  <div className="text-[14px]" style={{ color: '#F5F2EA', fontWeight: 500 }}>
+                    <div>🇰🇷 {t('Korean Citizen', '대한민국 국적')}</div>
+                    <div style={{ color: '#C8C6BE', marginTop: 4 }}>🇭🇰 {t('Top Talent Pass Scheme Visa Holder — Hong Kong', '홍콩 우수인재 통행증 계획 (TTPS) 비자 보유자')}</div>
                   </div>
                 </div>
               </div>
@@ -281,27 +210,18 @@ function FeaturedWork({
         { v: '5mo', l: t('To PMF', 'PMF 달성') },
       ],
     },
-    {
-      id: 'monetization',
-      name: t('Monetization & Growth', '수익화 & 그로스'),
-      tag: t('Revenue · Growth', '수익 · 그로스'),
-      kicker: '02',
-      categories: ['B2C', 'B2B'],
-      headline: t(
-        'Revenue-first product thinking.',
-        'AI 맥락형 광고와 수익화 전반.',
-      ),
-      body: t(
-        "Designed NewsChat's contextual ad system — 10% CTR, 3.5x ARPU. Grew NewsChat to 1M MAU with minimal paid acquisition.",
-        'NewsChat의 맥락 광고 시스템을 설계해 10% CTR, ARPU 3.5배를 달성했습니다. NewsChat을 최소한의 유료 마케팅으로 MAU 100만까지 성장시켰습니다.',
-      ),
-      accent: '#98E8C1',
-      metrics: [
-        { v: '10%', l: 'CTR' },
-        { v: '3.5x', l: 'ARPU' },
-        { v: 'A/B', l: t('Testing', '테스팅') },
-      ],
-    },
+    // HIDDEN: monetization card — restore by uncommenting
+    // {
+    //   id: 'monetization',
+    //   name: t('Monetization & Growth', '수익화 & 그로스'),
+    //   tag: t('Revenue · Growth', '수익 · 그로스'),
+    //   kicker: '02',
+    //   categories: ['B2C', 'B2B'],
+    //   headline: t('Revenue-first product thinking.', 'AI 맥락형 광고와 수익화 전반.'),
+    //   body: t("Designed NewsChat's contextual ad system — 10% CTR, 3.5x ARPU. Grew NewsChat to 1M MAU with minimal paid acquisition.", 'NewsChat의 맥락 광고 시스템을 설계해 10% CTR, ARPU 3.5배를 달성했습니다. NewsChat을 최소한의 유료 마케팅으로 MAU 100만까지 성장시켰습니다.'),
+    //   accent: '#98E8C1',
+    //   metrics: [{ v: '10%', l: 'CTR' }, { v: '3.5x', l: 'ARPU' }, { v: 'A/B', l: t('Testing', '테스팅') }],
+    // },
     {
       id: 'agents',
       name: t('Agentic Tooling', '에이전틱 툴링'),
@@ -695,7 +615,6 @@ function HomePage({
 
 /* ─── Root App ─────────────────────────────── */
 export default function App() {
-  const [authed, setAuthed] = useState(() => sessionStorage.getItem(AUTH_KEY) === '1');
   const [lang, setLang] = useState<Lang>(() => (localStorage.getItem('jy_lang') as Lang) || 'en');
   const pathToPage = (path: string): Page => {
     if (path === '/work/newschat') return 'newschat';
@@ -754,9 +673,7 @@ export default function App() {
     window.scrollTo({ top: 0 });
   };
 
-  // Case study pages require auth
   if (page !== 'home') {
-    if (!authed) return <PasswordGate onUnlock={() => setAuthed(true)} />;
 
     if (page === 'newschat')
       return <NewsChatCaseStudy onBack={backHome} onNavigate={openCase} lang={lang} onToggleLang={toggleLang} t={t} />;

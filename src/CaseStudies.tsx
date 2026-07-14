@@ -80,8 +80,8 @@ function CaseStudyHero({
   t: T;
 }) {
   return (
-    <section className="border-b hairline">
-      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-20 pb-16 md:pt-28 md:pb-24">
+    <section className="border-b hairline" style={{ minHeight: 'calc(100svh - 60px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div className="max-w-[1240px] mx-auto px-6 md:px-10 pt-20 pb-16 md:pt-28 md:pb-24" style={{ width: '100%' }}>
         <div className={heroRight ? 'lg:grid lg:items-center' : ''} style={heroRight ? { gridTemplateColumns: 'minmax(0,1fr) auto', gap: 48 } : {}}>
         <div>
         <Reveal delay={120}>
@@ -1602,7 +1602,7 @@ export function AekoCaseStudy({
 
   const timeline = [
     {
-      phase: '01 — ' + t('Dashboard & Feature Design', '대시보드 & 기능 설계'),
+      phase: t('Dashboard & Feature Design', '대시보드 & 기능 설계'),
       title: t(
         'Designing for e-commerce owners, not data analysts',
         '데이터 분석가가 아닌 이커머스 사업자를 위한 설계',
@@ -1615,7 +1615,7 @@ export function AekoCaseStudy({
       visual: <AekoVisibilityDashboard lang={lang} />,
     },
     {
-      phase: '02 — ' + t('AEKO Agents (MCP)', 'AEKO 에이전트 (MCP)'),
+      phase: t('AEKO Agents (MCP)', 'AEKO 에이전트 (MCP)'),
       title: t(
         'Making AI execution accessible to non-technical sellers',
         '비기술 셀러도 AI를 실행할 수 있도록',
@@ -1775,6 +1775,250 @@ export function AekoCaseStudy({
   );
 }
 
+/* ─── ATTN Hero Publishing UI ───────────────────────────── */
+function AttnHeroPublishing({ lang }: { lang: 'en' | 'kr' }) {
+  const isKo = lang === 'kr';
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
+  const t0Ref = useRef<number>(0);
+
+  useEffect(() => {
+    const LOOP = isKo ? 11500 : 9800;
+    const clamp = (x: number, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+    const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
+    const lerp = (a: number, b: number, p: number) => a + (b - a) * p;
+    const fade = (T: number, s: number, d: number) => clamp((T - s) / d);
+    const commas = (n: number) => Math.round(n).toLocaleString('en-US');
+    const type = (full: string, T: number, s: number, cps: number) => {
+      if (T < s) return { txt: '', active: false, started: false };
+      const n = Math.floor((T - s) / 1000 * cps);
+      const end = s + (full.length / cps) * 1000;
+      return { txt: full.slice(0, Math.min(n, full.length)), active: T < end + 550, started: true };
+    };
+
+    const headStr = isKo
+      ? '밴티코 클라우드 홀딩스(VNTQ), 7.39% 급락… 시총 약 93.7억 달러 증발'
+      : 'Vantiqo Cloud Holdings (VNTQ) Plummets 7.39%, Market Cap Shrinks ~$9.37B';
+    const HEAD_CPS = isKo ? 18 : 52;
+    const bodyStr = isKo
+      ? '밴티코 클라우드 홀딩스(NYSE: VNTQ)는 이번 거래일에 130.44달러로 마감하며 전일 대비 7.39% 하락했다. 이에 따라 시가총액은 약 136억 1천만 달러로 줄어, 하루 만에 약 9억 3,700만 달러가 증발했다. 이날 거래량은 1,311,134주를 기록했다. 규제 공시나 별도 발표에서 이번 급락의 특별한 촉매는 확인되지 않았다.'
+      : 'Vantiqo Cloud Holdings (NYSE: VNTQ) closed at $130.44, down 7.39% on the session. Its market capitalization fell to roughly $13.61 billion, erasing about $937 million in a single day. Trading volume reached 1,311,134 shares. No specific catalyst for the decline has been identified in regulatory filings.';
+    const BODY_CPS = isKo ? 44 : 130;
+    const BODY_START = 5000;
+    const bodyEnd = BODY_START + (bodyStr.length / BODY_CPS) * 1000;
+
+    const factLabels = isKo
+      ? ['주가', '등락률', '거래량', '시가총액']
+      : ['Price', 'Change', 'Volume', 'Market Cap'];
+
+    const tick = (now: number) => {
+      if (!t0Ref.current) t0Ref.current = now;
+      const T = (now - t0Ref.current) % LOOP;
+      const el = canvasRef.current;
+      if (!el) { rafRef.current = requestAnimationFrame(tick); return; }
+
+      // logo
+      const p = easeOut(clamp((T - 1200) / 480));
+      const logoLeft = lerp(180, 56, p);
+      const logoTop = lerp(232, 30, p);
+      const logoScale = lerp(3, 1, p);
+      const logo = el.querySelector<HTMLElement>('.attn-logo');
+      if (logo) logo.style.cssText = `position:absolute;left:${logoLeft}px;top:${logoTop}px;transform:scale(${logoScale});transform-origin:left top;z-index:6;`;
+
+      // candlestick bars
+      const grow = (delay: number) => {
+        const g = easeOut(clamp((T - 250 - delay) / 360));
+        return `transform-box:fill-box;transform-origin:center bottom;transform:scaleY(${g});opacity:${g}`;
+      };
+      const barIds = ['g47','g48','g50','g51','g53','g54','g56','g57','g59','g60'];
+      const barDelays: Record<string,number> = { g47:0,g48:0,g50:90,g51:90,g53:210,g54:210,g56:330,g57:330,g59:450,g60:450 };
+      barIds.forEach(id => {
+        const bar = el.querySelector<SVGElement>(`.${id}`);
+        if (bar) bar.style.cssText = grow(barDelays[id]);
+      });
+
+      // chrome
+      const chromeO = fade(T, 1500, 450);
+      el.querySelectorAll<HTMLElement>('.attn-chrome').forEach(e => { e.style.opacity = String(chromeO); });
+
+      // meta
+      const metaO = fade(T, 1700, 400);
+      const metaEl = el.querySelector<HTMLElement>('.attn-meta');
+      if (metaEl) { metaEl.style.opacity = String(metaO); metaEl.style.transform = `translateY(${lerp(6,0,metaO)}px)`; }
+
+      // headline
+      const head = type(headStr, T, 1900, HEAD_CPS);
+      const headEl = el.querySelector<HTMLElement>('.attn-head');
+      if (headEl) {
+        const ht = headEl.querySelector<HTMLElement>('.attn-head-text');
+        if (ht) ht.textContent = head.txt;
+        const caret = headEl.querySelector<HTMLElement>('.attn-caret');
+        if (caret) caret.style.display = head.started && head.active ? 'inline-block' : 'none';
+      }
+
+      // byline
+      const byO = fade(T, 4300, 450);
+      const byEl = el.querySelector<HTMLElement>('.attn-byline');
+      if (byEl) { byEl.style.opacity = String(byO); byEl.style.transform = `translateY(${lerp(5,0,byO)}px)`; }
+
+      // facts
+      const FS = 4550;
+      const cnt = (target: number, i: number) => target * easeOut(clamp((T - FS - i * 170) / 950));
+      const factVals = [
+        { v: '$' + cnt(130.44, 0).toFixed(2), c: '#161512' },
+        { v: '−' + cnt(7.39, 1).toFixed(2) + '%', c: '#C6203E' },
+        { v: commas(cnt(1311134, 2)), c: '#161512' },
+        { v: '$' + cnt(13.61, 3).toFixed(2) + 'B', c: '#161512' },
+      ];
+      el.querySelectorAll<HTMLElement>('.attn-fact').forEach((f, i) => {
+        const o = fade(T, FS + i * 170, 350);
+        f.style.opacity = String(o);
+        f.style.transform = `translateY(${lerp(12,0,o)}px)`;
+        const val = f.querySelector<HTMLElement>('.attn-fact-val');
+        if (val) { val.textContent = factVals[i].v; val.style.color = factVals[i].c; }
+      });
+
+      // body
+      const bodyT2 = type(bodyStr, T, BODY_START, BODY_CPS);
+      const bodyEl = el.querySelector<HTMLElement>('.attn-body');
+      if (bodyEl) {
+        const bt = bodyEl.querySelector<HTMLElement>('.attn-body-text');
+        if (bt) bt.textContent = bodyT2.txt;
+        const caret = bodyEl.querySelector<HTMLElement>('.attn-caret');
+        if (caret) caret.style.display = bodyT2.started && bodyT2.active ? 'inline-block' : 'none';
+      }
+
+      // committed
+      const commEl = el.querySelector<HTMLElement>('.attn-committed');
+      if (commEl) commEl.style.opacity = String(fade(T, bodyEnd + 300, 500));
+
+      // progress
+      const published = T > bodyEnd + 250;
+      const pStart = 1200;
+      const pct = Math.round(clamp((T - pStart) / (bodyEnd - pStart)) * 100);
+      const progPct = published ? 100 : pct;
+      const progColor = published ? '#5ACE81' : '#C6203E';
+      const progLabel = published
+        ? (isKo ? '발행 완료 ✓' : 'Published ✓')
+        : (T < pStart ? (isKo ? '초기화 중' : 'Initializing') : (isKo ? `생성 중 ${pct}%` : `Generating ${pct}%`));
+      const progBar = el.querySelector<HTMLElement>('.attn-prog-bar');
+      if (progBar) { progBar.style.width = progPct + '%'; progBar.style.background = progColor; }
+      const progLabelEl = el.querySelector<HTMLElement>('.attn-prog-label');
+      if (progLabelEl) { progLabelEl.textContent = progLabel; progLabelEl.style.color = progColor; }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [isKo]);
+
+  const factLabels = isKo ? ['주가','등락률','거래량','시가총액'] : ['Price','Change','Volume','Market Cap'];
+  const navItems = isKo ? ["오늘의 ATTN","SEC 공시","미국 정부 신호"] : ["Today's ATTN","SEC Filings","US Gov Signals"];
+  const byline = isKo ? 'ATTN 데스크' : 'By ATTN Desk';
+  const committed = isKo ? 'attn.today에 발행 완료 · 기사 ID 2026-07-10-VNTQ' : 'committed to attn.today · article id 2026-07-10-VNTQ';
+  const statusLabel = isKo ? '자동 뉴스룸' : 'Automated Newsroom';
+  const timestamp = isKo ? '2026년 7월 10일 · 오후 9:05 (ET)' : 'July 10, 2026 · 09:05 PM ET';
+  const headFont = isKo ? "'Noto Serif KR','Newsreader',serif" : "'Newsreader',serif";
+
+  return (
+    <>
+      <style>{`
+        @keyframes attnBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+        @keyframes attnPulse{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
+        .attn-caret{display:inline-block;width:3px;height:.92em;background:#111;vertical-align:-2px;margin-left:2px;animation:attnBlink 1s step-end infinite;}
+      `}</style>
+      <div ref={canvasRef} style={{ position: 'relative', width: 720, background: '#fdfcfa', borderRadius: 6, boxShadow: '0 40px 90px -32px rgba(40,32,20,.5),0 2px 0 rgba(0,0,0,.04),0 0 0 1px rgba(20,16,10,.06)', overflow: 'hidden', fontFamily: "'IBM Plex Sans',sans-serif" }}>
+        {/* status strip */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 30px', background: '#111114', color: '#c9c6bf', fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5ACE81', display: 'inline-block', animation: 'attnPulse 1.5s ease-in-out infinite' }} />
+            <span>{statusLabel}</span>
+          </div>
+          <div className="attn-prog-label" style={{ fontWeight: 500, color: '#C6203E' }}>Initializing</div>
+        </div>
+        {/* progress bar */}
+        <div style={{ height: 2, background: '#eceae4' }}>
+          <div className="attn-prog-bar" style={{ height: '100%', width: '0%', background: '#C6203E' }} />
+        </div>
+        {/* article sheet */}
+        <div style={{ position: 'relative', padding: '34px 56px 52px', height: 660, boxSizing: 'border-box' }}>
+          {/* logo */}
+          <div className="attn-logo" style={{ position: 'absolute', left: 180, top: 232, transformOrigin: 'left top', zIndex: 6 }}>
+            <svg width="120" viewBox="0 0 62 18" fill="none">
+              <rect y="3.788" width="3" height="14.211" rx="0.2" fill="#111"/>
+              <rect x="10" y="3.788" width="3" height="14.211" rx="0.2" fill="#111"/>
+              <rect x="3" y="3.788" width="2.842" height="7" rx="0.2" transform="rotate(-90 3 3.788)" fill="#111"/>
+              <rect x="3" y="13.262" width="2.842" height="7" transform="rotate(-90 3 13.262)" fill="#111"/>
+              <rect x="36.5" y="1.895" width="3" height="16.105" rx="0.2" fill="#111"/>
+              <rect x="31" y="3.788" width="2.842" height="14" rx="0.2" transform="rotate(-90 31 3.788)" fill="#111"/>
+              <rect x="20.5" y="1.895" width="3" height="16.105" rx="0.2" fill="#111"/>
+              <rect x="15" y="3.788" width="2.842" height="14" rx="0.2" transform="rotate(-90 15 3.788)" fill="#111"/>
+              <rect className="g51" x="51" y="0" width="1" height="6.632" rx="0.2" fill="#C6203E"/>
+              <rect className="g54" x="54" y="3.789" width="1" height="6.632" rx="0.2" fill="#C6203E"/>
+              <rect className="g57" x="57" y="7.579" width="1" height="6.632" rx="0.2" fill="#C6203E"/>
+              <rect className="g48" x="48" y="0" width="1" height="18" rx="0.2" fill="#5ACE81"/>
+              <rect className="g60" x="60" y="0" width="1" height="18" rx="0.2" fill="#5ACE81"/>
+              <rect className="g50" x="50" y="0.947" width="3" height="4.737" rx="0.2" fill="#C6203E"/>
+              <rect className="g53" x="53" y="4.737" width="3" height="4.737" rx="0.2" fill="#C6203E"/>
+              <rect className="g56" x="56" y="8.526" width="3" height="4.737" rx="0.2" fill="#C6203E"/>
+              <rect className="g59" x="59" y="0.947" width="3" height="16.105" rx="0.2" fill="#5ACE81"/>
+              <rect className="g47" x="47" y="0.947" width="3" height="16.105" rx="0.2" fill="#5ACE81"/>
+            </svg>
+          </div>
+          {/* masthead nav */}
+          <div className="attn-chrome" style={{ opacity: 0, position: 'absolute', top: 40, right: 56, display: 'flex', gap: 22, fontFamily: "'IBM Plex Mono',monospace", fontSize: 12, letterSpacing: '.06em', color: '#54514a' }}>
+            {navItems.map((n, i) => <span key={i}>{n}</span>)}
+          </div>
+          <div className="attn-chrome" style={{ opacity: 0, position: 'absolute', top: 74, left: 56, right: 56, height: 1, background: '#e9e6df' }} />
+          <div className="attn-chrome" style={{ opacity: 0, position: 'absolute', top: 73, left: 56, display: 'flex', gap: 2 }}>
+            <span style={{ width: 14, height: 3, background: '#C6203E', display: 'inline-block' }} />
+            <span style={{ width: 8, height: 3, background: '#111', display: 'inline-block' }} />
+            <span style={{ width: 20, height: 3, background: '#5ACE81', display: 'inline-block' }} />
+          </div>
+          {/* article body */}
+          <div style={{ paddingTop: 78 }}>
+            {/* meta row */}
+            <div className="attn-meta" style={{ opacity: 0, display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, fontFamily: "'IBM Plex Mono',monospace" }}>
+              <span style={{ padding: '3px 9px', background: '#111114', color: '#fff', fontSize: 11, fontWeight: 500, letterSpacing: '.1em', borderRadius: 3 }}>NYSE</span>
+              <span style={{ fontSize: 15, fontWeight: 600, color: '#111', letterSpacing: '.04em' }}>VNTQ</span>
+              <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#C6203E', display: 'inline-block' }} />
+              <span style={{ fontSize: 12, color: '#8a857a', letterSpacing: '.04em' }}>{timestamp}</span>
+            </div>
+            {/* headline */}
+            <h1 className="attn-head" style={{ margin: '0 0 16px', fontFamily: headFont, fontWeight: 500, fontSize: 41, lineHeight: 1.12, letterSpacing: '-.01em', color: '#161512', maxWidth: 760 }}>
+              <span className="attn-head-text"></span>
+              <span className="attn-caret" style={{ display: 'none' }} />
+            </h1>
+            {/* byline */}
+            <div className="attn-byline" style={{ opacity: 0, display: 'flex', alignItems: 'center', gap: 8, marginBottom: 30, fontSize: 13, color: '#77726a' }}>
+              <span style={{ fontWeight: 600, color: '#4a463f' }}>{byline}</span>
+            </div>
+            {/* key facts */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', borderTop: '1px solid #eceae4', borderBottom: '1px solid #eceae4', marginBottom: 32 }}>
+              {factLabels.map((label, i) => (
+                <div key={i} className="attn-fact" style={{ opacity: 0, padding: '18px 20px', borderLeft: '1px solid #f1efe9' }}>
+                  <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 10.5, letterSpacing: '.16em', textTransform: 'uppercase', color: '#a29c90', marginBottom: 8 }}>{label}</div>
+                  <div className="attn-fact-val" style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 23, fontWeight: 500, letterSpacing: '-.01em', color: '#161512' }}>—</div>
+                </div>
+              ))}
+            </div>
+            {/* body copy */}
+            <p className="attn-body" style={{ margin: 0, fontFamily: headFont, fontSize: 19, lineHeight: 1.66, color: '#2c2a25', maxWidth: 720 }}>
+              <span className="attn-body-text"></span>
+              <span className="attn-caret" style={{ display: 'none' }} />
+            </p>
+            {/* footer */}
+            <div className="attn-committed" style={{ opacity: 0, marginTop: 34, display: 'flex', alignItems: 'center', gap: 9, fontFamily: "'IBM Plex Mono',monospace", fontSize: 11.5, letterSpacing: '.05em', color: '#8a857a' }}>
+              <span style={{ color: '#5ACE81' }}>✓</span>
+              <span>{committed}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 /* ─── ATTN ─────────────────────────────────────────────── */
 export function AttnCaseStudy({
   onBack,
@@ -1794,7 +2038,7 @@ export function AttnCaseStudy({
   const pillars: { icon: IconName; title: string; body: string }[] = [
     {
       icon: 'Trend',
-      title: t('Real-time market news', '실시간 시장 뉴스'),
+      title: t('Market news', '시장 뉴스'),
       body: t(
         'Breaking US market coverage translated and delivered to Korean investors within minutes — fast enough to inform intraday decisions on small-cap stocks and earnings plays.',
         '미국 시장 속보를 수분 내에 한국어로 번역하여 전달합니다 — 스몰캡 종목과 실적 관련 당일 매매 의사결정에 충분한 속도입니다.',
@@ -1820,59 +2064,35 @@ export function AttnCaseStudy({
 
   const timeline = [
     {
-      phase: '01 — ' + t('Discovery', '리서치'),
-      title: t(
-        'Korean investors are flying blind on US markets',
-        '한국 투자자들은 미국 시장 정보 없이 투자하고 있다',
-      ),
+      phase: t('Product Strategy', '프로덕트 전략'),
+      title: t('Sourcing signals Korean investors can\'t access', '한국 투자자가 접근하기 어려운 정보를 직접 수집'),
       content: t(
-        'Korean retail investors were increasingly active in US equities, but the information gap was severe. Earnings releases, SEC filings, and government policy signals move US small-cap stocks within minutes — yet Korean investors had no reliable, translated source to act on them in time. By the time news filtered through, the trade was gone.',
-        '한국 개인 투자자의 미국 주식 활동이 급증했지만, 정보 격차는 심각했습니다. 실적 발표, SEC 공시, 정부 정책 시그널은 수분 안에 미국 스몰캡 종목을 움직입니다. 하지만 한국 투자자에게는 이를 제때 행동으로 옮길 수 있는 신뢰할 만한 번역 소스가 없었습니다. 뉴스가 한국어로 도착할 때쯤이면 매매 기회는 이미 지나간 뒤였습니다.',
+        'Identified the core information gap: SEC filings, earnings signals, company updates from LinkedIn, and US market news were all publicly available — but entirely in English, scattered across sources Korean investors had no workflow to monitor. ATTN was designed to aggregate these sources, extract what\'s market-relevant, and curate it into readable Korean articles.',
+        '핵심 정보 격차를 정의했습니다. SEC 공시, 실적 시그널, LinkedIn의 기업 업데이트, 미국 시장 뉴스는 모두 공개된 정보지만, 전부 영어로 흩어져 있어 한국 투자자가 체계적으로 모니터링하기 어렵습니다. ATTN은 이 소스들을 수집하고, 시장에 유의미한 내용을 추려, 읽기 쉬운 한국어 아티클로 큐레이션하도록 설계했습니다.',
       ),
-      tags: ['User Research', 'Market Analysis', 'Opportunity Sizing', 'Competitive Landscape'],
+      tags: ['Product Strategy', 'Content Architecture', 'Source Aggregation'],
     },
     {
-      phase: '02 — ' + t('Problem Framing', '문제 정의'),
+      phase: t('Build', '빌드'),
       title: t(
-        "The bottleneck isn't information — it's speed and language",
-        '병목은 정보 자체가 아닌 속도와 언어',
+        'AI pipeline from raw source to Korean article',
+        '원문 소스에서 한국어 아티클까지',
       ),
       content: t(
-        "The problem wasn't that US market data didn't exist. It was that nothing aggregated SEC filings, government signals, and breaking market news in one place and made them accessible in Korean, fast enough to act on. We framed the product opportunity as: build the intelligence layer Korean investors need to move at the speed of US markets.",
-        '문제는 미국 시장 데이터가 없다는 것이 아니었습니다. SEC 공시, 정부 시그널, 속보를 한곳에 모아 한국어로 실행 가능한 속도로 제공하는 도구가 없었던 것입니다. 제품 기회를 다음과 같이 정의했습니다: 한국 투자자가 미국 시장 속도에 맞춰 움직일 수 있는 인텔리전스 레이어를 구축하자.',
-      ),
-      tags: ['Problem Statement', 'Jobs-to-be-Done', 'TAM Sizing'],
-    },
-    {
-      phase: '03 — ' + t('Product Strategy', '프로덕트 전략'),
-      title: t('Three-pillar intelligence platform', '세 축의 인텔리전스 플랫폼'),
-      content: t(
-        'Designed ATTN around three core content pillars: real-time market news, SEC filing analysis, and US government policy signals. Each pillar feeds a distinct investor need — from intraday traders reacting to earnings to longer-horizon investors tracking regulatory shifts. Multi-model AI handles translation, summarization, and signal extraction at scale.',
-        'ATTN을 세 개의 핵심 콘텐츠 축으로 설계했습니다: 실시간 시장 뉴스, SEC 공시 분석, 미국 정부 정책 시그널. 각 축은 실적에 반응하는 단기 트레이더부터 규제 변화를 추적하는 장기 투자자까지 서로 다른 수요를 충족합니다. 멀티 모델 AI가 번역, 요약, 시그널 추출을 대규모로 처리합니다.',
-      ),
-      tags: ['Product Strategy', 'Content Architecture', 'Multi-Model AI', 'AI Orchestration'],
-    },
-    {
-      phase: '04 — ' + t('Build', '빌드'),
-      title: t(
-        'AI-native pipeline from source to reader',
-        '소스에서 독자까지 이어지는 AI 네이티브 파이프라인',
-      ),
-      content: t(
-        'Built an AI-native data pipeline using multi-model orchestration and MCP servers to continuously ingest English-language financial sources, extract market-moving signals, translate and structure content for Korean readers, and surface it within minutes of publication. Docker-based infrastructure enables reliable scaling around US market open/close windows.',
-        '멀티 모델 오케스트레이션과 MCP 서버를 활용하여 영문 금융 소스를 지속적으로 수집하고, 시장을 움직이는 시그널을 추출하고, 한국어로 번역·구조화하여 발행 수분 내에 노출하는 AI 네이티브 데이터 파이프라인을 구축했습니다. Docker 기반 인프라로 미국 장 개장·마감 시간대의 트래픽 급증에도 안정적으로 대응합니다.',
+        'Built an AI-native pipeline using multi-model orchestration and MCP servers to ingest English-language financial sources — SEC filings, market news, LinkedIn company signals — extract what\'s relevant, and produce structured Korean-language articles. Multi-model orchestration handles each step: extraction, summarization, translation, and editorial formatting.',
+        '멀티 모델 오케스트레이션과 MCP 서버를 활용해 영문 금융 소스(SEC 공시, 시장 뉴스, LinkedIn 기업 시그널)를 수집하고, 유의미한 내용을 추출하여 구조화된 한국어 아티클로 변환하는 AI 파이프라인을 구축했습니다. 추출, 요약, 번역, 편집 포맷팅 각 단계를 목적에 맞는 모델이 처리합니다.',
       ),
       tags: ['Multi-Model AI', 'MCP Server', 'Docker', '3rd Party APIs', 'AI Orchestration'],
     },
     {
-      phase: '05 — ' + t('Outcome', '성과'),
+      phase: t('Outcome', '성과'),
       title: t(
         "South Korea's #1 US stock market information media",
         '한국 1위 미국 주식 시장 정보 미디어',
       ),
       content: t(
-        "ATTN established itself as the leading Korean-language platform for US market intelligence. The platform delivers real-time coverage of SEC filings, government signals, and market news — closing the information gap that had left Korean investors at a structural disadvantage in US markets.",
-        'ATTN은 미국 시장 인텔리전스 분야의 대표 한국어 플랫폼으로 자리 잡았습니다. SEC 공시, 정부 시그널, 시장 뉴스를 실시간으로 전달하며, 한국 투자자가 미국 주식 시장에서 겪던 구조적 정보 격차를 해소하고 있습니다.',
+        "ATTN established itself as the leading Korean-language platform for US market intelligence. The platform covers SEC filings, government signals, and market news — closing the information gap that had left Korean investors at a structural disadvantage in US markets.",
+        'ATTN은 미국 시장 인텔리전스 분야의 대표 한국어 플랫폼으로 자리 잡았습니다. SEC 공시, 정부 시그널, 시장 뉴스를 빠르게 전달하며, 한국 투자자가 미국 주식 시장에서 겪던 구조적 정보 격차를 해소하고 있습니다.',
       ),
       tags: ['Product Launch', 'Market Leadership', 'SEO', 'Growth'],
     },
@@ -1897,10 +2117,10 @@ export function AttnCaseStudy({
     },
     {
       icon: 'Zap',
-      title: t('Multi-model orchestration earns its complexity', '멀티 모델 오케스트레이션, 복잡해도 그만한 가치가 있다'),
+      title: t('The narrower the niche, the clearer the product', '니치가 명확할수록 제품이 선명해진다'),
       body: t(
-        'No single model handles real-time ingestion, translation, summarization, and signal extraction equally well. Orchestrating specialized models per task gave us both better output quality and cost efficiency at scale.',
-        '단일 모델로는 실시간 수집, 번역, 요약, 시그널 추출을 모두 잘 처리할 수 없습니다. 작업별로 전문화된 모델을 오케스트레이션한 결과, 대규모 운영에서 결과 품질과 비용 효율성이 모두 향상되었습니다.',
+        'Targeting Korean retail investors in US stocks — not "global investors" — forced every content decision to be specific. Which sources to pull, what to surface, how to frame it. A vague audience produces a vague product.',
+        '미국 주식에 투자하는 한국 개인 투자자를 타깃으로 좁히자, 모든 콘텐츠 결정이 구체적으로 바뀌었습니다. 어떤 소스를 수집하고, 무엇을 노출하고, 어떻게 전달할지. 타깃이 흐리면 제품도 흐려집니다.',
       ),
     },
   ];
@@ -1912,54 +2132,22 @@ export function AttnCaseStudy({
         title="ATTN"
         tagline={t('US Market Intelligence · AI Translation · Korean Investors', '미국 시장 인텔리전스 · AI 번역 · 한국 투자자')}
         subtitle={t(
-          'Closing the information gap between Korean investors and US markets — real-time SEC filings, government signals, and market news, translated and delivered at the speed of trading.',
-          '한국 투자자와 미국 시장 간 정보 격차 해소 — SEC 공시, 정부 시그널, 시장 뉴스를 실시간으로 번역해 트레이딩 속도로 전달.',
+          'Closing the information gap between Korean investors and US markets — SEC filings, government signals, and market news, translated and delivered fast enough to act on.',
+          '한국 투자자와 미국 시장 간 정보 격차 해소 — SEC 공시, 정부 시그널, 시장 뉴스를 빠르게 번역해 실행 가능한 형태로 전달.',
         )}
         productColor="#5ACE81"
         metrics={[
-          { v: 'Real-time', l: t('Delivery', '실시간 전달') },
+          { v: 'Fast', l: t('Delivery', '빠른 전달') },
           { v: 'SEC + Gov', l: t('Signal Sources', '시그널 소스') },
           { v: '0→1', l: t('Build', '빌드') },
         ]}
+        heroRight={
+          <div className="hidden lg:block" style={{ zoom: 0.55, transformOrigin: 'top center' }}>
+            <AttnHeroPublishing lang={lang} />
+          </div>
+        }
         t={t}
       />
-
-      {/* Product UI showcase */}
-      <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 md:py-24">
-          <Reveal>
-            <div className="flex items-center gap-4 mb-10">
-              <img src="/attn-logo.svg" alt="ATTN" className="h-6" />
-              <a
-                href="https://www.attn.today"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono-tech text-[11px] tracking-widest uppercase"
-                style={{ color: 'var(--acc)' } as React.CSSProperties}
-              >
-                attn.today ↗
-              </a>
-            </div>
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="rounded-sm overflow-hidden border hairline mb-6">
-              <img src="/attn-hero.png" alt="ATTN homepage with market overview and SEC filings" className="w-full" />
-            </div>
-          </Reveal>
-          <div className="grid md:grid-cols-2 gap-6">
-            <Reveal delay={160}>
-              <div className="rounded-sm overflow-hidden border hairline">
-                <img src="/attn-content.png" alt="ATTN morning brief and market data" className="w-full" />
-              </div>
-            </Reveal>
-            <Reveal delay={240}>
-              <div className="rounded-sm overflow-hidden border hairline">
-                <img src="/attn-features.png" alt="ATTN SEC filing articles" className="w-full" />
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
@@ -2002,20 +2190,20 @@ export function AttnCaseStudy({
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('PROCESS', '프로세스')} title={t('How we built it', '어떻게 만들었는가')} />
+          <SectionLabel eyebrow={t('PROCESS', '프로세스')} title={t('Planning & Execution', '기획과 구현')} />
           <TimelineList steps={timeline} />
         </div>
       </section>
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('REFLECTIONS', '회고')} title={t('What I learned', '제가 배운 것')} />
+          <SectionLabel eyebrow={t('REFLECTIONS', '회고')} title={t('Key takeaways', '핵심 인사이트')} />
           <CardGrid items={learnings} />
         </div>
       </section>
 
       <CTASection
-        title={t('Want to talk through this?', '이 프로젝트 더 이야기 나누고 싶다면')}
+        title={t('Want to talk through this?', '이 프로젝트에 관심 있으시다면 문의 주세요.')}
         body={t(
           'Happy to go deeper on the AI pipeline, financial media strategy, or what it takes to build for speed-sensitive markets.',
           'AI 파이프라인, 금융 미디어 전략, 속도가 중요한 시장을 위한 제품 구축에 대해 더 자세히 이야기 나눌 수 있습니다.',
@@ -2145,7 +2333,7 @@ export function WorkflowCaseStudy({
       </section>
 
       <CTASection
-        title={t('Want to talk agentic workflows?', '에이전틱 워크플로우에 대해 이야기할까요?')}
+        title={t('Want to talk agentic workflows?', '에이전틱 워크플로우 도입에 관심 있으시다면 문의 주세요.')}
         body={t(
           'Happy to share how I build and ship with AI agents — from architecture to daily use.',
           'AI 에이전트로 어떻게 제품을 만들고 운영하는지 공유할 수 있습니다 — 아키텍처부터 일상 활용까지.',
@@ -2153,6 +2341,93 @@ export function WorkflowCaseStudy({
         ctaLabel={t('Get in touch', '연락하기')}
       />
     </CaseStudyShell>
+  );
+}
+
+/* ─── NewsChat Preview Card ─────────────────────────────── */
+function NewsChatPreviewCard({ lang }: { lang: 'en' | 'kr' }) {
+  const isKo = lang === 'kr';
+  return (
+    <div className="preview-card" style={{ position: 'relative', width: '100%', maxWidth: 540, borderRadius: 20, background: '#18191f', padding: '36px 36px 28px', boxShadow: '0 32px 80px -20px rgba(0,0,0,.6)', fontFamily: "Pretendard,'Apple SD Gothic Neo',sans-serif", transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease', border: '1px solid rgba(255,255,255,0.06)' }}>
+      {/* Outlink icon */}
+      <svg style={{ position: 'absolute', top: 24, right: 24, opacity: 0.35 }} width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 17L17 7M17 7H7M17 7v10" />
+      </svg>
+      {/* Logo row */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+        <img src="/newschat-icon.svg" alt="NewsChat" style={{ width: 52, height: 52 }} />
+        <span style={{ fontSize: 36, fontWeight: 800, color: '#ffffff', letterSpacing: -1.2, lineHeight: 1 }}>
+          NewsChat<span style={{ color: '#7c70d8' }}>.</span>
+        </span>
+      </div>
+      {/* Tagline */}
+      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.8, textTransform: 'uppercase' as const, color: '#8b9199', marginBottom: 20 }}>
+        {isKo ? '국내 언론사 최초의 대화형 생성형 AI' : "Korea's first conversational GenAI for news publishers"}
+      </div>
+      {/* Body */}
+      <p style={{ margin: '0 0 28px', fontSize: 16, fontWeight: 600, lineHeight: 1.6, color: '#dfe2e7' }}>
+        {isKo
+          ? '단순 챗봇이 아닙니다. 투표, 맥락 카드, 검색 프롬프트로 시작되는 몰입형 AI 뉴스 경험.'
+          : 'Not a chatbot — an immersive AI experience triggered by polls, contextual cards, and search prompts embedded in the news reading flow.'}
+      </p>
+      {/* Metrics */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        {[
+          { v: '1M',   l: isKo ? 'MAU 5개월 달성' : 'MAU in 5 months' },
+          { v: '250%', l: isKo ? '체류 시간 증가' : 'Increase in dwell time' },
+          { v: '10%',  l: isKo ? '맥락 광고 CTR' : 'Contextual ad CTR' },
+        ].map(({ v, l }, i) => (
+          <div key={i} style={{ padding: '20px 16px 12px', borderRight: i < 2 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
+            <div style={{ fontSize: 30, fontWeight: 800, color: '#F8CD48', lineHeight: 1, marginBottom: 8 }}>{v}</div>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.4, textTransform: 'uppercase' as const, color: '#8b9199', lineHeight: 1.4 }}>{l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── AEKO Preview Card ─────────────────────────────────── */
+function AekoPreviewCard({ lang }: { lang: 'en' | 'kr' }) {
+  const isKo = lang === 'kr';
+  return (
+    <div className="preview-card" style={{ position: 'relative', width: '100%', maxWidth: 540, borderRadius: 20, background: '#18191f', padding: '36px 36px 28px', boxShadow: '0 32px 80px -20px rgba(0,0,0,.6)', fontFamily: "Pretendard,'Apple SD Gothic Neo',sans-serif", transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease', border: '1px solid rgba(255,255,255,0.06)' }}>
+      {/* Outlink icon */}
+      <svg style={{ position: 'absolute', top: 24, right: 24, opacity: 0.35 }} width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 17L17 7M17 7H7M17 7v10" />
+      </svg>
+      {/* Logo row */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+        <img src="/aeko-icon.svg" alt="AEKO" style={{ width: 52, height: 52 }} />
+        <span style={{ fontSize: 36, fontWeight: 800, color: '#ffffff', letterSpacing: -1.2, lineHeight: 1 }}>
+          AEKO<span style={{ color: '#6b9fff' }}>.</span>
+        </span>
+      </div>
+      {/* Tagline */}
+      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.8, textTransform: 'uppercase' as const, color: '#8b9199', marginBottom: 20 }}>
+        {isKo ? 'AEO 인텔리전스 · AI 가시성 · 크로스보더 이커머스' : 'AEO Intelligence · AI Visibility · Cross-Border E-commerce'}
+      </div>
+      {/* Body */}
+      <p style={{ margin: '0 0 28px', fontSize: 16, fontWeight: 600, lineHeight: 1.6, color: '#dfe2e7' }}>
+        {isKo
+          ? 'AI 검색 시대, 이커머스 비즈니스를 위한 분석에서 실행까지의 레이어.'
+          : 'The analytics to execution layer for e-commerce businesses in the AI search era.'}
+      </p>
+      {/* Metrics */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        {[
+          { v: '5',    l: isKo ? 'AI 엔진' : 'AI Engines' },
+          { v: '4',    l: isKo ? '글로벌 시장' : 'Global Markets' },
+          { v: 'MCP',  l: isKo ? '통합' : 'Integration' },
+          { v: '0→1',  l: isKo ? '빌드' : 'Build' },
+        ].map(({ v, l }, i) => (
+          <div key={i} style={{ padding: '20px 12px 12px', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
+            <div style={{ fontSize: 24, fontWeight: 800, color: '#6b9fff', lineHeight: 1, marginBottom: 8 }}>{v}</div>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.4, textTransform: 'uppercase' as const, color: '#8b9199', lineHeight: 1.4 }}>{l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -2254,85 +2529,63 @@ export function StrategyCaseStudy({
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel
-            eyebrow={t('IN PRACTICE', '실전 사례')}
-            title={t('Where I applied it', '어디에 적용했는가')}
-          />
-          <CardGrid items={examples} />
-        </div>
-      </section>
-
-      <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <style>{`
+            .preview-card-btn:hover .preview-card {
+              transform: translateY(-6px);
+              box-shadow: 0 48px 100px -20px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,0.12);
+              border-color: rgba(255,255,255,0.14) !important;
+            }
+            .preview-card-btn:hover .preview-card svg {
+              opacity: 0.8 !important;
+            }
+          `}</style>
           <SectionLabel eyebrow={t('CASE STUDY VISUALS', '케이스 스터디 비주얼')} title={t('In practice', '실제 제품에서')} />
 
-          {/* NewsChat spotlight */}
           <Reveal>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-10 md:py-14">
-              <div>
-                <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-3" style={{ color: 'var(--acc)' }}>NewsChat · UX Strategy</div>
-                <h3 className="font-serif-display text-[22px] md:text-[30px] leading-tight tracking-tight mb-4" style={{ color: 'var(--ink)' }}>
-                  {t('Turning passive reading into interaction', '정적인 읽기를 상호작용으로')}
-                </h3>
-                <p className="text-[15px] leading-relaxed mb-6" style={{ color: 'var(--ink-2)' }}>
-                  {t(
-                    'Embedded AI follow-up questions, polls, and search prompts directly inside articles — contextual entry points that drove 250% dwell time and 10% CTR without interrupting the reading experience.',
-                    '기사 내부에 AI 후속 질문, 투표, 검색 프롬프트를 직접 심어 체류 시간 250%, CTR 10%를 달성했습니다. 독자의 흐름을 끊지 않는 맥락형 진입점 설계.',
-                  )}
-                </p>
-                <button
-                  onClick={() => onNavigate ? onNavigate('newschat') : onBack()}
-                  className="font-mono-tech text-[12px] tracking-widest uppercase"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--acc)', padding: 0 }}
-                >
-                  {t('View full case study →', '케이스 스터디 보기 →')}
-                </button>
-              </div>
-              <div className="w-full overflow-hidden">
-                <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-start' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                    <NewsContextualCard />
-                    <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: 'var(--ink-3)' }}>{t('Follow-up Question', '후속 질문')}</span>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                    <NewsContextualPoll />
-                    <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: 'var(--ink-3)' }}>{t('Poll', '투표')}</span>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                    <NewsContextualSearch />
-                    <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: 'var(--ink-3)' }}>{t('Search Prompt', '검색 프롬프트')}</span>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10 md:pt-14">
+              {/* NewsChat column */}
+              <div className="flex flex-col gap-6">
+                <div>
+                  <h3 className="font-serif-display text-[20px] md:text-[26px] leading-tight tracking-tight mb-3" style={{ color: 'var(--ink)' }}>
+                    {t('Turning passive reading into interaction', '정적인 읽기를 상호작용으로')}
+                  </h3>
+                  <p className="text-[14px] leading-relaxed mb-4" style={{ color: 'var(--ink-2)' }}>
+                    {t(
+                      'Embedded AI follow-up questions, polls, and search prompts directly inside articles — contextual entry points that drove 250% dwell time and 10% CTR without interrupting the reading experience.',
+                      '기사 내부에 AI 후속 질문, 투표, 검색 프롬프트를 직접 심어 체류 시간 250%, CTR 10%를 달성했습니다. 독자의 흐름을 끊지 않는 맥락형 진입점 설계.',
+                    )}
+                  </p>
                 </div>
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="border-t hairline" />
-
-          {/* AEKO spotlight */}
-          <Reveal delay={80}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-10 md:py-14">
-              <div>
-                <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-3" style={{ color: 'var(--acc)' }}>AEKO · Product Design</div>
-                <h3 className="font-serif-display text-[22px] md:text-[30px] leading-tight tracking-tight mb-4" style={{ color: 'var(--ink)' }}>
-                  {t('One number that answered the question sellers actually had', '셀러들이 진짜 궁금했던 것에 대한 하나의 숫자')}
-                </h3>
-                <p className="text-[15px] leading-relaxed mb-6" style={{ color: 'var(--ink-2)' }}>
-                  {t(
-                    'User interviews revealed sellers didn\'t need more dashboards — they needed to know one thing: am I showing up in AI? The AI Visibility Score distills that into a single, scannable number.',
-                    '셀러 인터뷰에서 드러난 핵심: 더 많은 대시보드가 아니라 "AI가 나를 언급하고 있는가?"라는 하나의 질문이었습니다. AI Visibility Score는 그 답을 한눈에 보이는 숫자로 만들었습니다.',
-                  )}
-                </p>
                 <button
-                  onClick={() => onNavigate ? onNavigate('aeko') : onBack()}
-                  className="font-mono-tech text-[12px] tracking-widest uppercase"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--acc)', padding: 0 }}
+                  className="preview-card-btn"
+                  onClick={() => onNavigate ? onNavigate('newschat') : onBack()}
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'block', textAlign: 'left' }}
+                  aria-label={t('View NewsChat case study', 'NewsChat 케이스 스터디 보기')}
                 >
-                  {t('View full case study →', '케이스 스터디 보기 →')}
+                  <NewsChatPreviewCard lang={lang} />
                 </button>
               </div>
-              <div className="w-full overflow-hidden">
-                <AekoVisibilityDashboard lang={lang} />
+              {/* AEKO column */}
+              <div className="flex flex-col gap-6">
+                <div>
+                  <h3 className="font-serif-display text-[20px] md:text-[26px] leading-tight tracking-tight mb-3" style={{ color: 'var(--ink)' }}>
+                    {t('In the AI era, what do sellers actually want to know?', 'AI 시대, 셀러들이 진짜 궁금한 건 뭘까?')}
+                  </h3>
+                  <p className="text-[14px] leading-relaxed mb-4" style={{ color: 'var(--ink-2)' }}>
+                    {t(
+                      'User interviews revealed sellers didn\'t need more dashboards — they needed to know one thing: am I showing up in AI? The AI Visibility Score distills that into a single, scannable number.',
+                      '셀러 인터뷰에서 드러난 핵심: 더 많은 대시보드가 아니라 "AI가 나를 언급하고 있는가?"라는 하나의 질문이었습니다. AI Visibility Score는 그 답을 한눈에 보이는 숫자로 만들었습니다.',
+                    )}
+                  </p>
+                </div>
+                <button
+                  className="preview-card-btn"
+                  onClick={() => onNavigate ? onNavigate('aeko') : onBack()}
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'block', textAlign: 'left' }}
+                  aria-label={t('View AEKO case study', 'AEKO 케이스 스터디 보기')}
+                >
+                  <AekoPreviewCard lang={lang} />
+                </button>
               </div>
             </div>
           </Reveal>
@@ -2357,7 +2610,7 @@ export function StrategyCaseStudy({
       </section>
 
       <CTASection
-        title={t('Want to talk strategy?', '전략에 대해 이야기할까요?')}
+        title={t('Want to talk strategy?', '전략 수립이나 협업에 관심 있으시다면 연락 주세요.')}
         body={t(
           "I'm always happy to go deeper on 0→1 builds, product-market fit, or early-stage product decisions.",
           '0→1 제품 구축, 프로덕트-마켓 핏, 초기 단계 프로덕트 의사결정에 대해 언제든 이야기 나눌 수 있습니다.',
@@ -2498,10 +2751,10 @@ export function AISystemsCaseStudy({
       </section>
 
       <CTASection
-        title={t('Want to talk AI architecture?', 'AI 아키텍처에 대해 이야기할까요?')}
+        title={t('Interested in product strategy or AI workflow automation? Feel free to reach out.', '프로덕트 전략이나 AI 워크플로우 자동화에 관심 있으시다면 문의 주세요.')}
         body={t(
-          'Happy to go deeper on RAG pipelines, multi-model orchestration, or building AI systems that actually ship.',
-          'RAG 파이프라인, 멀티 모델 오케스트레이션, 실제로 출시되는 AI 시스템 구축에 대해 더 자세히 이야기 나눌 수 있습니다.',
+          'Happy to share what I\'ve learned building ATTN — from content pipeline design to what early users in a niche market actually need.',
+          'ATTN을 만들며 배운 것들을 나눌 수 있어요. 콘텐츠 파이프라인 설계부터 니치 마켓 얼리 유저가 실제로 필요로 하는 것까지.',
         )}
         ctaLabel={t('Get in touch', '연락하기')}
       />
@@ -2598,25 +2851,53 @@ export function MonetizationCaseStudy({
             eyebrow={t('IN PRACTICE', '실전 사례')}
             title={t('Where I applied it', '어디에 적용했는가')}
           />
-          <CardGrid items={examples} />
-        </div>
-      </section>
 
-      <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('VISUALS', '비주얼')} title={t('UX & Revenue Design', 'UX 및 수익 설계')} />
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              { title: 'Contextual Ad Placement UX', desc: 'Before/after mockup showing ad placement at natural conversation breakpoints vs. traditional banner ads — the UX constraint that drove 10% CTR' },
-              { title: 'AEKO Freemium Funnel', desc: 'Funnel diagram: free visibility score → urgency trigger → paid prompt tracking → optimization tier' },
-            ].map((item, i) => (
-              <Reveal key={i} delay={i * 80}>
-                <div className="border-2 border-dashed rounded-sm p-8 md:p-12 flex flex-col items-center justify-center text-center gap-3 min-h-[200px]" style={{ borderColor: 'var(--rule)' }}>
-                  <div className="eyebrow">{item.title}</div>
-                  <p className="text-[13px] max-w-[36ch]" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
-                </div>
-              </Reveal>
-            ))}
+          {/* NewsChat contextual ads — full spotlight with UI */}
+          <Reveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center pt-10 pb-14 border-b hairline">
+              <div>
+                <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-3" style={{ color: 'var(--acc)' }}>NewsChat · Contextual Ads</div>
+                <h3 className="font-serif-display text-[22px] md:text-[30px] leading-tight tracking-tight mb-4" style={{ color: 'var(--ink)' }}>
+                  {t('Contextual ads that earn without breaking UX', '경험을 해치지 않는 맥락 광고 모델')}
+                </h3>
+                <p className="text-[15px] leading-relaxed mb-3" style={{ color: 'var(--ink-2)' }}>
+                  {t(
+                    'The AI thinking pause is dead time — we filled it with a contextually matched ad, then let it fade as the answer streamed in. Users never felt interrupted. The result: 10% CTR and a monetization model that protected UX instead of fighting it.',
+                    'AI가 답변을 생성하는 2~3초의 공백을 맥락 광고로 채우고, 응답이 시작되면 자연스럽게 사라지게 설계했습니다. 유저는 방해받지 않았고, 결과는 CTR 10% — UX와 수익이 공존하는 모델이었습니다.',
+                  )}
+                </p>
+                <p className="text-[14px] leading-relaxed" style={{ color: 'var(--ink-3)' }}>
+                  {t('3.5x ARPU · 10% contextual ad CTR', '3.5배 ARPU · 맥락 광고 CTR 10%')}
+                </p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+                {lang === 'kr' ? (
+                  <AdExplainerPhone
+                    question="한동훈 의원이 검사 시절 맡았던 주요 사건들은 뭐였을까?"
+                    workLine="AI가 답변을 준비하는 동안 잠시만 기다려주세요.."
+                    workLineDone="AI 답변 불러오기 완료!"
+                    answerHeading="부동산 재무 기록 조회"
+                    answer="한동훈 의원은 검사 시절 '대기업 저승사자'로 불렸어요. 현대차 비자금 사건으로 정몽구 회장을 구속했고, 2016년 국정농단 특검에서 삼성을 수사해 이재용 부회장을 구속 기소했습니다."
+                  />
+                ) : (
+                  <AdExplainerPhone
+                    question="What were the major cases Rep. Han Dong-hoon handled during his prosecutor years?"
+                    workLine="Ad showing while AI is working…"
+                    workLineDone="AI answer is ready!"
+                    answerHeading="Estate Financial Records"
+                    answer="Known as a 'grim reaper of big business,' he jailed Hyundai's Chung Mong-koo in the 2006 slush-fund case and led the 2016 Samsung probe that indicted Lee Jae-yong."
+                  />
+                )}
+                <span className="font-mono-tech text-[11px] tracking-widest uppercase" style={{ color: 'var(--ink-3)' }}>
+                  {t('Contextual Ad', '맥락 광고')}
+                </span>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Other examples */}
+          <div className="pt-10">
+            <CardGrid items={examples.filter((_, i) => i !== 0)} />
           </div>
         </div>
       </section>
@@ -2639,7 +2920,7 @@ export function MonetizationCaseStudy({
       </section>
 
       <CTASection
-        title={t('Want to talk monetization?', '수익화에 대해 이야기할까요?')}
+        title={t('Want to talk monetization?', '수익화 전략 설계에 관심 있으시다면 문의 주세요.')}
         body={t(
           'Happy to go deeper on revenue strategy, pricing architecture, or growth without paid acquisition.',
           '수익 전략, 가격 설계, 유료 획득 없는 성장에 대해 더 자세히 이야기 나눌 수 있습니다.',
@@ -2650,7 +2931,590 @@ export function MonetizationCaseStudy({
   );
 }
 
+/* ─── Agent UI Components ───────────────────────────────── */
+const AGENT_KF = `
+  @keyframes cwBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes cwPulse{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.55);opacity:1}}
+  @keyframes cwFade{0%,100%{opacity:.45}50%{opacity:1}}
+  @keyframes cwShimmer{0%{background-position:-260px 0}100%{background-position:260px 0}}
+`;
+const A_LOAD = [300, 850, 1400, 1950];
+const A_LOAD_D = 520;
+const A_DONE = 2470;
+function skSt(T:number,i:number):'queued'|'loading'|'ready'{const s=A_LOAD[i];if(T>=s+A_LOAD_D)return'ready';if(T>=s)return'loading';return'queued';}
+
+function AgentLeftPanel({accent,glow,emoji,name,role,cmd,arg,skills,T,stageLabel,stageColor,progPct,progColor,consoleLog}:{accent:string;glow:string;emoji:string;name:string;role:string;cmd:string;arg:string;skills:{icon:string;title:string;sub?:string}[];T:number;stageLabel:string;stageColor:string;progPct:number;progColor:string;consoleLog:string}) {
+  const FF="Pretendard,'Apple SD Gothic Neo',sans-serif";
+  const FM="'JetBrains Mono',monospace";
+  const clamp=(x:number,a=0,b=1)=>Math.max(a,Math.min(b,x));
+  const fade=(s:number,d:number)=>clamp((T-s)/d);
+  const AMBER='#d99a3a';
+  const skillsReadyCount=skills.filter((_,i)=>skSt(T,i)==='ready').length;
+  return (
+    <div style={{width:392,background:'#0f1319',borderRight:'1px solid rgba(255,255,255,0.06)',display:'flex',flexDirection:'column',padding:'28px 24px',flexShrink:0}}>
+      <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:24}}>
+        <div style={{width:54,height:54,borderRadius:16,background:`linear-gradient(150deg,${glow},${accent})`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,flexShrink:0}}>{emoji}</div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:3}}>
+            <span style={{fontSize:15,fontWeight:700,color:'#e8eaf0',letterSpacing:-0.2,fontFamily:FF}}>{name}</span>
+            <span style={{fontSize:10,fontWeight:700,letterSpacing:0.8,background:glow+'22',color:glow,padding:'2px 7px',borderRadius:6,fontFamily:FM}}>AI</span>
+          </div>
+          <div style={{fontSize:12,color:'#6b7280',letterSpacing:0.1,fontFamily:FF}}>{role}</div>
+        </div>
+      </div>
+      <div style={{background:'#0b0d10',borderRadius:10,padding:'12px 14px',marginBottom:20}}>
+        <div style={{fontFamily:FM,fontSize:11.5,color:'#4a5568',marginBottom:8}}>
+          <span style={{color:'#3a4a5c'}}>$ </span><span style={{color:'#7c8fa8'}}>{cmd}</span><span style={{color:'#4a5568'}}> --topic </span><span style={{color:glow}}>"{arg}"</span>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:8,fontFamily:FM,fontSize:11}}>
+          <span style={{width:6,height:6,borderRadius:'50%',background:T<A_DONE?AMBER:accent,display:'inline-block',animation:T<A_DONE?'cwFade 1s ease-in-out infinite':'none',opacity:T<A_DONE?undefined:0.8}}/>
+          <span style={{color:'#6b7280'}}>{consoleLog}</span>
+          {skillsReadyCount>0&&<span style={{marginLeft:'auto',color:'#4a5568',fontSize:10}}>{skillsReadyCount}/4</span>}
+        </div>
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:8,flex:1}}>
+        {skills.map((sk,i)=>{
+          const status=skSt(T,i);
+          const o=clamp((T-(A_LOAD[i]-100))/200);
+          return (
+            <div key={i} style={{display:'flex',alignItems:'center',gap:10,padding:'10px 12px',background:'rgba(255,255,255,0.03)',borderRadius:9,opacity:o,transform:`translateY(${(1-o)*8}px)`}}>
+              <span style={{fontSize:16,opacity:status==='queued'?0.35:1}}>{sk.icon}</span>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:12.5,color:status==='ready'?'#c8d0e0':'#6b7280',fontWeight:status==='ready'?600:400,fontFamily:FF}}>{sk.title}</div>
+                {sk.sub&&<div style={{fontSize:10.5,color:'#4a5568',fontFamily:FF,marginTop:1}}>{sk.sub}</div>}
+              </div>
+              <span style={{fontFamily:FM,fontSize:10,padding:'2px 8px',borderRadius:6,background:status==='ready'?accent+'22':status==='loading'?AMBER+'22':'rgba(255,255,255,0.06)',color:status==='ready'?accent:status==='loading'?AMBER:'#4a5568',animation:status==='loading'?'cwFade 0.9s ease-in-out infinite':'none',flexShrink:0}}>
+                {status==='ready'?'ready':status==='loading'?'loading':'queued'}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{marginTop:24}}>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
+          <span style={{fontFamily:FM,fontSize:10.5,color:stageColor,fontWeight:600,letterSpacing:0.5}}>{stageLabel}</span>
+          <span style={{fontFamily:FM,fontSize:10.5,color:'#4a5568'}}>{Math.round(progPct)}%</span>
+        </div>
+        <div style={{height:6,background:'rgba(255,255,255,0.07)',borderRadius:99,overflow:'hidden'}}>
+          <div style={{height:'100%',width:progPct+'%',background:progColor,borderRadius:99,transition:'width 0.3s ease,background 0.3s'}}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SalesAgentUI({ lang = 'en' }: { lang?: 'en' | 'kr' }) {
+  const KO = lang === 'kr';
+  const ACC='#6D5EF5',GLOW='#9B8CFF',AMBER='#d99a3a',GREEN='#1c8a5a';
+  const FF="Pretendard,'Apple SD Gothic Neo',sans-serif";
+  const FM="'JetBrains Mono',monospace";
+  const SUBJECT=KO?"Dewy Lab 재구매율을 높일 간단한 아이디어":"Quick idea for Dewy Lab's retention numbers";
+  const BODY=KO
+    ?"안녕하세요 Mia 님,\n\n지난달 Dewy Lab의 세포라 입점 축하드립니다 — 젤 모이스처라이저 포지셔닝이 인상적이었어요.\n\n저희와 함께한 DTC 스킨케어 브랜드 대부분이 약한 구매 후 플로우 때문에 재구매 매출의 20~30%를 놓치고 있었습니다. Glow Theory는 한 분기 만에 재구매를 34% 올렸어요.\n\n같은 방식이 Dewy Lab에도 맞을지, 다음 주에 15분만 통화 가능하실까요?\n\n감사합니다,\nAlex 드림"
+    :"Hi Mia,\n\nCongrats on Dewy Lab's Sephora launch last month — the gel-moisturizer positioning is sharp.\n\nMost DTC skincare brands we work with were leaving 20–30% of repeat revenue on the table from weak post-purchase flows. We helped Glow Theory lift repeat orders 34% in one quarter.\n\nWorth a quick 15-min call next week?\n\nBest,\nAlex";
+  const prospects=[
+    {ini:'MC',bg:ACC,name:'Mia Chen',role:KO?'창업자 & CEO · Dewy Lab':'Founder & CEO · Dewy Lab'},
+    {ini:'JP',bg:'#0A66C2',name:'Jordan Park',role:KO?'성장 총괄 · Skinly':'VP Growth · Skinly'},
+    {ini:'RA',bg:'#12b3a6',name:'Rae Adigun',role:KO?'이커머스 리드 · Lumé Co':'Head of eComm · Lumé Co'},
+    {ini:'ST',bg:'#e0245e',name:'Sara Tan',role:KO?'창업자 · Bare Ritual':'Founder · Bare Ritual'},
+    {ini:'DK',bg:'#d99a3a',name:'Dan Kim',role:'CMO · Hydra House'},
+  ];
+  const skills=KO?[
+    {icon:'🔎',title:'잠재고객 검색'},
+    {icon:'🎯',title:'ICP & 리드 검증'},
+    {icon:'🧩',title:'개인화 리서치'},
+    {icon:'✍️',title:'이메일 카피라이팅'},
+  ]:[
+    {icon:'🔎',title:'Prospect search'},
+    {icon:'🎯',title:'ICP & lead qualification'},
+    {icon:'🧩',title:'Personalization research'},
+    {icon:'✍️',title:'Email copywriting'},
+  ];
+  const [T,setT]=useState(0);
+  const [sent,setSent]=useState(false);
+  const sentAt=useRef(0);
+  useEffect(()=>{
+    const iv=setInterval(()=>{
+      if(sent){if(performance.now()-sentAt.current>3200){setSent(false);setT(0);}return;}
+      setT(p=>p>=18000?0:p+50);
+    },50);
+    return()=>clearInterval(iv);
+  },[sent]);
+  const clamp=(x:number,a=0,b=1)=>Math.max(a,Math.min(b,x));
+  const fade=(s:number,d:number)=>clamp((T-s)/d);
+  const typeText=(full:string,s:number,cps:number)=>{
+    if(T<s)return{txt:'',typing:false,end:s};
+    const end=s+(full.length/cps)*1000;
+    const n=Math.floor((T-s)/1000*cps);
+    return{txt:full.slice(0,Math.min(n,full.length)),typing:T<end,end};
+  };
+  const SEARCH=A_DONE+200,PROS_START=A_DONE+550,PROS_STEP=260;
+  const prospectsDone=PROS_START+4*PROS_STEP+250;
+  const G=prospectsDone+250;
+  const subj=typeText(SUBJECT,G,38);
+  const body=typeText(BODY,subj.end+250,78);
+  useEffect(()=>{if(!sent&&body.end>0&&T>body.end+950){setSent(true);sentAt.current=performance.now();}},[ T,sent,body.end]);
+  let stageLabel=KO?'스킬 로딩 중':'Loading skills',stageColor=AMBER,progPct=0,progColor=AMBER;
+  if(T<A_DONE){let p=0;for(let i=0;i<4;i++)p+=25*clamp((T-A_LOAD[i])/A_LOAD_D);progPct=Math.min(100,p);}
+  else if(T<G){stageLabel=KO?'잠재고객 탐색 중':'Finding prospects';progPct=50+50*clamp((T-A_DONE)/(G-A_DONE))*0.5;progColor=AMBER;stageColor=AMBER;}
+  else if(!sent){stageLabel=T>=body.end?(KO?'발송 준비 완료':'Ready to send'):(KO?'이메일 작성 중':'Drafting email');stageColor=ACC;progColor=ACC;progPct=50+50*clamp((T-G)/(body.end+500-G));}
+  if(sent){stageLabel=KO?'발송 완료':'Sent';stageColor=GREEN;progColor=GREEN;progPct=100;}
+  const consoleLog=T<SEARCH?(KO?'→ 스킬 불러오는 중…':'→ resolving skills…'):T<G?(KO?'→ 잠재고객 검색 중…':'→ searching prospects…'):T<body.end?(KO?'→ 이메일 작성 중…':'→ drafting email…'):sent?(KO?'→ 이메일 발송 완료 ✓':'→ email sent ✓'):(KO?'→ 초안 준비 완료 ✓':'→ draft ready ✓');
+  return (
+    <div style={{width:1120,height:820,background:'#14181f',borderRadius:18,boxShadow:'0 40px 90px -34px rgba(20,16,10,.6),0 0 0 1px rgba(20,25,32,.9)',display:'flex',overflow:'hidden',fontFamily:FF,flexShrink:0}}>
+      <style>{AGENT_KF}</style>
+      <AgentLeftPanel accent={ACC} glow={GLOW} emoji="📨" name={KO?'영업 아웃리치':'Sales Outreach'} role={KO?'자율 영업 아웃리치 에이전트':'Autonomous sales outreach agent'} cmd="sales.outreach" arg="skincare-brands" skills={skills} T={T} stageLabel={stageLabel} stageColor={stageColor} progPct={progPct} progColor={progColor} consoleLog={consoleLog}/>
+      <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden'}}>
+        <div style={{height:42,background:'#0e1116',borderBottom:'1px solid rgba(255,255,255,0.06)',display:'flex',alignItems:'center',paddingLeft:16,gap:8,flexShrink:0}}>
+          {['#ff5f57','#febc2e','#28c840'].map((c,i)=><span key={i} style={{width:12,height:12,borderRadius:'50%',background:c,display:'inline-block'}}/>)}
+          <span style={{flex:1,textAlign:'center',fontFamily:FM,fontSize:11.5,color:'#4a5568',paddingRight:52}}>{KO?'아웃리치 — 새 메일':'Outreach — New Message'}</span>
+        </div>
+        <div style={{flex:1,display:'flex',overflow:'hidden'}}>
+          <div style={{width:246,background:'#f7f8fa',borderRight:'1px solid #dfe3e8',display:'flex',flexDirection:'column',overflow:'hidden',flexShrink:0}}>
+            <div style={{padding:'14px 16px 10px',display:'flex',alignItems:'center',gap:8}}>
+              <span style={{fontSize:14}}>📁</span>
+              <span style={{fontSize:12,fontWeight:700,color:'#374151'}}>{KO?'잠재고객 데이터베이스':'Prospect database'}</span>
+            </div>
+            <div style={{margin:'0 12px 10px',background:'#fff',border:'1px solid #e5e7eb',borderRadius:7,padding:'6px 10px',display:'flex',alignItems:'center',gap:6}}>
+              <span style={{fontSize:11,color:'#9ca3af'}}>🔍</span>
+              <span style={{fontFamily:FM,fontSize:10.5,color:'#9ca3af'}}>{KO?'창업자 · 스킨케어 · DTC':'Search prospects…'}</span>
+            </div>
+            <div style={{padding:'0 16px 8px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <span style={{fontSize:11,color:'#9ca3af',fontFamily:FM}}>{KO?'5명':'5 prospects'}</span>
+              <span style={{fontSize:10,background:ACC+'22',color:ACC,padding:'2px 7px',borderRadius:99,fontFamily:FM,fontWeight:600}}>{KO?'ICP':'ICP match'}</span>
+            </div>
+            <div style={{flex:1,overflowY:'auto'}}>
+              {prospects.map((p,i)=>{
+                const o=fade(PROS_START+i*PROS_STEP,250);
+                return(
+                  <div key={i} style={{padding:'10px 14px',display:'flex',alignItems:'center',gap:10,background:i===0?ACC+'11':'transparent',borderLeft:i===0?`3px solid ${ACC}`:'3px solid transparent',opacity:o,transform:`translateY(${(1-o)*6}px)`}}>
+                    <div style={{width:34,height:34,borderRadius:'50%',background:p.bg,display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:700,color:'#fff',flexShrink:0}}>{p.ini}</div>
+                    <div style={{minWidth:0}}>
+                      <div style={{fontSize:12.5,fontWeight:600,color:'#1f2937',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{p.name}</div>
+                      <div style={{fontSize:11,color:'#9ca3af',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{p.role}</div>
+                    </div>
+                    {sent&&i===0&&<span style={{fontSize:12,marginLeft:'auto',color:GREEN}}>✓</span>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div style={{flex:1,background:'#fff',display:'flex',flexDirection:'column',overflow:'hidden'}}>
+            <div style={{padding:'18px 24px 14px',borderBottom:'1px solid #f0f0f0',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <span style={{fontSize:15,fontWeight:700,color:'#111827'}}>{KO?'새 아웃리치 이메일':'New outreach email'}</span>
+              {!sent&&<span style={{fontFamily:FM,fontSize:10,padding:'3px 10px',borderRadius:99,background:T>=body.end?ACC+'22':AMBER+'15',color:T>=body.end?ACC:AMBER}}>{T<G?(KO?'대기':'Queued'):T>=body.end?(KO?'초안 준비됨':'Draft ready'):(KO?'작성 중…':'Drafting…')}</span>}
+            </div>
+            <div style={{padding:'12px 24px',borderBottom:'1px solid #f8f8f8',display:'flex',alignItems:'center',gap:10,opacity:fade(PROS_START,300)}}>
+              <span style={{fontFamily:FM,fontSize:11,color:'#9ca3af',width:32}}>{KO?'받는사람':'To:'}</span>
+              <div style={{display:'flex',alignItems:'center',gap:6,background:ACC+'11',padding:'4px 10px',borderRadius:99}}>
+                <div style={{width:18,height:18,borderRadius:'50%',background:ACC,display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,fontWeight:700,color:'#fff'}}>MC</div>
+                <span style={{fontSize:12,fontWeight:600,color:'#374151'}}>Mia Chen</span>
+                <span style={{fontSize:11,color:'#9ca3af'}}>mia@dewylab.com</span>
+              </div>
+            </div>
+            <div style={{padding:'12px 24px',borderBottom:'1px solid #f8f8f8',display:'flex',alignItems:'baseline',gap:10,opacity:fade(G-100,300)}}>
+              <span style={{fontFamily:FM,fontSize:11,color:'#9ca3af',width:52,flexShrink:0}}>{KO?'제목':'Subject:'}</span>
+              <span style={{fontSize:13.5,color:'#111827',fontWeight:500,flex:1}}>
+                {subj.txt}{subj.typing&&<span style={{display:'inline-block',width:2,height:'1em',background:'#111',verticalAlign:'-2px',marginLeft:1,animation:'cwBlink 1s step-end infinite'}}/>}
+              </span>
+            </div>
+            <div style={{flex:1,padding:'16px 24px',overflowY:'auto',opacity:fade(subj.end,300)}}>
+              <pre style={{margin:0,fontFamily:FF,fontSize:13.5,lineHeight:1.7,color:'#374151',whiteSpace:'pre-wrap',wordBreak:'break-word'}}>
+                {body.txt}{body.typing&&<span style={{display:'inline-block',width:2,height:'1em',background:'#111',verticalAlign:'-2px',marginLeft:1,animation:'cwBlink 1s step-end infinite'}}/>}
+              </pre>
+            </div>
+            <div style={{padding:'12px 24px',borderTop:'1px solid #f0f0f0',display:'flex',alignItems:'center'}}>
+              {sent?(
+                <div style={{display:'flex',alignItems:'center',gap:10}}>
+                  <span style={{fontSize:16,color:GREEN}}>✓</span>
+                  <div>
+                    <div style={{fontSize:13,fontWeight:600,color:GREEN}}>{KO?'Mia Chen 님에게 발송됨':'Email sent to Mia Chen'}</div>
+                    <div style={{fontSize:11,color:'#9ca3af',fontFamily:FM}}>{KO?'방금 · Gmail':'just now · via Gmail'}</div>
+                  </div>
+                </div>
+              ):(
+                <button onClick={()=>{setSent(true);sentAt.current=performance.now();}} style={{padding:'8px 20px',borderRadius:8,border:'none',cursor:T>=body.end?'pointer':'default',background:T>=body.end?ACC:'rgba(109,94,245,0.12)',color:T>=body.end?'#fff':ACC,fontSize:13,fontWeight:600,fontFamily:FF,transition:'background 0.3s'}}>
+                  {T<body.end?(KO?'작성 중…':'Drafting…'):(KO?'보내기':'Send')}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MarketingAgentUI({ lang = 'en' }: { lang?: 'en' | 'kr' }) {
+  const KO = lang === 'kr';
+  const ACC='#1596BC',GLOW='#4FC3E8',AMBER='#d99a3a',GREEN='#1c8a5a';
+  const FF="Pretendard,'Apple SD Gothic Neo',sans-serif";
+  const FM="'JetBrains Mono',monospace";
+  const POST_TEXT=KO
+    ?"지성 피부라 보습 건너뛰세요? 그게 오히려 번들거림을 키워요 💦\n\n수분이 부족한 피부는 유분을 과다 분비해요 — 가벼운 젤로 유분 없이 수분만 채우세요."
+    :"Oily skin? Skipping moisturizer is quietly making it worse. 💦\n\nDehydrated skin overproduces oil to compensate — a lightweight gel hydrates without the grease.";
+  const HASHTAGS=KO?"#스킨케어 #지성피부 #스킨케어팁 #dewylab":"#skincare #oilyskin #skintok #dewylab";
+  const feedPosts=KO?[
+    {av:'🧴',name:'스킨케어 데일리',handle:'@skincaredaily',txt:'리마인더: 자외선 차단제 바른 날엔 밤에 이중 세안 필수예요 🌙',r:6,rp:14,l:88},
+    {av:'💧',name:'더마 노트',handle:'@dermnotes',txt:'피부를 벗겨내기보다 나이아신아마이드 + 순한 보습이 언제나 이겨요.',r:19,rp:43,l:260},
+    {av:'🌿',name:'글로우 저널',handle:'@glowjournal',txt:'지성 피부 과세안을 멈췄더니 일주일 만에 진정됐어요.',r:27,rp:96,l:740},
+    {av:'🧑‍⚕️',name:'피부과 상담소',handle:'@askaderm',txt:'유분 ≠ 수분. 대부분의 \'지성\' 피부는 사실 수분 부족이에요 — 유분이 아니라 수분을 잡으세요.',r:38,rp:112,l:1100},
+  ]:[
+    {av:'🧴',name:'Skincare Daily',handle:'@skincaredaily',txt:'Reminder: if you wear SPF, double cleansing at night isn\'t optional 🌙',r:6,rp:14,l:88},
+    {av:'💧',name:'Derm Notes',handle:'@dermnotes',txt:'Niacinamide + gentle hydration beats stripping your skin, every single time.',r:19,rp:43,l:260},
+    {av:'🌿',name:'Glow Journal',handle:'@glowjournal',txt:'POV: you finally stopped over-washing your oily skin and it calmed down in a week.',r:27,rp:96,l:740},
+    {av:'🧑‍⚕️',name:'Ask a Derm',handle:'@askaderm',txt:'Oily ≠ hydrated. Most "oily" skin is actually dehydrated — fix the water, not the oil.',r:38,rp:112,l:1100},
+  ];
+  const skills=KO?[
+    {icon:'🛡️',title:'브랜드 보이스 가드레일'},
+    {icon:'📈',title:'트렌드 & 오디언스 리서치'},
+    {icon:'✍️',title:'후킹 & 카피라이팅'},
+    {icon:'🖼️',title:'비주얼 & 해시태그'},
+  ]:[
+    {icon:'🛡️',title:'Brand voice & guardrails'},
+    {icon:'📈',title:'Trend & audience research'},
+    {icon:'✍️',title:'Hook & copywriting'},
+    {icon:'🖼️',title:'Visuals & hashtags'},
+  ];
+  const [T,setT]=useState(0);
+  const [published,setPublished]=useState(false);
+  const pubAt=useRef(0);
+  const [ep,setEp]=useState(0);
+  useEffect(()=>{
+    const iv=setInterval(()=>{
+      if(published){
+        const elapsed=performance.now()-pubAt.current;
+        setEp(Math.min(1,elapsed/1200));
+        if(elapsed>3200){setPublished(false);setT(0);setEp(0);}
+        return;
+      }
+      setT(p=>p>=18000?0:p+50);
+    },50);
+    return()=>clearInterval(iv);
+  },[published]);
+  const clamp=(x:number,a=0,b=1)=>Math.max(a,Math.min(b,x));
+  const fade=(s:number,d:number)=>clamp((T-s)/d);
+  const easeOut=(x:number)=>1-Math.pow(1-x,3);
+  const typeText=(full:string,s:number,cps:number)=>{
+    if(T<s)return{txt:'',typing:false,end:s};
+    const end=s+(full.length/cps)*1000;
+    const n=Math.floor((T-s)/1000*cps);
+    return{txt:full.slice(0,Math.min(n,full.length)),typing:T<end,end};
+  };
+  const fmt=(n:number)=>{n=Math.round(n);if(n>=1000)return(n/1000).toFixed(1).replace(/\.0$/,'')+'K';return String(n);};
+  const G=2750;
+  const post=typeText(POST_TEXT,G,62);
+  const postEnd=post.end;
+  const imgO=fade(postEnd+100,350);
+  const draftReady=imgO>=1;
+  useEffect(()=>{if(!published&&draftReady&&T>postEnd+900){setPublished(true);pubAt.current=performance.now();}},[ T,published,draftReady,postEnd]);
+  let stageLabel=KO?'스킬 로딩 중':'Loading skills',stageColor=AMBER,progPct=0,progColor=AMBER;
+  if(T<A_DONE){let p=0;for(let i=0;i<4;i++)p+=25*clamp((T-A_LOAD[i])/A_LOAD_D);progPct=Math.min(100,p);}
+  else if(T<postEnd){stageLabel=KO?'포스트 작성 중':'Drafting post';stageColor=ACC;progColor=ACC;progPct=50+50*clamp((T-A_DONE)/(postEnd-A_DONE));}
+  else if(!published){stageLabel=KO?'게시 준비 완료':'Ready to post';stageColor=GREEN;progColor=GREEN;progPct=100;}
+  if(published){stageLabel=KO?'게시 완료':'Posted';stageColor=GREEN;progColor=GREEN;progPct=100;}
+  const consoleLog=T<A_DONE?(KO?'→ 스킬 불러오는 중…':'→ resolving skills…'):T<postEnd?(KO?'→ 포스트 작성 중…':'→ drafting post…'):published?(KO?'→ 게시 완료 ✓':'→ posted ✓'):(KO?'→ 초안 준비 완료 ✓':'→ draft ready ✓');
+  const ep2=easeOut(ep);
+  return (
+    <div style={{width:1120,height:820,background:'#14181f',borderRadius:18,boxShadow:'0 40px 90px -34px rgba(20,16,10,.6),0 0 0 1px rgba(20,25,32,.9)',display:'flex',overflow:'hidden',fontFamily:FF,flexShrink:0}}>
+      <style>{AGENT_KF}</style>
+      <AgentLeftPanel accent={ACC} glow={GLOW} emoji="🎯" name={KO?'소셜 마케팅':'Social Marketing'} role={KO?'자율 캠페인 에이전트':'Autonomous campaign agent'} cmd="campaign.post" arg="oily-skin" skills={skills} T={T} stageLabel={stageLabel} stageColor={stageColor} progPct={progPct} progColor={progColor} consoleLog={consoleLog}/>
+      <div style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',background:'#0f1319',padding:'24px 32px'}}>
+        <div style={{width:340,background:'#1a1f28',borderRadius:46,padding:10,boxShadow:'0 0 0 1px rgba(255,255,255,0.07)',flexShrink:0}}>
+          <div style={{background:'#fff',borderRadius:38,overflow:'hidden',height:720}}>
+            <div style={{padding:'14px 20px 10px',display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid #f0f0f0'}}>
+              <div style={{width:30,height:30,borderRadius:'50%',background:'#d8dde2'}}/>
+              <div style={{width:27,height:27,borderRadius:8,background:ACC,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontSize:14,fontWeight:700}}>✷</div>
+              <span style={{fontSize:16,color:'#374151'}}>⚙</span>
+            </div>
+            <div style={{display:'flex',borderBottom:'1px solid #f0f0f0'}}>
+              {(KO?['추천','팔로우 중']:['For you','Following']).map((tab,i)=>(
+                <div key={i} style={{flex:1,padding:'10px 0',textAlign:'center',fontSize:13,fontWeight:i===0?700:400,color:i===0?'#0f1419':'#6b7280',borderBottom:i===0?`2px solid #0f1419`:'2px solid transparent'}}>{tab}</div>
+              ))}
+            </div>
+            <div style={{overflowY:'auto',height:'calc(100% - 110px)'}}>
+              <div style={{padding:'14px 16px',background:'#eff9fc',borderBottom:'1px solid #e0f0f6'}}>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+                  <div style={{width:36,height:36,borderRadius:'50%',background:ACC,display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:700,color:'#fff',flexShrink:0}}>D</div>
+                  <div style={{flex:1}}>
+                    <div style={{display:'flex',alignItems:'center',gap:4}}>
+                      <span style={{fontSize:13,fontWeight:700,color:'#0f1419'}}>Dewy Lab</span>
+                      <span style={{fontSize:11,color:ACC}}>✓</span>
+                    </div>
+                    <div style={{fontSize:11,color:'#6b7280'}}>{KO?'@dewylab · 방금':'@dewylab · now'}</div>
+                  </div>
+                  {!published&&<span style={{fontFamily:FM,fontSize:9,padding:'2px 7px',borderRadius:99,background:draftReady?ACC+'22':AMBER+'20',color:draftReady?ACC:AMBER,animation:!draftReady&&T>G?'cwFade 1s ease-in-out infinite':'none'}}>{draftReady?(KO?'초안 준비됨':'Draft ready'):(KO?'작성 중…':'Drafting…')}</span>}
+                  {published&&<span style={{fontFamily:FM,fontSize:9,padding:'2px 7px',borderRadius:99,background:GREEN+'22',color:GREEN}}>{KO?'게시됨 ✓':'Posted ✓'}</span>}
+                </div>
+                <div style={{fontSize:13.5,lineHeight:1.55,color:'#0f1419',marginBottom:10,whiteSpace:'pre-line'}}>
+                  {post.txt}{post.typing&&<span style={{display:'inline-block',width:2,height:'1em',background:'#0f1419',verticalAlign:'-2px',marginLeft:1,animation:'cwBlink 1s step-end infinite'}}/>}
+                </div>
+                {post.txt.length>20&&(
+                  <div style={{fontSize:13,color:ACC,marginBottom:10}}>{HASHTAGS}</div>
+                )}
+                <div style={{height:140,borderRadius:12,overflow:'hidden',marginBottom:10,opacity:imgO,background:'linear-gradient(135deg,#e8f4f8,#c8e8f0,#d0eef6)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  {imgO>0.5&&<div style={{textAlign:'center'}}>
+                    <div style={{fontSize:28,marginBottom:4}}>🧴</div>
+                    <div style={{fontFamily:FM,fontSize:10,color:'#1596BC',opacity:0.7}}>✓ Pexels</div>
+                  </div>}
+                </div>
+                {!published?(
+                  <div style={{display:'flex',gap:8}}>
+                    <button onClick={()=>{setPublished(true);pubAt.current=performance.now();}} style={{flex:1,padding:'8px 0',borderRadius:8,border:'none',cursor:draftReady?'pointer':'default',background:draftReady?ACC:'rgba(21,150,188,0.12)',color:draftReady?'#fff':ACC,fontSize:13,fontWeight:600,fontFamily:FF}}>
+                      {draftReady?(KO?'게시하기':'Post'):(KO?'작성 중…':'Drafting…')}
+                    </button>
+                  </div>
+                ):(
+                  <div style={{display:'flex',gap:16,fontSize:12,color:'#6b7280',fontFamily:FM}}>
+                    {[{l:'💬',v:fmt(18*ep2)},{l:'🔁',v:fmt(47*ep2)},{l:'❤️',v:fmt(312*ep2)},{l:'👁',v:fmt(6200*ep2)}].map((s,i)=>(
+                      <span key={i}>{s.l} {s.v}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {feedPosts.map((fp,i)=>(
+                <div key={i} style={{padding:'12px 16px',borderBottom:'1px solid #f0f0f0'}}>
+                  <div style={{display:'flex',gap:10}}>
+                    <span style={{fontSize:22,flexShrink:0}}>{fp.av}</span>
+                    <div style={{flex:1}}>
+                      <div style={{display:'flex',gap:6,alignItems:'center',marginBottom:3}}>
+                        <span style={{fontSize:12,fontWeight:700,color:'#0f1419'}}>{fp.name}</span>
+                        <span style={{fontSize:11,color:'#6b7280'}}>{fp.handle}</span>
+                      </div>
+                      <div style={{fontSize:12.5,color:'#374151',lineHeight:1.45,marginBottom:8}}>{fp.txt}</div>
+                      <div style={{display:'flex',gap:14,fontSize:11,color:'#6b7280',fontFamily:FM}}>
+                        <span>💬 {fp.r}</span><span>🔁 {fp.rp}</span><span>❤️ {fp.l>=1000?fmt(fp.l):fp.l}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContentWriterAgentUI({ lang = 'en' }: { lang?: 'en' | 'kr' }) {
+  const KO = lang === 'kr';
+  const ACC='#2E7C5E',GLOW='#5BCB97',AMBER='#d99a3a';
+  const FF="Pretendard,'Apple SD Gothic Neo',sans-serif";
+  const FM="'JetBrains Mono',monospace";
+  const SERIF=KO?"'Noto Serif KR',serif":"'Newsreader',serif";
+  const HEADLINE=KO?'지성 피부도 보습해야 할까? 안 하면 오히려 더 번들거려요.':'Should You Moisturize Oily Skin? Skipping It Is Probably Making Things Worse.';
+  const SUMMARY=KO?'요약 — 네, 지성 피부도 보습제가 필요해요. 건너뛰면 수분 부족 피부가 보상하기 위해 피지를 과잉 생산하는 리바운드 효과가 생겨요. 가벼운 수분 젤 보습제가 유분 추가 없이 수분을 공급해요.':'TL;DR — Yes, oily skin needs moisturizer. Skipping it triggers a rebound effect where dehydrated skin overproduces sebum to compensate. A lightweight, water-based gel hydrates without adding oil.';
+  const SECTION=KO?'보습을 건너뛰면 지성 피부가 왜 더 번들거릴까?':'Why Does Skipping Moisturizer Make Oily Skin Oilier?';
+  const BODY=KO?'메커니즘이 직관에 반하지만 잘 문서화되어 있어요. 피부에는 두 종류의 수분이 있어요: 수분(보습, 각질층에 유지)과 유분(피지, 피지선에서 생산). 이건 다른 시스템이에요. 지성 피부는 피지가 충분하지만 수분은 부족할 수 있어요.':'The mechanism is counterintuitive but well-documented. When you skip hydration, the skin barrier senses dehydration and signals the sebaceous glands to overproduce oil as a protective response — leaving skin both dry and greasy.';
+  const skills=KO?[
+    {icon:'⚖️',title:'법적·규제 준수',sub:'규제 한도 대비 주장 검수'},
+    {icon:'🔍',title:'주제 리서치',sub:'출처 수집·종합'},
+    {icon:'✍️',title:'후킹 & 글쓰기',sub:'헤드라인·흐름·톤 설계'},
+    {icon:'🖼️',title:'이미지 소싱',sub:'출처 표기 이미지 확보'},
+  ]:[
+    {icon:'⚖️',title:'Legal & compliance',sub:'Screens claims against regulatory limits'},
+    {icon:'🔍',title:'Topic research',sub:'Fetches & synthesizes sources'},
+    {icon:'✍️',title:'Hook & writing craft',sub:'Structures headline, flow & voice'},
+    {icon:'🖼️',title:'Image sourcing',sub:'Finds visuals with attribution'},
+  ];
+  const LOOP=10600;
+  const [T,setT]=useState(0);
+  useEffect(()=>{
+    const iv=setInterval(()=>setT(p=>(p+50)>=LOOP?0:p+50),50);
+    return()=>clearInterval(iv);
+  },[]);
+  const clamp=(x:number,a=0,b=1)=>Math.max(a,Math.min(b,x));
+  const fade=(s:number,d:number)=>clamp((T-s)/d);
+  const typeText=(full:string,s:number,cps:number)=>{
+    if(T<s)return{txt:'',typing:false,done:false,end:s};
+    const end=s+(full.length/cps)*1000;
+    const n=Math.floor((T-s)/1000*cps);
+    return{txt:full.slice(0,Math.min(n,full.length)),typing:T<end,done:T>=end,end};
+  };
+  const G=2750;
+  const head=typeText(HEADLINE,G,48);
+  const sum=typeText(SUMMARY,4350,92);
+  const sec=typeText(SECTION,6300,36);
+  const bod=typeText(BODY,6900,124);
+  const bodyEnd=bod.end;
+  const published=T>=bodyEnd+200;
+  let stageLabel=KO?'스킬 로딩 중':'Loading skills',stageColor=AMBER,progPct=0,progColor=AMBER;
+  if(T<A_DONE){let p=0;for(let i=0;i<4;i++)p+=25*clamp((T-A_LOAD[i])/A_LOAD_D);progPct=Math.min(100,p);}
+  else if(T<bodyEnd){stageLabel=KO?'글 작성 중':'Writing article';stageColor=ACC;progColor=ACC;progPct=50+50*clamp((T-A_DONE)/(bodyEnd-A_DONE));}
+  else{stageLabel=KO?'발행 완료':'Published';stageColor=GLOW;progColor=GLOW;progPct=100;}
+  const consoleLog=T<A_DONE?(KO?'→ 스킬 불러오는 중…':'→ resolving skills…'):T<bodyEnd?(KO?'→ 초안 작성 중…':'→ composing draft…'):(KO?'→ 발행 완료 ✓':'→ published ✓');
+  const catO=fade(G-150,250),headO=fade(G-50,250),metaO=fade(4250,300),sumO=fade(4200,350),imgO=fade(5300,350),capO=fade(5850,300),secO=fade(6200,250),bodO=fade(6800,250);
+  return (
+    <div style={{width:1120,height:820,background:'#14181f',borderRadius:18,boxShadow:'0 40px 90px -34px rgba(20,16,10,.6),0 0 0 1px rgba(20,25,32,.9)',display:'flex',overflow:'hidden',fontFamily:FF,flexShrink:0}}>
+      <style>{AGENT_KF}</style>
+      <AgentLeftPanel accent={ACC} glow={GLOW} emoji="📝" name={KO?'SEO/AEO 콘텐츠 작가':'SEO/AEO Content Writer'} role={KO?'자율 글쓰기 에이전트':'Autonomous writing agent'} cmd="writer.compose" arg="oily-skin" skills={skills} T={T} stageLabel={stageLabel} stageColor={stageColor} progPct={progPct} progColor={progColor} consoleLog={consoleLog}/>
+      <div style={{flex:1,background:'#fbf9f2',overflow:'hidden',position:'relative',WebkitMaskImage:'linear-gradient(180deg,#000 87%,transparent 100%)',maskImage:'linear-gradient(180deg,#000 87%,transparent 100%)'}}>
+        <div style={{padding:'34px 40px',overflowY:'auto',height:'100%',boxSizing:'border-box'}}>
+          <div style={{opacity:catO,transform:`translateY(${(1-catO)*8}px)`,fontSize:12,fontWeight:800,letterSpacing:'0.16em',color:ACC,textTransform:'uppercase' as const,marginBottom:14,fontFamily:FM}}>{KO?'스킨케어':'SKINCARE'}</div>
+          <h2 style={{opacity:headO,transform:`translateY(${(1-headO)*8}px)`,margin:'0 0 16px',fontFamily:SERIF,fontSize:30,fontWeight:500,lineHeight:1.16,letterSpacing:'-0.01em',color:'#1c1812'}}>
+            {head.txt}{head.typing&&<span style={{display:'inline-block',width:2,height:'1em',background:'#1c1812',verticalAlign:'-2px',marginLeft:1,animation:'cwBlink 1s step-end infinite'}}/>}
+          </h2>
+          <div style={{opacity:metaO,transform:`translateY(${(1-metaO)*6}px)`,display:'flex',alignItems:'center',gap:8,marginBottom:20,fontSize:13.5,color:'#9a9384'}}>
+            <span style={{width:13,height:13,borderRadius:'50%',border:'1.5px solid #b7b0a0',display:'inline-block'}}/>
+            <span>{KO?'6분 읽기   ·   June 18, 2026':'6 min read · June 18, 2026'}</span>
+          </div>
+          <div style={{opacity:sumO,transform:`translateY(${(1-sumO)*12}px)`,background:'#e7e0d2',border:'1px solid #dbd2c0',borderRadius:16,padding:'18px 22px',marginBottom:24}}>
+            <div style={{display:'flex',gap:10,alignItems:'flex-start'}}>
+              <span style={{fontSize:20,flexShrink:0}}>💦</span>
+              <div>
+                <span style={{fontWeight:700,color:'#2b261e',fontSize:14}}>{KO?'요약: ':'Summary: '}</span>
+
+                <span style={{fontSize:14,lineHeight:1.6,color:'#3a352d'}}>
+                  {sum.txt}{sum.typing&&<span style={{display:'inline-block',width:2,height:'1em',background:'#3a352d',verticalAlign:'-2px',marginLeft:1,animation:'cwBlink 1s step-end infinite'}}/>}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div style={{opacity:imgO,transform:`translateY(${(1-imgO)*16}px)`,height:200,borderRadius:16,overflow:'hidden',marginBottom:16,background:'linear-gradient(135deg,#e8f5ee,#c8e8d8,#d8f0e4)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+            {imgO>0.5&&<div style={{textAlign:'center'}}>
+              <div style={{fontSize:36,marginBottom:6}}>🧴</div>
+              <div style={{fontFamily:FM,fontSize:11,color:ACC,opacity:0.7}}>{KO?'출처 Pexels':'Woman applying facial cream · Pexels'}</div>
+            </div>}
+          </div>
+          <div style={{opacity:capO,fontSize:11.5,color:'#9a9384',fontFamily:FM,marginBottom:20,display:'flex',alignItems:'center',gap:6}}>
+            <span style={{color:ACC}}>{KO?'✓ 출처 확인':'✓ Cited'}</span><span>{KO?'· 출처 표기 이미지 확보':'· Woman applying facial cream during skincare routine · Pexels'}</span>
+          </div>
+          <h3 style={{opacity:secO,transform:`translateY(${(1-secO)*8}px)`,margin:'0 0 14px',fontFamily:SERIF,fontSize:22,fontWeight:600,color:'#1c1812'}}>
+            {sec.txt}{sec.typing&&<span style={{display:'inline-block',width:2,height:'1em',background:'#1c1812',verticalAlign:'-2px',marginLeft:1,animation:'cwBlink 1s step-end infinite'}}/>}
+          </h3>
+          <p style={{opacity:bodO,transform:`translateY(${(1-bodO)*8}px)`,margin:0,fontSize:15.5,lineHeight:1.66,color:'#3a352d'}}>
+            {bod.txt}{bod.typing&&<span style={{display:'inline-block',width:2,height:'1em',background:'#3a352d',verticalAlign:'-2px',marginLeft:1,animation:'cwBlink 1s step-end infinite'}}/>}
+          </p>
+          {published&&<div style={{marginTop:24,display:'flex',alignItems:'center',gap:8,fontFamily:FM,fontSize:11.5,color:'#9a9384'}}><span style={{color:ACC}}>✓</span><span>{KO?'ana2me.com에 발행됨 · article id 2026-06-18-moisturizer':'published to ana2me.com · article id 2026-06-18-moisturizer'}</span></div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Agentic Tooling ──────────────────────────────────── */
+function AgentCarousel({ t, lang }: { t: T; lang: 'en' | 'kr' }) {
+  const [active, setActive] = useState(0);
+
+  const slides: { accent: string; eyebrow: string; title: string; body: string; replaces: string; UI: React.ComponentType<{ lang?: 'en' | 'kr' }> }[] = [
+    {
+      accent: '#6D5EF5',
+      eyebrow: t('Sales Agent', '세일즈 에이전트'),
+      title: t('Outbound research and outreach, automated end-to-end', '아웃바운드 리서치부터 아웃리치까지 자동화'),
+      body: t('Claude MCP plugin that automates prospect research, ICP qualification, personalization, and email drafting — replacing hours of manual prospecting with a single conversational workflow.', 'Claude MCP 플러그인으로 잠재 고객 리서치, 리드 검증, 개인화, 이메일 초안 작성을 자동화합니다. 수시간이 걸리던 수동 영업을 대화 한 번으로 처리합니다.'),
+      replaces: t('Replaces: Sales rep', '대체: 영업 담당자'),
+      UI: SalesAgentUI,
+    },
+    {
+      accent: '#1596BC',
+      eyebrow: t('Social Marketing Agent', '소셜 마케팅 에이전트'),
+      title: t('Brand-safe social content, drafted and posted autonomously', '브랜드 소셜 콘텐츠, 초안부터 게시까지 자동화'),
+      body: t('Researches trending topics, drafts on-brand posts, sources visuals, and publishes — with brand voice guardrails built in. Turns a multi-step content workflow into one command.', '트렌드 리서치, 브랜드 톤에 맞는 포스트 초안, 비주얼 소싱, 자동 게시. 브랜드 보이스 가드레일을 내장했습니다. 여러 단계의 콘텐츠 작업을 명령 하나로 처리합니다.'),
+      replaces: t('Replaces: Social media manager', '대체: 소셜 미디어 매니저'),
+      UI: MarketingAgentUI,
+    },
+    {
+      accent: '#2E7C5E',
+      eyebrow: t('Content Writer Agent', '콘텐츠 라이터 에이전트'),
+      title: t('SEO/AEO articles researched, written, and published automatically', 'SEO/AEO 아티클 자동 리서치·작성·발행'),
+      body: t('End-to-end content pipeline — compliance screening, topic research, bilingual writing, image sourcing, and publishing to ana2me.com. Replaced a multi-person editorial team.', '컴플라이언스 검토부터 주제 리서치, 한영 이중 언어 작성, 이미지 소싱, 발행까지 전 과정 자동화. 여러 명이 필요하던 편집팀 역할을 대체합니다.'),
+      replaces: t('Replaces: Editorial team', '대체: 편집팀'),
+      UI: ContentWriterAgentUI,
+    },
+  ];
+
+  const tabLabels = [
+    t('Sales Agent', '세일즈 에이전트'),
+    t('Marketing Agent', '마케팅 에이전트'),
+    t('Content Writer', '콘텐츠 라이터'),
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => setActive(a => (a + 1) % 3), 8000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div>
+      {/* Tab bar */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 40, flexWrap: 'wrap' }}>
+        {slides.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            style={{
+              padding: '8px 18px',
+              borderRadius: 6,
+              border: `1px solid ${active === i ? s.accent : 'var(--rule)'}`,
+              background: active === i ? `${s.accent}18` : 'transparent',
+              color: active === i ? s.accent : 'var(--ink-3)',
+              fontFamily: 'var(--font-mono, monospace)',
+              fontSize: 11,
+              fontWeight: 500,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase' as const,
+              cursor: 'pointer',
+              transition: 'all 0.25s',
+            }}
+          >
+            {tabLabels[i]}
+          </button>
+        ))}
+      </div>
+
+      {/* Slider */}
+      <div style={{ overflow: 'hidden' }}>
+        <div style={{
+          display: 'flex',
+          transition: 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          transform: `translateX(-${active * 100}%)`,
+          willChange: 'transform',
+          alignItems: 'flex-start',
+        }}>
+          {slides.map((s, i) => (
+            <div key={i} style={{ minWidth: '100%', display: 'flex', gap: 48, alignItems: 'center' }}>
+              {/* Description left */}
+              <div style={{ flex: '0 0 340px' }}>
+                <div className="font-mono-tech text-[11px] tracking-widest uppercase mb-3" style={{ color: s.accent }}>{s.eyebrow}</div>
+                <h3 className="font-serif-display text-[22px] md:text-[28px] leading-tight tracking-tight mb-4" style={{ color: 'var(--ink)' }}>{s.title}</h3>
+                <p className="text-[15px] leading-relaxed mb-3" style={{ color: 'var(--ink-2)' }}>{s.body}</p>
+                <span className="font-mono-tech text-[10px] tracking-widest uppercase" style={{ color: s.accent, opacity: 0.7 }}>{s.replaces}</span>
+              </div>
+              {/* UI right */}
+              <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-end' }}>
+                <div style={{ zoom: 0.6, flexShrink: 0, transformOrigin: 'top right' }}>
+                  <s.UI lang={lang} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Dot indicators */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 32 }}>
+        {slides.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            style={{
+              width: active === i ? 24 : 6,
+              height: 6,
+              borderRadius: 3,
+              background: active === i ? s.accent : 'var(--rule)',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function AgentsCaseStudy({
   onBack,
   lang,
@@ -2666,7 +3530,7 @@ export function AgentsCaseStudy({
     window.scrollTo({ top: 0 });
   }, []);
 
-  const examples: { icon: IconName; title: string; body: string }[] = [
+  const examples: { icon: IconName; title: string; body: string; replaces: string }[] = [
     {
       icon: 'Zap',
       title: t('Sales & Marketing Agent', '세일즈 & 마케팅 에이전트'),
@@ -2674,6 +3538,7 @@ export function AgentsCaseStudy({
         'Claude MCP plugin for AEKO — automates outbound research, personalized pitches, outreach drafting, and lead tracking. Replaced hours of manual prospecting with a single conversational workflow.',
         'AEKO용 Claude MCP 플러그인입니다. 아웃바운드 리서치, 맞춤형 피치, 아웃리치 초안 작성, 리드 추적을 자동화하여 수시간의 수동 영업 준비를 하나의 대화형 워크플로우로 대체했습니다.',
       ),
+      replaces: t('Replaces: Sales rep', '대체 역할: 영업 담당자'),
     },
     {
       icon: 'News',
@@ -2682,14 +3547,16 @@ export function AgentsCaseStudy({
         'Automated competitive research, market monitoring, and news aggregation across industries. Pulls from multiple sources, synthesizes insights, and delivers structured briefings — turning a daily manual process into an always-on intelligence feed.',
         '경쟁사 리서치, 시장 모니터링, 업계 뉴스 수집을 자동화했습니다. 다양한 소스에서 정보를 수집하고 인사이트를 종합하여 구조화된 브리핑을 제공합니다. 매일 수동으로 하던 작업을 상시 가동되는 인텔리전스 피드로 전환했습니다.',
       ),
+      replaces: t('Replaces: Research analyst', '대체 역할: 리서치 애널리스트'),
     },
     {
       icon: 'Globe',
       title: t('Content Pipeline → ana2me', '콘텐츠 파이프라인 → ana2me'),
       body: t(
-        'End-to-end content automation agents — topic research, SEO/AEO scoring, bilingual writing, fact-checking, and publishing. Powers ana2me (ana2me.com), a Korean beauty & ingredient database built as a side project. Each agent is a modular skill that chains into the next, replacing a multi-person editorial workflow.',
-        '주제 리서치, SEO/AEO 스코어링, 이중 언어 작성, 팩트체킹, 발행까지 전 과정을 아우르는 콘텐츠 자동화 에이전트입니다. 사이드 프로젝트로 구축한 한국 뷰티 & 성분 데이터베이스 ana2me(ana2me.com)를 운영하고 있습니다. 각 에이전트는 모듈형 스킬로 다음 단계와 연결되어, 여러 명이 필요했던 편집 워크플로우를 대체합니다.',
+        'End-to-end content automation — topic research, SEO/AEO scoring, bilingual writing, fact-checking, and publishing. Powers ana2me (ana2me.com), a Korean beauty & ingredient database. Each agent is a modular skill that chains into the next, replacing a multi-person editorial workflow.',
+        '주제 리서치, SEO/AEO 스코어링, 이중 언어 작성, 팩트체킹, 발행까지 전 과정을 아우르는 콘텐츠 자동화 에이전트입니다. 한국 뷰티 & 성분 데이터베이스 ana2me(ana2me.com)를 운영합니다. 각 에이전트는 모듈형 스킬로 연결되어 여러 명이 필요했던 편집 워크플로우를 대체합니다.',
       ),
+      replaces: t('Replaces: Editorial team', '대체 역할: 편집 팀'),
     },
   ];
 
@@ -2699,7 +3566,7 @@ export function AgentsCaseStudy({
       title: t('Agents as teammates, not tools', '에이전트는 도구가 아닌 팀원'),
       body: t(
         'Each agent has a specific role and judgment scope, not just a prompt wrapper.',
-        '각 에이전트는 단순 프롬프트 래퍼가 아닌 특정 역할과 판단 범위를 갖습니다.',
+        '각 에이전트에는 단순 프롬프트 래퍼가 아닌, 고유한 역할과 판단 범위가 있습니다.',
       ),
     },
     {
@@ -2707,15 +3574,15 @@ export function AgentsCaseStudy({
       title: t('MCP as the integration layer', 'MCP를 통합 레이어로'),
       body: t(
         'Agents operate inside existing tools (Claude Desktop, Cursor, terminal), not separate UIs.',
-        '에이전트는 별도 UI가 아닌 기존 도구(Claude Desktop, Cursor, 터미널) 안에서 작동합니다.',
+        '별도 UI 없이, 이미 쓰는 도구(Claude Desktop, Cursor, 터미널) 안에서 바로 작동합니다.',
       ),
     },
     {
       icon: 'Bar',
-      title: t('Compounding leverage', '복리적 레버리지'),
+      title: t('Compounding leverage', '누적되는 레버리지'),
       body: t(
         'Each agent frees capacity to build the next one. The real ROI is cumulative.',
-        '에이전트 하나를 만들 때마다 다음 에이전트를 만들 여유가 생깁니다. 진정한 ROI는 누적됩니다.',
+        '에이전트 하나를 만들수록 다음 에이전트를 만들 여유가 생깁니다. 진짜 ROI는 누적에서 나옵니다.',
       ),
     },
   ];
@@ -2724,14 +3591,49 @@ export function AgentsCaseStudy({
     <CaseStudyShell accentClass="acc-violet" onBack={onBack} lang={lang} onToggleLang={onToggleLang} t={t} pageTitle="Agentic Tooling — Justina Yoo" pageDescription="Claude-powered agents for sales, PM workflows, and content automation.">
       <CaseStudyHero
         brandLabel={t('Agentic Tooling', '에이전틱 툴링')}
-        subLabels={[t('Role-Level Case Study', '역할 기반 케이스 스터디'), 'Panomix & AEKO Intelligence']}
+        tagline={t('Agents · MCP · Workflow Automation', '에이전트 · MCP · 워크플로우 자동화')}
         title={t('Agentic Tooling', '에이전틱 툴링')}
         subtitle={t(
-          'Custom AI agents built on Claude — replacing manual workflows with autonomous, composable tooling.',
-          'Claude 기반 커스텀 AI 에이전트 — 수동 워크플로우를 자율적이고 조합 가능한 도구로 대체합니다.',
+          'If a function can be automated, I build an agent for it — turning headcount constraints into a workflow problem, then solving the workflow.',
+          '자동화할 수 있는 기능은 에이전트로 만듭니다. 인력 제약을 워크플로우 문제로 바꾸고, 직접 해결합니다.',
         )}
+        metrics={[
+          { v: '3+', l: t('Agents in production', '운영 중인 에이전트') },
+          { v: 'MCP', l: t('Integration layer', '통합 레이어') },
+          { v: '0→1', l: t('Solo execution', '직접 구축') },
+        ]}
         t={t}
       />
+
+      {/* Context block */}
+      <section className="border-b hairline">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
+          <Reveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
+              <div>
+                <div className="eyebrow mb-4">{t('THE PROBLEM', '문제')}</div>
+                <h2 className="font-serif-display text-[28px] md:text-[38px] leading-tight tracking-tight mb-0" style={{ color: 'var(--ink)' }}>
+                  {t('There are only so many hours. And only so many people.', '시간도, 인력도 한정되어 있다.')}
+                </h2>
+              </div>
+              <div style={{ paddingTop: 4 }}>
+                <p className="text-[16px] leading-relaxed mb-5" style={{ color: 'var(--ink-2)' }}>
+                  {t(
+                    'Whether you\'re a lean startup, a small product team, or moving fast on a new initiative — there are always more functions to cover than people to cover them. Sales research, competitive monitoring, content production, operations. These things don\'t stop needing to happen just because headcount is limited.',
+                    '린 스타트업이든, 소규모 프로덕트 팀이든, 새 이니셔티브를 빠르게 추진하는 팀이든 마찬가지입니다. 인력보다 담당해야 할 기능이 항상 더 많습니다. 영업 리서치, 경쟁사 모니터링, 콘텐츠 제작, 운영. 인력이 부족해도 이 일들은 없어지지 않습니다.',
+                  )}
+                </p>
+                <p className="text-[16px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
+                  {t(
+                    'My approach: if a function can be automated, I build an agent for it. Each agent is infrastructure — not a shortcut — that compounds over time and lets the team focus on what only humans can do.',
+                    '내 접근법: 자동화할 수 있는 기능이면 에이전트로 만듭니다. 각 에이전트는 지름길이 아니라 인프라입니다. 시간이 쌓일수록 가치가 커집니다. 사람만 할 수 있는 일에 팀이 집중할 수 있게 해줍니다.',
+                  )}
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       <section className="border-b hairline">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
@@ -2739,26 +3641,8 @@ export function AgentsCaseStudy({
             eyebrow={t('WHAT I BUILT', '무엇을 만들었는가')}
             title={t('Agent systems in production', '운영 중인 에이전트 시스템')}
           />
-          <CardGrid items={examples} />
-        </div>
-      </section>
 
-      <section className="border-b hairline">
-        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <SectionLabel eyebrow={t('VISUALS', '비주얼')} title={t('Agent Architecture', '에이전트 아키텍처')} />
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              { title: 'Agent Workflow Map', desc: 'Diagram showing how the 3 agents (Sales, Research, Content) connect via MCP and chain into each other' },
-              { title: 'Content Pipeline Flow', desc: 'Flow chart: topic research → SEO/AEO scoring → bilingual writing → fact-checking → publishing to ana2me.com' },
-            ].map((item, i) => (
-              <Reveal key={i} delay={i * 80}>
-                <div className="border-2 border-dashed rounded-sm p-8 md:p-12 flex flex-col items-center justify-center text-center gap-3 min-h-[200px]" style={{ borderColor: 'var(--rule)' }}>
-                  <div className="eyebrow">{item.title}</div>
-                  <p className="text-[13px] max-w-[36ch]" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <AgentCarousel t={t} lang={lang} />
         </div>
       </section>
 
@@ -2772,18 +3656,18 @@ export function AgentsCaseStudy({
       >
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-20 md:py-28">
           <SectionLabel
-            eyebrow={t('APPROACH', '접근')}
-            title={t('How I think about agents', '에이전트에 대한 사고방식')}
+            eyebrow={t('APPROACH', '접근 방식')}
+            title={t('How I think about agents', '에이전트를 설계하는 원칙')}
           />
           <CardGrid items={principles} />
         </div>
       </section>
 
       <CTASection
-        title={t('Want to talk agentic tooling?', '에이전틱 툴링에 대해 이야기할까요?')}
+        title={t('Want to talk agentic tooling?', '에이전트 구축이나 도입에 관심 있으시다면 문의 주세요.')}
         body={t(
           'Happy to share how I design, build, and chain AI agents — from MCP architecture to compounding leverage.',
-          'AI 에이전트를 어떻게 설계하고 구축하고 연결하는지 공유할 수 있습니다 — MCP 아키텍처부터 복리적 레버리지까지.',
+          'AI 에이전트 설계·구축·연결 방식을 공유할 수 있어요. MCP 아키텍처부터 레버리지 설계 전반을 다룹니다.',
         )}
         ctaLabel={t('Get in touch', '연락하기')}
       />
