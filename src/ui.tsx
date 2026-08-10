@@ -212,7 +212,7 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
             href="https://www.linkedin.com/in/justina-ji-yeon-yoo/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full hover:scale-105 transition-all"
+            className="flex w-9 h-9 items-center justify-center rounded-full hover:scale-105 transition-all"
             style={{
               color: 'var(--ink-2)',
               boxShadow: 'inset 1px 1px 1px -0.5px rgba(255,255,255,0.5), inset -1px -1px 1px -0.5px rgba(255,255,255,0.5), inset 0 0 4px 3px rgba(255,255,255,0.06), 0 0 6px rgba(0,0,0,0.1)',
@@ -225,7 +225,7 @@ export function TopNav({ onHome, onScrollTo, lang, onToggleLang, tFn }: NavProps
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full hover:scale-105 transition-all"
+            className="flex w-9 h-9 items-center justify-center rounded-full hover:scale-105 transition-all"
             style={{
               color: 'var(--ink-2)',
               boxShadow: 'inset 1px 1px 1px -0.5px rgba(255,255,255,0.5), inset -1px -1px 1px -0.5px rgba(255,255,255,0.5), inset 0 0 4px 3px rgba(255,255,255,0.06), 0 0 6px rgba(0,0,0,0.1)',
