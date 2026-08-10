@@ -353,7 +353,7 @@ function FeaturedWork({
 function Career({ t }: { t: (en: string, kr: string) => string }) {
   const roles = [
     {
-      period: 'May 2026 — Present',
+      period: 'Jun 2026 — Present',
       company: 'Independent',
       role: 'AX Consultant & Operations Specialist',
       body: t(
