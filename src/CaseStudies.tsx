@@ -272,8 +272,10 @@ function AekoBannerHero({ lang }: { lang: 'en' | 'kr' }) {
         @keyframes akMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
         @keyframes akSwap{0%{opacity:0;transform:translateY(9px) scale(.9)}55%{opacity:1;transform:translateY(0) scale(1.05)}100%{opacity:1;transform:translateY(0) scale(1)}}
         @keyframes akCardIn{from{opacity:0;transform:translateX(-50%) translateY(26px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+        .aeko-hero-wrap{display:flex;flex-direction:column;align-items:center;zoom:0.5;-webkit-mask-image:linear-gradient(180deg,#000 60%,rgba(0,0,0,0) 98%);mask-image:linear-gradient(180deg,#000 60%,rgba(0,0,0,0) 98%)}
+        @media(max-width:1023px){.aeko-hero-wrap{zoom:0.38}}
       `}</style>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zoom: 0.5, WebkitMaskImage: 'linear-gradient(180deg,#000 60%,rgba(0,0,0,0) 98%)', maskImage: 'linear-gradient(180deg,#000 60%,rgba(0,0,0,0) 98%)' }}>
+      <div className="aeko-hero-wrap">
         {/* MacBook screen */}
         <div style={{ width: 980, background: 'linear-gradient(160deg,#2e3038 0%,#17181c 60%,#0b0c0e 100%)', borderRadius: 24, padding: '24px 15px 15px', boxShadow: '0 60px 120px -30px rgba(20,24,45,.8), 0 0 0 2px rgba(255,255,255,.13), inset 0 1px 0 rgba(255,255,255,.18)', position: 'relative' }}>
           <span style={{ position: 'absolute', top: 9, left: '50%', transform: 'translateX(-50%)', width: 7, height: 7, borderRadius: '50%', background: '#26282d', boxShadow: 'inset 0 0 2px rgba(120,150,200,.5)' }} />
@@ -504,8 +506,14 @@ function AekoVisibilityDashboard({ lang }: { lang: 'en' | 'kr' }) {
 
   return (
     <>
-      <style>{`@keyframes chipIn{0%{opacity:0;transform:translateY(10px) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}`}</style>
-      <div style={{ zoom: 0.58, transformOrigin: 'top left', width: 980 }}>
+      <style>{`
+        @keyframes chipIn{0%{opacity:0;transform:translateY(10px) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}
+        .aeko-dash-wrap{zoom:0.58;transform-origin:top left;width:980px}
+        @media(max-width:1023px){.aeko-dash-wrap{zoom:0.42}}
+        @media(max-width:767px){.aeko-dash-wrap{zoom:0.34}}
+        @media(max-width:479px){.aeko-dash-wrap{zoom:0.28}}
+      `}</style>
+      <div className="aeko-dash-wrap">
         {/* Single card matching original design */}
         <div style={{ ...cardStyle, padding: '34px 56px', display: 'flex', flexDirection: 'column', gap: 30 }}>
 
@@ -719,9 +727,16 @@ function AekoOptimizeFlow({ lang }: { lang: 'en' | 'kr' }) {
 
   return (
     <>
-      <style>{`@keyframes termBlink{0%,49%{opacity:1}50%,100%{opacity:0}}`}</style>
-      <div style={{ zoom: 0.47, transformOrigin: 'top left' }}>
-        <div style={{ display:'flex', gap:30, alignItems:'stretch' }}>
+      <style>{`
+        @keyframes termBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+        .aeko-opt-wrap{zoom:0.47;transform-origin:top left}
+        .aeko-opt-panels{display:flex;gap:30px;align-items:stretch}
+        @media(max-width:1023px){.aeko-opt-wrap{zoom:0.38}}
+        @media(max-width:767px){.aeko-opt-wrap{zoom:0.48}.aeko-opt-panels{flex-direction:column}}
+        @media(max-width:479px){.aeko-opt-wrap{zoom:0.42}}
+      `}</style>
+      <div className="aeko-opt-wrap">
+        <div className="aeko-opt-panels">
 
           {/* LEFT: AEKO plan panel */}
           <div style={PANEL}>

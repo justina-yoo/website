@@ -375,7 +375,7 @@ export function CardGrid({
   items,
   iconKey = 'Bulb',
 }: {
-  items: { icon?: IconName; logo?: string; title: string; body: string }[];
+  items: { icon?: IconName; logo?: string; title: string; body: string; replaces?: string }[];
   iconKey?: IconName;
 }) {
   return (
@@ -412,6 +412,13 @@ export function CardGrid({
               <p className="text-[14px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
                 {item.body}
               </p>
+              {item.replaces && (
+                <div className="mt-auto pt-2">
+                  <span className="font-mono-tech text-[10px] tracking-widest uppercase" style={{ color: 'var(--acc)', opacity: 0.7 }}>
+                    {item.replaces}
+                  </span>
+                </div>
+              )}
             </div>
           </Reveal>
         );

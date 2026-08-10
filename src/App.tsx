@@ -353,6 +353,15 @@ function FeaturedWork({
 function Career({ t }: { t: (en: string, kr: string) => string }) {
   const roles = [
     {
+      period: 'May 2026 — Present',
+      company: 'Independent',
+      role: 'AX Consultant & Operations Specialist',
+      body: t(
+        <>Client: Vectus (Early Stage FinTech Investment Platform)<br/>— MVP development (AI-driven investment recommendation & features)<br/><br/>Alongside client work, currently building independent side projects.</>,
+        <>Client: Vectus (초기 핀테크 투자 플랫폼)<br/>— MVP 개발 (AI 기반 투자 추천 및 기능)<br/><br/>클라이언트 업무와 함께 독립 사이드 프로젝트를 진행 중입니다.</>,
+      ),
+    },
+    {
       period: 'May 2024 — May 2026',
       company: 'Panomix & AEKO Intelligence',
       role: 'AI Product Manager',
